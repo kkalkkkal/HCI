@@ -17,6 +17,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"/>
         <ImageButton
+            android:id="@+id/filterBtn"
             style="@style/imageButton"
             android:src="@drawable/ic_baseline_filter_alt_24"/>
         <ImageButton
