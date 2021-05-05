@@ -1,6 +1,8 @@
 package com.example.hci_project;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -33,6 +35,12 @@ public class MainActivity extends AppCompatActivity {
         frame_in_layout_3 = findViewById(R.id.frame_in_layout_3);
 
         context = this;
+
+        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+        PagerAdapter adapter = new PageAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(adapter);
+
+        tablayout.setupWithViewPager(viewPager);
 
         // 네이버 지도 SDK 접속
         NaverMapSdk.getInstance(this).setClient(
