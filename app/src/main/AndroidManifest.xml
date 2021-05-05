@@ -9,14 +9,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.HCI_Project">
-        <activity android:name=".SearchFilterActivity"></activity>
-        <activity android:name=".SearchSchoolActivity">
+        <activity android:name=".SearchResultActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".BarChartActivity" />
+        <activity android:name=".LineChartActivity" />
+        <activity android:name=".PieChartActivity" />
+        <activity android:name=".CompareSchool">
+
+        </activity>
+        <activity android:name=".SearchFilterActivity" />
+        <activity android:name=".SearchSchoolActivity" />
         <activity android:name=".MainActivity" />
     </application>
 
