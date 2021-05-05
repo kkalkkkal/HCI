@@ -13,7 +13,8 @@
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="o82z0vth6u" /> <!--네이버지도 클라이언트 아이디-->
         <activity android:name=".MainActivity" />
-        <activity android:name=".IntroActivity">
+        <activity android:name=".IntroActivity"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
