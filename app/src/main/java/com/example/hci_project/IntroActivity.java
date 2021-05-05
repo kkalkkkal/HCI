@@ -16,11 +16,6 @@ public class IntroActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.intro_page);
 
-        try {
-            sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
         Intent mainintent = new Intent(IntroActivity.this, MainActivity.class);
         mainintent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//뒤로가기 버튼 눌렀을때 메인에서 로그인으로 못가게?

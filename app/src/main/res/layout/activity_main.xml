@@ -6,11 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+
     <fragment
         android:id="@+id/map"
         android:name="com.naver.maps.map.MapFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteY="301dp" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tablayout"
@@ -26,19 +28,19 @@
             android:id="@+id/tabItem1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="첫번째 TextView" />
+            android:text="주변" />
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/tabItem2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="두번째 TextView" />
+            android:text="비교" />
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/tabItem3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="세번째 TextView" />
+            android:text="즐겨찾기" />
     </com.google.android.material.tabs.TabLayout>
 
     <LinearLayout

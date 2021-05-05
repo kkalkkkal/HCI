@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout frame_in_layout_1, frame_in_layout_2, frame_in_layout_3;
     Context context;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
