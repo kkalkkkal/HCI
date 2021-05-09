@@ -24,13 +24,6 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <FrameLayout
-        android:id="@+id/myfragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    </FrameLayout>
-
     <fragment
         android:id="@+id/map"
         android:name="com.naver.maps.map.MapFragment"
@@ -67,6 +60,11 @@
             android:text="즐겨찾기" />
     </com.google.android.material.tabs.TabLayout>
 
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -101,11 +99,6 @@
                 android:orientation="vertical"
                 android:visibility="invisible">
 
-                <View
-                    android:id="@+id/comparision_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
                 <TextView
                     android:id="@+id/textView2"
                     android:layout_width="wrap_content"
@@ -121,11 +114,6 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:visibility="invisible">
-
-                <View
-                    android:id="@+id/bookmarkview"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
 
                 <TextView
                     android:id="@+id/textView3"
