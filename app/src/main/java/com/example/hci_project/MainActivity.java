@@ -9,6 +9,7 @@ import android.os.Bundle;
 
 import com.naver.maps.map.NaverMapSdk;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.google.android.material.tabs.TabLayout;
@@ -19,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
     TabLayout tablayout;
     LinearLayout frame_in_layout_1, frame_in_layout_2, frame_in_layout_3;
+
     Context context;
 
 
@@ -35,12 +37,6 @@ public class MainActivity extends AppCompatActivity {
         frame_in_layout_3 = findViewById(R.id.frame_in_layout_3);
 
         context = this;
-
-        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-        PagerAdapter adapter = new PageAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(adapter);
-
-        tablayout.setupWithViewPager(viewPager);
 
         // 네이버 지도 SDK 접속
         NaverMapSdk.getInstance(this).setClient(
@@ -79,11 +75,13 @@ public class MainActivity extends AppCompatActivity {
     private void changeView(int index) { // 숨기고 표시로 화면 전환을 만들어 둠
         switch (index) {
         case 0 :
+
         frame_in_layout_1.setVisibility(View.VISIBLE) ;
         frame_in_layout_2.setVisibility(View.INVISIBLE) ;
         frame_in_layout_3.setVisibility(View.INVISIBLE) ;
         break ;
         case 1 :
+
         frame_in_layout_1.setVisibility(View.INVISIBLE) ;
         frame_in_layout_2.setVisibility(View.VISIBLE) ;
         frame_in_layout_3.setVisibility(View.INVISIBLE) ;
