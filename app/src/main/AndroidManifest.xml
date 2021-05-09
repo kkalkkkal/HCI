@@ -39,6 +39,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".BarChartActivity" />
+        <activity android:name=".LineChartActivity" />
+        <activity android:name=".PieChartActivity" />
+        <activity android:name=".CompareSchool">
+
+        </activity>
+        <activity android:name=".SearchFilterActivity" />
+        <activity android:name=".SearchSchoolActivity" />
+        <activity android:name=".MainActivity" />
     </application>
 
 </manifest>
