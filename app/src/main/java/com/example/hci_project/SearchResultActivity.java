@@ -13,7 +13,6 @@ import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
@@ -62,7 +61,7 @@ public class SearchResultActivity extends AppCompatActivity {
         year2.add("2017");
         BarDataSet bardataset = new BarDataSet(NoOfEmp2, "No Of Employee");
         chart.animateY(5000);
-        BarData data2 = new BarData((IBarDataSet) year2, bardataset);
+        BarData data2 = new BarData(year2, bardataset);
         // MPAndroidChart v3.X 오류 발생
         bardataset.setColors(ColorTemplate.COLORFUL_COLORS);
         chart.setData(data2);
