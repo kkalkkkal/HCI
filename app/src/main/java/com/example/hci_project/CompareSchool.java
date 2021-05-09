@@ -167,7 +167,7 @@ public class CompareSchool extends AppCompatActivity {
         year.add("2015");
         year.add("2016");
         year.add("2017");
-        PieData data = new PieData(year, dataSet);
+        PieData data = new PieData(dataSet);
         // MPAndroidChart v3.X 오류 발생
         pieChart.setData(data);
         dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
@@ -204,7 +204,7 @@ public class CompareSchool extends AppCompatActivity {
         year2.add("2017");
         BarDataSet bardataset = new BarDataSet(NoOfEmp2, "No Of Employee");
         chart.animateY(5000);
-        BarData data2 = new BarData(year2, bardataset);
+        BarData data2 = new BarData((IBarDataSet) year2, bardataset);
         // MPAndroidChart v3.X 오류 발생
         bardataset.setColors(ColorTemplate.COLORFUL_COLORS);
         chart.setData(data2);

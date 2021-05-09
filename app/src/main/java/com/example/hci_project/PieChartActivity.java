@@ -41,7 +41,7 @@ public class PieChartActivity extends AppCompatActivity {
         year.add("2015");
         year.add("2016");
         year.add("2017");
-        PieData data = new PieData(year, dataSet);
+        PieData data = new PieData(dataSet);
         // MPAndroidChart v3.X 오류 발생
         pieChart.setData(data);
         dataSet.setColors(ColorTemplate.COLORFUL_COLORS);

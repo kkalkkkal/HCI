@@ -42,7 +42,7 @@ public class BarChartActivity extends AppCompatActivity {
         year.add("2017");
         BarDataSet bardataset = new BarDataSet(NoOfEmp, "No Of Employee");
         chart.animateY(5000);
-        BarData data = new BarData(year, bardataset);
+        BarData data = new BarData((IBarDataSet) year, bardataset);
         // MPAndroidChart v3.X 오류 발생
         bardataset.setColors(ColorTemplate.COLORFUL_COLORS);
         chart.setData(data);

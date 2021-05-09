@@ -7,7 +7,7 @@
     tools:context=".BarChartActivity">
 
 
-    <com.github.mikephil.charting.charts.BarChart
+    <view class="com.github.mikephil.charting.charts.BarChart"
         android:id="@+id/barchart"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
