@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.hci_project.dummy.DummyContent.DummyItem;
+import com.example.hci_project.dummy.DummySchoolContent.DummyItem;
 
 import java.util.List;
 
@@ -33,8 +33,8 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.mIdView.setText(mValues.get(position).getId());
+        holder.mContentView.setText(mValues.get(position).getContent());
     }
 
     @Override

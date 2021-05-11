@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.hci_project.dummy.DummyContent;
+import com.example.hci_project.dummy.DummySchoolContent;
 
 /**
  * A fragment representing a list of Items.
@@ -64,7 +65,7 @@ public class BookmarkActivity extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(DummyContent.ITEMS));
+//            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(DummyContent.ITEMS));
         }
         return view;
     }

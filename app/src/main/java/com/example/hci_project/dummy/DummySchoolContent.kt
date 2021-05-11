@@ -9,7 +9,7 @@ import java.util.HashMap
  *
  * TODO: Replace all uses of this class before publishing your app.
  */
-object DummyContent {
+object DummySchoolContent {
 
     /**
      * An array of sample (dummy) items.
