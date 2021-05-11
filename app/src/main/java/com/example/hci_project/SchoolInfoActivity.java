@@ -17,7 +17,7 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
 
-public class SearchResultActivity extends AppCompatActivity {
+public class SchoolInfoActivity extends AppCompatActivity {
 
 
     private TableLayout tableLayout;
@@ -26,7 +26,7 @@ public class SearchResultActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_result);
+        setContentView(R.layout.activity_school_info);
 
 
 

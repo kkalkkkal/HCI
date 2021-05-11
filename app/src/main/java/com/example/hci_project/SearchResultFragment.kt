@@ -36,7 +36,7 @@ class SearchResultFragment : Fragment() {
                     columnCount <= 1 -> LinearLayoutManager(context)
                     else -> GridLayoutManager(context, columnCount)
                 }
-                adapter = MySearchResultRecyclerViewAdapter(DummySchoolContent.ITEMS)
+                adapter = SearchResultRecyclerViewAdapter(DummySchoolContent.ITEMS)
             }
         }
         return view
