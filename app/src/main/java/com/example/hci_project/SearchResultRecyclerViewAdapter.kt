@@ -6,15 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 
-import com.example.hci_project.dummy.DummyContent.DummyItem
+import com.example.hci_project.dummy.DummySchoolContent.DummyItem
 
 /**
  * [RecyclerView.Adapter] that can display a [DummyItem].
  * TODO: Replace the implementation with code for your data type.
  */
-class MySearchResultRecyclerViewAdapter(
+class SearchResultRecyclerViewAdapter(
         private val values: List<DummyItem>)
-    : RecyclerView.Adapter<MySearchResultRecyclerViewAdapter.ViewHolder>() {
+    : RecyclerView.Adapter<SearchResultRecyclerViewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)

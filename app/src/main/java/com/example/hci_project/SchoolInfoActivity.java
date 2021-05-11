@@ -17,7 +17,7 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
 
-public class SearchResultActivity extends AppCompatActivity {
+public class SchoolInfoActivity extends AppCompatActivity {
 
 
     private TableLayout tableLayout;
@@ -26,12 +26,7 @@ public class SearchResultActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_result);
-
-
-
-
-
+        setContentView(R.layout.activity_school_info);
 
 
         /////////////////////////////// Bar chart /////////////////////////////
@@ -61,15 +56,10 @@ public class SearchResultActivity extends AppCompatActivity {
         year2.add("2017");
         BarDataSet bardataset = new BarDataSet(NoOfEmp2, "No Of Employee");
         chart.animateY(5000);
-        BarData data2 = new BarData(year2, bardataset);
+        BarData data2 = new BarData(bardataset);
         // MPAndroidChart v3.X 오류 발생
         bardataset.setColors(ColorTemplate.COLORFUL_COLORS);
         chart.setData(data2);
-
-
-
-
-
 
 
         ////////////////////////// 테이블 동적생성 ///////////////////////
@@ -81,17 +71,14 @@ public class SearchResultActivity extends AppCompatActivity {
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT));
 
-            for (int i = 0; i < 2; i++) {
-                TextView textView = new TextView(this);
-                textView.setText(String.valueOf(i));
-                textView.setGravity(Gravity.CENTER);
-                textView.setTextSize(36);
-                tableRow.addView(textView);        // tableRow에 view 추가
-            }
-            tableLayout.addView(tableRow);        // tableLayout에 tableRow 추가
-
-
-
+        for (int i = 0; i < 2; i++) {
+            TextView textView = new TextView(this);
+            textView.setText(String.valueOf(i));
+            textView.setGravity(Gravity.CENTER);
+            textView.setTextSize(36);
+            tableRow.addView(textView);        // tableRow에 view 추가
+        }
+        tableLayout.addView(tableRow);        // tableLayout에 tableRow 추가
 
 
     }

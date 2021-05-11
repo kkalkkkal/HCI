@@ -1,39 +1,33 @@
 package com.example.hci_project;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.app.ActionBar.LayoutParams;
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
 import android.widget.Toast;
-import android.os.Bundle;
+
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
-import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
-import com.github.mikephil.charting.utils.ColorTemplate;
+
 import java.util.ArrayList;
+import java.util.List;
 
 
-public class CompareSchool extends AppCompatActivity {
-
+public class CompareSchoolActivity extends AppCompatActivity {
 
 
     @Override
@@ -57,7 +51,7 @@ public class CompareSchool extends AppCompatActivity {
         LinearLayout ll = new LinearLayout(this);
 
         ll.setOrientation(LinearLayout.HORIZONTAL);
-        int last=5;
+        int last = 5;
 
         for (int j = 0; j <= last; j++) {
 
@@ -89,8 +83,8 @@ public class CompareSchool extends AppCompatActivity {
             // setId 버튼에 대한 키값
 
             btn.setId(j + 1);
-            if(j!=last)
-                btn.setText("유치원"+j);
+            if (j != last)
+                btn.setText("유치원" + j);
             else
                 btn.setText("+");
 
@@ -108,18 +102,14 @@ public class CompareSchool extends AppCompatActivity {
                 public void onClick(View v) {
 
                     Log.d("log", "position :" + position);
-                    if(finalJ !=last) {
+                    if (finalJ != last) {
                         Toast.makeText(getApplicationContext(), "클릭한 유치원번호:" + position, Toast.LENGTH_LONG).show();
 
-                    
 
-
-                    }
-                    else {
-                        Intent intent = new Intent(CompareSchool.this, SearchSchoolActivity.class);
+                    } else {
+                        Intent intent = new Intent(CompareSchoolActivity.this, SearchSchoolActivity.class);
                         startActivity(intent);
                     }
-
 
 
                 }
@@ -127,34 +117,31 @@ public class CompareSchool extends AppCompatActivity {
             });
 
 
-
             //버튼 add
 
-          //  ll.addView(btn);
+            //  ll.addView(btn);
 
             //LinearLayout 정의된거 add
-
 
 
         }
         lm.addView(ll);
 
 
-
 /////////////////////////////// PI chart /////////////////////////////
 
         PieChart pieChart = findViewById(R.id.piechart);
-        ArrayList NoOfEmp = new ArrayList();
-        NoOfEmp.add(new Entry(945f, 0));
-        NoOfEmp.add(new Entry(1040f, 1));
-        NoOfEmp.add(new Entry(1133f, 2));
-        NoOfEmp.add(new Entry(1240f, 3));
-        NoOfEmp.add(new Entry(1369f, 4));
-        NoOfEmp.add(new Entry(1487f, 5));
-        NoOfEmp.add(new Entry(1501f, 6));
-        NoOfEmp.add(new Entry(1645f, 7));
-        NoOfEmp.add(new Entry(1578f, 8));
-        NoOfEmp.add(new Entry(1695f, 9));
+        ArrayList<PieEntry> NoOfEmp = new ArrayList<>();
+        NoOfEmp.add(new PieEntry(945f, 0));
+        NoOfEmp.add(new PieEntry(1040f, 1));
+        NoOfEmp.add(new PieEntry(1133f, 2));
+        NoOfEmp.add(new PieEntry(1240f, 3));
+        NoOfEmp.add(new PieEntry(1369f, 4));
+        NoOfEmp.add(new PieEntry(1487f, 5));
+        NoOfEmp.add(new PieEntry(1501f, 6));
+        NoOfEmp.add(new PieEntry(1645f, 7));
+        NoOfEmp.add(new PieEntry(1578f, 8));
+        NoOfEmp.add(new PieEntry(1695f, 9));
         PieDataSet dataSet = new PieDataSet(NoOfEmp, "Number Of Employees");
         ArrayList year = new ArrayList();
         year.add("2008");
@@ -167,30 +154,24 @@ public class CompareSchool extends AppCompatActivity {
         year.add("2015");
         year.add("2016");
         year.add("2017");
-        PieData data = new PieData(year, dataSet);
+        PieData data = new PieData(dataSet);
         // MPAndroidChart v3.X 오류 발생
         pieChart.setData(data);
         dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
         pieChart.animateXY(5000, 5000);
 
 
-
-
-
         /////////////////////////////// Bar chart /////////////////////////////
 
         BarChart chart = findViewById(R.id.barchart);
         ArrayList NoOfEmp2 = new ArrayList();
-        NoOfEmp2.add(new BarEntry(945f, 0));
-        NoOfEmp2.add(new BarEntry(1040f, 1));
-        NoOfEmp2.add(new BarEntry(1133f, 2));
-        NoOfEmp2.add(new BarEntry(1240f, 3));
-        NoOfEmp2.add(new BarEntry(1369f, 4));
-        NoOfEmp2.add(new BarEntry(1487f, 5));
-        NoOfEmp2.add(new BarEntry(1501f, 6));
-        NoOfEmp2.add(new BarEntry(1645f, 7));
-        NoOfEmp2.add(new BarEntry(1578f, 8));
-        NoOfEmp2.add(new BarEntry(1695f, 9));
+        NoOfEmp2.add(new BarEntry(0,945f));
+        NoOfEmp2.add(new BarEntry(1,145f));
+        NoOfEmp2.add(new BarEntry(2,345f));
+        NoOfEmp2.add(new BarEntry(3,645f));
+        NoOfEmp2.add(new BarEntry(4,925f));
+        NoOfEmp2.add(new BarEntry(5,905f));
+        NoOfEmp2.add(new BarEntry(6,345f));
         ArrayList year2 = new ArrayList();
         year2.add("2008");
         year2.add("2009");
@@ -204,20 +185,13 @@ public class CompareSchool extends AppCompatActivity {
         year2.add("2017");
         BarDataSet bardataset = new BarDataSet(NoOfEmp2, "No Of Employee");
         chart.animateY(5000);
-        BarData data2 = new BarData(year2, bardataset);
+        BarData data2 = new BarData(bardataset);
         // MPAndroidChart v3.X 오류 발생
         bardataset.setColors(ColorTemplate.COLORFUL_COLORS);
         chart.setData(data2);
 
 
-
-
-
     }
-
-
-
-
 
 
 }

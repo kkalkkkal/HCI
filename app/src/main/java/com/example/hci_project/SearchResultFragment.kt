@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.hci_project.dummy.DummyContent
+import com.example.hci_project.dummy.DummySchoolContent
 
 /**
  * A fragment representing a list of Items.
@@ -36,7 +36,7 @@ class SearchResultFragment : Fragment() {
                     columnCount <= 1 -> LinearLayoutManager(context)
                     else -> GridLayoutManager(context, columnCount)
                 }
-                adapter = MySearchResultRecyclerViewAdapter(DummyContent.ITEMS)
+                adapter = SearchResultRecyclerViewAdapter(DummySchoolContent.ITEMS)
             }
         }
         return view
