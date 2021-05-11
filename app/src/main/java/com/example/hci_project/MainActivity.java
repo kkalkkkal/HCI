@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.naver.maps.map.MapFragment;
@@ -77,5 +78,16 @@ public class MainActivity extends AppCompatActivity {
             }
             return true;
         });
+    }
+
+    private long backButtonClickTime= 0;
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if(System.currentTimeMillis()- backButtonClickTime>= 1000){
+            Toast.makeText(this, "앱을 종료하시려면 뒤로가기 버튼을 한번 더 누르세요", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+        backButtonClickTime= System.currentTimeMillis();
     }
 }
