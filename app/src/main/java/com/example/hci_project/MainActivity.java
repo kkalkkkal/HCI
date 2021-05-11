@@ -86,8 +86,9 @@ public class MainActivity extends AppCompatActivity {
         super.onBackPressed();
         if(System.currentTimeMillis()- backButtonClickTime>= 1000){
             Toast.makeText(this, "앱을 종료하시려면 뒤로가기 버튼을 한번 더 누르세요", Toast.LENGTH_SHORT).show();
+            backButtonClickTime= System.currentTimeMillis();
+        }else{
             finish();
         }
-        backButtonClickTime= System.currentTimeMillis();
     }
 }
