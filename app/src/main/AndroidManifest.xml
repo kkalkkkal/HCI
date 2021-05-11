@@ -23,7 +23,7 @@
         <activity android:name=".BarChartActivity" />
         <activity android:name=".LineChartActivity" />
         <activity android:name=".PieChartActivity" />
-        <activity android:name=".CompareSchool">
+        <activity android:name=".CompareSchoolActivity">
 
         </activity>
         <activity android:name=".SearchFilterActivity" />

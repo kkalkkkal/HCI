@@ -1,39 +1,31 @@
 package com.example.hci_project;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.app.ActionBar.LayoutParams;
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
 import android.widget.Toast;
-import android.os.Bundle;
+
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
-import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
-import com.github.mikephil.charting.utils.ColorTemplate;
+
 import java.util.ArrayList;
 
 
-public class CompareSchool extends AppCompatActivity {
-
+public class CompareSchoolActivity extends AppCompatActivity {
 
 
     @Override
@@ -57,7 +49,7 @@ public class CompareSchool extends AppCompatActivity {
         LinearLayout ll = new LinearLayout(this);
 
         ll.setOrientation(LinearLayout.HORIZONTAL);
-        int last=5;
+        int last = 5;
 
         for (int j = 0; j <= last; j++) {
 
@@ -89,8 +81,8 @@ public class CompareSchool extends AppCompatActivity {
             // setId 버튼에 대한 키값
 
             btn.setId(j + 1);
-            if(j!=last)
-                btn.setText("유치원"+j);
+            if (j != last)
+                btn.setText("유치원" + j);
             else
                 btn.setText("+");
 
@@ -108,18 +100,14 @@ public class CompareSchool extends AppCompatActivity {
                 public void onClick(View v) {
 
                     Log.d("log", "position :" + position);
-                    if(finalJ !=last) {
+                    if (finalJ != last) {
                         Toast.makeText(getApplicationContext(), "클릭한 유치원번호:" + position, Toast.LENGTH_LONG).show();
 
-                    
 
-
-                    }
-                    else {
-                        Intent intent = new Intent(CompareSchool.this, SearchSchoolActivity.class);
+                    } else {
+                        Intent intent = new Intent(CompareSchoolActivity.this, SearchSchoolActivity.class);
                         startActivity(intent);
                     }
-
 
 
                 }
@@ -127,18 +115,15 @@ public class CompareSchool extends AppCompatActivity {
             });
 
 
-
             //버튼 add
 
-          //  ll.addView(btn);
+            //  ll.addView(btn);
 
             //LinearLayout 정의된거 add
 
 
-
         }
         lm.addView(ll);
-
 
 
 /////////////////////////////// PI chart /////////////////////////////
@@ -174,9 +159,6 @@ public class CompareSchool extends AppCompatActivity {
         pieChart.animateXY(5000, 5000);
 
 
-
-
-
         /////////////////////////////// Bar chart /////////////////////////////
 
         BarChart chart = findViewById(R.id.barchart);
@@ -210,14 +192,7 @@ public class CompareSchool extends AppCompatActivity {
         chart.setData(data2);
 
 
-
-
-
     }
-
-
-
-
 
 
 }
