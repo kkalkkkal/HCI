@@ -24,8 +24,8 @@
         <activity android:name=".LineChartActivity" />
         <activity android:name=".PieChartActivity" />
         <activity android:name=".CompareSchoolActivity">
-
         </activity>
+        <activity android:name=".SchoolInfoActivity"/>
         <activity android:name=".SearchFilterActivity" />
         <activity android:name=".SearchSchoolActivity" />
     </application>
