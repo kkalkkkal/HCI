@@ -26,4 +26,12 @@ class SearchResultFragment : Fragment() {
         }
         return view
     }
+    fun setList(resultList:ArrayList<DummySchoolContent.DummyItem>){
+        if (view!= null && view is RecyclerView) {
+            (view as RecyclerView).apply {
+                layoutManager = LinearLayoutManager(context)
+                adapter = SearchResultRecyclerViewAdapter(resultList)
+            }
+        }
+    }
 }
