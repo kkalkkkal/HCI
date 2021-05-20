@@ -7,12 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.example.hci_project.bean.SearchResult
 
 import com.example.hci_project.dummy.DummySchoolContent.DummyItem
 
 class SearchResultRecyclerViewAdapter(
-        private val values: List<DummyItem>)
+    private val values: List<SearchResult>, private val onClick: ((SearchResult)-> Unit) ? = null)
     : RecyclerView.Adapter<SearchResultRecyclerViewAdapter.ViewHolder>() {
+
 
     private lateinit var context: Context
 
@@ -26,9 +28,13 @@ class SearchResultRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
-        holder.titleView.text = item.content
+        holder.titleView.text = item.title
         holder.itemView.setOnClickListener {
-            context.startActivity(Intent(context, SchoolInfoActivity::class.java))
+            if(onClick!= null){
+                onClick?.let { it1 -> it1(item) }
+            }else{
+                context.startActivity(Intent(context, SchoolInfoActivity::class.java))
+            }
         }
     }
 

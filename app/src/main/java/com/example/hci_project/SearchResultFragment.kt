@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.hci_project.bean.SearchResult
 import com.example.hci_project.dummy.DummySchoolContent
 
 class SearchResultFragment : Fragment() {
@@ -20,14 +21,24 @@ class SearchResultFragment : Fragment() {
         // Set the adapter
         if (view is RecyclerView) {
             with(view) {
+
+                val searchResults = ArrayList<SearchResult>()
+                for (idx in 1..20) {
+                    searchResults.add(SearchResult(SearchResult.TYPE_SEARCH, "검색기록 ${idx}", "설명"))
+                }
                 layoutManager = LinearLayoutManager(context)
-                adapter = SearchResultRecyclerViewAdapter(DummySchoolContent.ITEMS)
+                adapter = SearchResultRecyclerViewAdapter(searchResults){
+                    if(activity!= null){
+                        (activity!! as SearchSchoolActivity).search(it.title)
+                    }
+                }
             }
         }
         return view
     }
-    fun setList(resultList:ArrayList<DummySchoolContent.DummyItem>){
-        if (view!= null && view is RecyclerView) {
+
+    fun setList(resultList: ArrayList<SearchResult>) {
+        if (view != null && view is RecyclerView) {
             (view as RecyclerView).apply {
                 layoutManager = LinearLayoutManager(context)
                 adapter = SearchResultRecyclerViewAdapter(resultList)

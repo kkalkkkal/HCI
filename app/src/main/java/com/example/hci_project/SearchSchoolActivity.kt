@@ -8,6 +8,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Toast
 import com.example.hci_project.bean.FilterSetting
+import com.example.hci_project.bean.SearchResult
 import com.example.hci_project.databinding.ActivitySearchSchoolBinding
 import com.example.hci_project.dummy.DummySchoolContent
 
@@ -39,8 +40,10 @@ class SearchSchoolActivity : AppCompatActivity() {
         //filtering with filterSetting and editText values
         val keyword= binding.searchKeyword.text.toString().trim()
 
-        val result = ArrayList<DummySchoolContent.DummyItem>()
-        result.addAll(DummySchoolContent.ITEMS)
+        val result = ArrayList<SearchResult>()
+        for (idx in 1..20) {
+            result.add(SearchResult(SearchResult.TYPE_SCHOOL, "유치원 ${idx}", "설명"))
+        }
         result.shuffle()
         searchResultFragment.setList(result)
     }
@@ -54,9 +57,18 @@ class SearchSchoolActivity : AppCompatActivity() {
                 startActivityForResult(intent, FILTER_SET_ACTIVITY)
             }
             searchBtn.setOnClickListener {
-                renderSearchResult()
+                val keyword= binding.searchKeyword.text.toString().trim()
+                search(keyword)
             }
         }
+    }
+    fun search(text:String){
+        if(text.length< 2){
+            Toast.makeText(applicationContext, "2자 이상을 입력해야 합니다", Toast.LENGTH_SHORT).show()
+            return
+        }
+        binding.searchKeyword.setText(text)
+        renderSearchResult()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

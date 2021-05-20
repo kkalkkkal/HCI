@@ -12,7 +12,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.hci_project.bean.SearchResult;
 import com.example.hci_project.dummy.DummySchoolContent;
+
+import java.util.ArrayList;
 
 /**
  * A fragment representing a list of Items.
@@ -64,7 +67,7 @@ public class BookmarkActivity extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new SearchResultRecyclerViewAdapter(DummySchoolContent.INSTANCE.getITEMS()));
+            recyclerView.setAdapter(new SearchResultRecyclerViewAdapter(new ArrayList<>(), null));
         }
         return view;
     }
