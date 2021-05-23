@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.example.hci_project.bean.SearchResult
+import com.example.hci_project.bean.SearchResultManager
 
 import com.example.hci_project.dummy.DummySchoolContent.DummyItem
 
@@ -31,6 +32,11 @@ class SearchResultRecyclerViewAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
         holder.titleView.text = item.title
+        holder.explainView.visibility = View.GONE
+        if (item.subtitle != null) {
+            holder.explainView.text = item.subtitle
+            holder.explainView.visibility = View.VISIBLE
+        }
         holder.iconView.setImageDrawable(
             ContextCompat.getDrawable(
                 context,
@@ -44,9 +50,20 @@ class SearchResultRecyclerViewAdapter(
 
         holder.itemView.setOnClickListener {
             if (onClick != null) {
-                onClick?.let { it1 -> it1(item) }
+                onClick.run {
+                    this(item)
+                }
             } else {
-                context.startActivity(Intent(context, SchoolInfoActivity::class.java))
+                SearchResultManager.getInstance().use(context) { manager ->
+                    manager?.apply {
+                        searchResultList.add(item)
+                        save(context)
+                    }
+                }
+                val intent =
+                    Intent(context, SchoolInfoActivity::class.java)
+                intent.putExtra("school", item)
+                context.startActivity(intent)
             }
         }
     }
@@ -55,6 +72,7 @@ class SearchResultRecyclerViewAdapter(
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val titleView: TextView = view.findViewById(R.id.title)
+        val explainView: TextView = view.findViewById(R.id.explain)
         val iconView: ImageView = view.findViewById(R.id.icon)
 
         override fun toString(): String {

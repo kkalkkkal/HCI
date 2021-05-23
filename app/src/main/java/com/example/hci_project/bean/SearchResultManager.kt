@@ -18,10 +18,15 @@ class SearchResultManager private constructor() {
     }
 
     private val fileName = "searchResults.txt"
+
     var searchResultList: ArrayList<SearchResult> = ArrayList()
 
     @Synchronized
     fun use(context: Context, @WorkerThread callback: (SearchResultManager?) -> Unit) {
+        if (searchResultList.isNotEmpty()) {
+            callback(this)
+            return
+        }
         Thread {
             try {
                 val file = context.getFileStreamPath(fileName)
@@ -42,8 +47,19 @@ class SearchResultManager private constructor() {
         }.start()
     }
 
+
     fun save(context: Context) {
         Thread {
+            val pureList = ArrayList<SearchResult>()
+            searchResultList.reverse()
+            searchResultList.map {
+                if (pureList.contains(it))
+                    return@map
+
+                pureList.add(it)
+            }
+            pureList.reverse()
+            searchResultList = pureList
             try {
                 val file = context.getFileStreamPath(fileName)
                 if (!file.exists())

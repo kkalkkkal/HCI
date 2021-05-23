@@ -8,6 +8,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Toast
 import com.example.hci_project.bean.FilterSetting
+import com.example.hci_project.bean.SchoolManager
 import com.example.hci_project.bean.SearchResult
 import com.example.hci_project.bean.SearchResultManager
 import com.example.hci_project.databinding.ActivitySearchSchoolBinding
@@ -36,18 +37,6 @@ class SearchSchoolActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.search_result_fragment)!! as SearchResultFragment
     }
 
-    private fun renderSearchResult() {
-        Toast.makeText(this, "검색/필터를 반영하여 결과를 표시합니다", Toast.LENGTH_SHORT).show()
-        //filtering with filterSetting and editText values
-        val keyword= binding.searchKeyword.text.toString().trim()
-
-        val result = ArrayList<SearchResult>()
-        for (idx in 1..20) {
-            result.add(SearchResult(SearchResult.TYPE_SCHOOL, "유치원 ${idx}", "설명"))
-        }
-        result.shuffle()
-        searchResultFragment.setList(result)
-    }
 
     private fun initListener() {
         binding.apply {
@@ -58,25 +47,73 @@ class SearchSchoolActivity : AppCompatActivity() {
                 startActivityForResult(intent, FILTER_SET_ACTIVITY)
             }
             searchBtn.setOnClickListener {
-                val keyword= binding.searchKeyword.text.toString().trim()
+                val keyword = binding.searchKeyword.text.toString().trim()
                 search(keyword)
             }
+
+            searchKeyword.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                }
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                }
+
+                override fun afterTextChanged(s: Editable?) {
+                    if (s.toString().contains("\n")) {
+                        searchKeyword.setText(s.toString().replace("\n", ""))
+                        search(searchKeyword.text.toString())
+                    }
+                }
+
+            })
         }
     }
-    fun search(text:String){
-        if(text.length< 2){
+
+    fun search(text: String) {
+        if (text.length < 2) {
             Toast.makeText(applicationContext, "2자 이상을 입력해야 합니다", Toast.LENGTH_SHORT).show()
             return
         }
-        SearchResultManager.getInstance().use(this){
-            manager->
+        SearchResultManager.getInstance().use(this) { manager ->
             manager?.apply {
                 searchResultList.add(SearchResult(SearchResult.TYPE_SEARCH, text.trim()))
                 save(applicationContext)
             }
         }
-        binding.searchKeyword.setText(text)
+        if(binding.searchKeyword.text.toString()!= text){
+            binding.searchKeyword.setText(text)
+        }
         renderSearchResult()
+    }
+
+    private fun renderSearchResult() {
+        //filtering with filterSetting and editText values
+        val keyword = binding.searchKeyword.text.toString().trim()
+
+        SchoolManager.getInstance().use(this) {
+            if (!isDestroyed)
+                runOnUiThread {
+                    if (it == null) {
+                        Toast.makeText(applicationContext, "유치원 정보를 로드할 수 없습니다", Toast.LENGTH_SHORT)
+                            .show()
+                        return@runOnUiThread
+                    }
+                    val resultList = it.search(keyword)
+                    if (resultList.isEmpty()) {
+                        searchResultFragment.setList(ArrayList())
+                        Toast.makeText(applicationContext, "해당하는 유치원이 없습니다", Toast.LENGTH_SHORT)
+                            .show()
+                        return@runOnUiThread
+                    }
+                    Toast.makeText(this, "검색/필터를 반영하여 ${resultList.size}개의 결과를 표시합니다", Toast.LENGTH_SHORT).show()
+                    searchResultFragment.setList(SearchResult.convert(resultList))
+                }
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -85,15 +122,15 @@ class SearchSchoolActivity : AppCompatActivity() {
         if (requestCode == FILTER_SET_ACTIVITY && resultCode == Activity.RESULT_OK) {
             if (data != null) {
                 val filterSetting = data.getSerializableExtra("filter") as FilterSetting
-                if (this.filterSetting == null){
+                if (this.filterSetting == null) {
                     this.filterSetting = filterSetting
-                    this.filterSetting?.setCallback{
+                    this.filterSetting?.setCallback {
                         renderSearchResult()
                         simpleFilterFragment.updateFilter(filterSetting)
                     }
                     this.filterSetting?.callback?.run()
-                }else{
-                    this.filterSetting?.setCallback{
+                } else {
+                    this.filterSetting?.setCallback {
                         renderSearchResult()
                         simpleFilterFragment.updateFilter(filterSetting)
                     }
