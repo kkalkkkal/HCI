@@ -26,8 +26,13 @@
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/main_viewPager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent" >
+
+
+        </androidx.viewpager2.widget.ViewPager2>
     </RelativeLayout>
+
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavBar"
         android:layout_gravity="bottom"
@@ -36,9 +41,12 @@
         app:menu="@menu/bottom_navigation_items"
         app:itemIconTint="@drawable/nav_item_color_state"
         app:itemTextColor="@drawable/nav_item_color_state"
-        />
+        >
 
-<!--    <com.google.android.material.tabs.TabLayout-->
+
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
+
+    <!--    <com.google.android.material.tabs.TabLayout-->
 <!--        android:id="@+id/tablayout"-->
 <!--        android:layout_width="match_parent"-->
 <!--        android:layout_height="wrap_content"-->

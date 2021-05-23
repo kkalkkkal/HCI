@@ -33,6 +33,13 @@ import com.naver.maps.map.overlay.Marker;
 import com.naver.maps.map.util.FusedLocationSource;
 
 import org.jetbrains.annotations.NotNull;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +54,8 @@ import java.io.InputStream;
 import jxl.Sheet;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
+import okhttp3.internal.http.HttpHeaders;
+import okhttp3.internal.http.HttpMethod;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -56,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
     private FusedLocationSource locationSource;
-    private NaverMap naverMap; // 네이버 맵 객체
+    static public NaverMap naverMap; // 네이버 맵 객체 - 다른 곳에서도 접근 가능하게 하려고 일단 전역변수화함.
 
     //데이터베이스
     static Sheet sheet0; // 어린이집 기본 현황
@@ -126,12 +135,22 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
-
+    static MapFragment mapFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        NaverMapOptions options = new NaverMapOptions() // 초기 화면 위치, 경도 생성자 설정
+                .camera(new CameraPosition(new LatLng(37.543344020789625, 127.07557079824849), 14)) // 건국대 기준으로 지도를 연다.
+                .mapType(NaverMap.MapType.Basic);
+
+        options.locationButtonEnabled(true).tiltGesturesEnabled(false);
+
+        mapFragment = MapFragment.newInstance(options); // 옵션 설정
+        mapFragment.getMapAsync(this);
+
 
         locationSource =
                 new FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE);
@@ -141,15 +160,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         schoolSearchTv= findViewById(R.id.search_school_tv);
         viewPager= findViewById(R.id.main_viewPager);
 
-        viewPagerFragmentList.add(new MapFragment());
+
+
+        viewPagerFragmentList.add(mapFragment); // 커스텀 맵 프래그먼트 : 기존 new MapFragment 대체
         viewPagerFragmentList.add(new CompareSchoolFragment());
         viewPagerFragmentList.add(new BookmarkActivity());
-
-        NaverMapOptions options = new NaverMapOptions() // 초기 화면 위치, 경도 생성자 설정
-                .camera(new CameraPosition(new LatLng(37.543344020789625, 127.07557079824849), 8))
-                .mapType(NaverMap.MapType.Basic);
-
-        options.locationButtonEnabled(true).tiltGesturesEnabled(false);;
 
 
         initUI();
@@ -393,7 +408,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
 
 
-                sheet11 = wb.getSheet(3);   // 10번 째 시트 '유치원 건물 현황' 불러오기
+                sheet11 = wb.getSheet(10);   // 10번 째 시트 '유치원 건물 현황' 불러오기
                 if(sheet11 != null) {
                     int colTotal = sheet11.getColumns();    // 전체 컬럼
                     int rowIndexStart = 1;                  // row 인덱스 시작
@@ -515,21 +530,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(@NonNull @NotNull NaverMap naverMap) { // 맵 설정
         this.naverMap = naverMap;
 
-        naverMap.setLocationSource(locationSource);
+        naverMap.setLocationSource(locationSource); // 자기 위치 설정 
         naverMap.setMapType(NaverMap.MapType.Basic); // 기본형 지도
         naverMap.setLayerGroupEnabled(NaverMap.LAYER_GROUP_BUILDING, true); // 빌딩 그룹 생성
 
-        naverMap.setLocationTrackingMode(LocationTrackingMode.Follow);
+        naverMap.setLocationTrackingMode(LocationTrackingMode.Follow); // 위치 추적 모드 실행
 
-
-        NaverMapOptions options = new NaverMapOptions() // 초기 화면 위치, 경도 생성자 설정
-                .camera(new CameraPosition(new LatLng(37.543344020789625, 127.07557079824849), 8))
-                .mapType(NaverMap.MapType.Basic);
-
-        options.locationButtonEnabled(true).tiltGesturesEnabled(false);;
-
-
-        MapFragment mapFragment = MapFragment.newInstance(options);
 
         //네이버 지도 추가 UI 설정
         UiSettings uiSettings = naverMap.getUiSettings();
@@ -537,7 +543,123 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         // 마커 표시하기
         Marker marker = new Marker();
-        marker.setPosition(new LatLng(36.763695, 127.281796));
+        marker.setPosition(new LatLng(37.541680773674464, 127.07943250328056));
         marker.setMap(naverMap);
+
+        // 클릭 리스너
+        naverMap.setOnMapClickListener((point, coord) ->
+                Toast.makeText(this, coord.latitude + ", " + coord.longitude,
+                        Toast.LENGTH_SHORT).show());
+
+        // 롱 클릭 리스너
+        naverMap.setOnMapLongClickListener((point, coord) ->
+                Toast.makeText(this, coord.latitude + ", " + coord.longitude,
+                        Toast.LENGTH_SHORT).show());
+
+        // 심벌 클릭 리스너
+        naverMap.setOnSymbolClickListener(symbol -> {
+            if ("서울특별시청".equals(symbol.getCaption())) {
+                Toast.makeText(this, "서울시청 클릭", Toast.LENGTH_SHORT).show();
+                // 이벤트 소비, OnMapClick 이벤트는 발생하지 않음
+                return true;
+            }
+            // 이벤트 전파, OnMapClick 이벤트가 발생함
+            return false;
+        });
     }
+
+    public void NearMarker() { // 화면에 있는 유치원의 마커를 표시함
+        int count = 0 ;
+        Sheet sheet = getSheet8(); // 유치원 기본 현황 시트
+
+        String address = null;
+
+        address = sheet.getCell(7, 2).getContents(); // 유치원 주소는 7번째 열에 있음. row는 줄.
+
+        // 네이버 API 주소 검색 요청
+
+
+
+        // 마커는 최대 10개
+        Marker marker1 = new Marker();
+        marker1.setPosition(new LatLng(37.541680773674464, 127.07943250328056));
+        marker1.setMap(naverMap);
+
+        Marker marker2 = new Marker();
+        marker2.setPosition(new LatLng(37.541680773674464, 127.07943250328056));
+        marker2.setMap(naverMap);
+
+        Marker marker3 = new Marker();
+        marker3.setPosition(new LatLng(37.541680773674464, 127.07943250328056));
+        marker3.setMap(naverMap);
+
+        Marker marker4 = new Marker();
+        marker4.setPosition(new LatLng(37.541680773674464, 127.07943250328056));
+        marker4.setMap(naverMap);
+
+        Marker marker5 = new Marker();
+        marker5.setPosition(new LatLng(37.541680773674464, 127.07943250328056));
+        marker5.setMap(naverMap);
+
+        Marker marker6 = new Marker();
+        marker6.setPosition(new LatLng(37.541680773674464, 127.07943250328056));
+        marker6.setMap(naverMap);
+
+        Marker marker7 = new Marker();
+        marker7.setPosition(new LatLng(37.541680773674464, 127.07943250328056));
+        marker7.setMap(naverMap);
+
+        Marker marker8 = new Marker();
+        marker8.setPosition(new LatLng(37.541680773674464, 127.07943250328056));
+        marker8.setMap(naverMap);
+
+        Marker marker9 = new Marker();
+        marker9.setPosition(new LatLng(37.541680773674464, 127.07943250328056));
+        marker9.setMap(naverMap);
+
+        Marker marker10 = new Marker();
+        marker10.setPosition(new LatLng(37.541680773674464, 127.07943250328056));
+        marker10.setMap(naverMap);
+        
+    }
+
+    // 주소 검색
+    public String getAddress_DAUM(String data) {
+
+        final String Client_ID = "o82z0vth6u"; // 인증용 클라이언트 아이디
+        final String Client_Secret = "LjN7euyVUTJlH2haz5RmIMmwwTVq77I6ODNipNrE"; // 클라이언트 인증키
+
+        final String API_URL = "https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode";
+
+        try {
+            String addr = URLEncoder.encode(data, "UTF-8");  //주소입력
+            String apiURL = "https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query=" + addr; //json
+            //String apiURL = "https://openapi.naver.com/v1/map/geocode.xml?query=" + addr; // xml
+            URL url = new URL(apiURL);
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("GET");
+            con.setRequestProperty("X-NCP-APIGW-API-KEY-ID", Client_ID);
+            con.setRequestProperty("X-NCP-APIGW-API-KEY", Client_Secret);
+
+            int responseCode = con.getResponseCode();
+            BufferedReader br;
+            if (responseCode == 200) { // 응답코드가 200이면 정상
+                br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            } else {
+                br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+            }
+            String inputLine;
+            StringBuffer response = new StringBuffer();
+            while ((inputLine = br.readLine()) != null) {
+                response.append(inputLine);
+            }
+            br.close();
+            System.out.println(response.toString());
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        return null; // 주소값 반환
+    }
+
 }

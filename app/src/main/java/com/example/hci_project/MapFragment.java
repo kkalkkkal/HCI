@@ -11,19 +11,26 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.naver.maps.map.MapView;
+import com.naver.maps.map.NaverMap;
+import com.naver.maps.map.OnMapReadyCallback;
+
+import org.jetbrains.annotations.NotNull;
 
 
 /**
- * A simple {@  link Fragment} subclass.
- * Use the {@  link MapFragment#newInstance} factory method to
+ * A simple {@link Fragment} subclass.
+ * Use the {@link MapFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 
-public class MapFragment extends Fragment {
+public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private MapView mapView;
 
-    /*
+    public MapFragment() {
+        // Required empty public constructor
+    }
+
     // 인터페이스 만들기 (임시)
 
     // TODO: Rename parameter arguments, choose names that match
@@ -35,19 +42,17 @@ public class MapFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public MapFragment() {
-        // Required empty public constructor
-    }
 
 
-    /**
+
+    /*
       Use this factory method to create a new instance of
       this fragment using the provided parameters.
 
-      @ param param1 Parameter 1.
-      @ param param2 Parameter 2.
-      @ return A new instance of fragment MapFragment.
-
+      @param param1 Parameter 1.
+      @param param2 Parameter 2.
+      @return A new instance of fragment MapFragment.
+    */
 
 
     // TODO: Rename and change types and number of parameters
@@ -70,16 +75,6 @@ public class MapFragment extends Fragment {
 
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.mappage, container, false);
-    }
-
-
-     */
-
 
 
     @Override
@@ -94,7 +89,7 @@ public class MapFragment extends Fragment {
     public void onViewCreated(@NonNull View view,
                               @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mapView = view.findViewById(R.id.map_view);
+        //mapView = view.findViewById(R.id.map_view);
         mapView.onCreate(savedInstanceState);
     }
 
@@ -141,4 +136,8 @@ public class MapFragment extends Fragment {
         mapView.onLowMemory();
     }
 
+    @Override
+    public void onMapReady(@NonNull @NotNull NaverMap naverMap) {
+
+    }
 }
