@@ -1,5 +1,6 @@
 package com.example.hci_project
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -8,7 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.hci_project.bean.SearchResult
-import com.example.hci_project.dummy.DummySchoolContent
+import com.example.hci_project.bean.SearchResultManager
 
 class SearchResultFragment : Fragment() {
 
@@ -16,25 +17,38 @@ class SearchResultFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_search_result, container, false)
+
+        return inflater.inflate(R.layout.fragment_search_result, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         // Set the adapter
         if (view is RecyclerView) {
-            with(view) {
+            view.layoutManager = LinearLayoutManager(context)
+            SearchResultManager.getInstance().use(context!!) {
+                if (it != null && !this.isDetached) {
+                    activity?.runOnUiThread {
+                        view.adapter = SearchResultRecyclerViewAdapter(it.searchResultList) {
+                            if (view.isAttachedToWindow) {
+                                when (it.type) {
+                                    SearchResult.TYPE_SEARCH -> (activity!! as SearchSchoolActivity).search(
+                                        it.title
+                                    )
+                                    SearchResult.TYPE_SEARCH -> {
+                                        val intent =
+                                            Intent(context!!, SchoolInfoActivity::class.java)
+                                        startActivity(intent)
+                                    }
+                                }
 
-                val searchResults = ArrayList<SearchResult>()
-                for (idx in 1..20) {
-                    searchResults.add(SearchResult(SearchResult.TYPE_SEARCH, "검색기록 ${idx}", "설명"))
-                }
-                layoutManager = LinearLayoutManager(context)
-                adapter = SearchResultRecyclerViewAdapter(searchResults){
-                    if(activity!= null){
-                        (activity!! as SearchSchoolActivity).search(it.title)
+                            }
+                        }
                     }
                 }
             }
         }
-        return view
     }
 
     fun setList(resultList: ArrayList<SearchResult>) {

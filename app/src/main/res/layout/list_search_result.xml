@@ -10,6 +10,7 @@
     android:padding="8dp">
 
     <ImageView
+        android:id="@+id/icon"
         style="@style/icon"
         android:src="@drawable/ic_baseline_location_on_24" />
 

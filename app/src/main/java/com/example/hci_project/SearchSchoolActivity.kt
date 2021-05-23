@@ -9,6 +9,7 @@ import android.text.TextWatcher
 import android.widget.Toast
 import com.example.hci_project.bean.FilterSetting
 import com.example.hci_project.bean.SearchResult
+import com.example.hci_project.bean.SearchResultManager
 import com.example.hci_project.databinding.ActivitySearchSchoolBinding
 import com.example.hci_project.dummy.DummySchoolContent
 
@@ -66,6 +67,13 @@ class SearchSchoolActivity : AppCompatActivity() {
         if(text.length< 2){
             Toast.makeText(applicationContext, "2자 이상을 입력해야 합니다", Toast.LENGTH_SHORT).show()
             return
+        }
+        SearchResultManager.getInstance().use(this){
+            manager->
+            manager?.apply {
+                searchResultList.add(SearchResult(SearchResult.TYPE_SEARCH, text.trim()))
+                save(applicationContext)
+            }
         }
         binding.searchKeyword.setText(text)
         renderSearchResult()
