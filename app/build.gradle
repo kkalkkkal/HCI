@@ -41,7 +41,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'com.google.android.gms:play-services-maps:17.0.1'
-    implementation 'net.sourceforge.jexcelapi:jxl:2.6.12'
+    implementation group: 'net.sourceforge.jexcelapi', name: 'jxl', version: '2.6.12'
     testImplementation 'junit:junit:4.+'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
