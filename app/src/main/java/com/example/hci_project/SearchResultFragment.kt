@@ -36,7 +36,7 @@ class SearchResultFragment : Fragment() {
                                     SearchResult.TYPE_SEARCH -> (activity!! as SearchSchoolActivity).search(
                                         it.title
                                     )
-                                    SearchResult.TYPE_SEARCH -> {
+                                    SearchResult.TYPE_SCHOOL -> {
                                         val intent =
                                             Intent(context!!, SchoolInfoActivity::class.java)
                                         startActivity(intent)
