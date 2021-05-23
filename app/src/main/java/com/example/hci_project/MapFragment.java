@@ -2,20 +2,29 @@ package com.example.hci_project;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.naver.maps.map.NaverMapSdk;
+import com.naver.maps.map.MapView;
+
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link MapFragment#newInstance} factory method to
+ * A simple {@  link Fragment} subclass.
+ * Use the {@  link MapFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
+
 public class MapFragment extends Fragment {
+
+    private MapView mapView;
+
+    /*
+    // 인터페이스 만들기 (임시)
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -30,14 +39,17 @@ public class MapFragment extends Fragment {
         // Required empty public constructor
     }
 
+
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MapFragment.
-     */
+      Use this factory method to create a new instance of
+      this fragment using the provided parameters.
+
+      @ param param1 Parameter 1.
+      @ param param2 Parameter 2.
+      @ return A new instance of fragment MapFragment.
+
+
+
     // TODO: Rename and change types and number of parameters
     public static MapFragment newInstance(String param1, String param2) {
         MapFragment fragment = new MapFragment();
@@ -65,5 +77,68 @@ public class MapFragment extends Fragment {
         return inflater.inflate(R.layout.mappage, container, false);
     }
 
+
+     */
+
+
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.mappage, container, false);
+    }
+
+
+    @Override
+    public void onViewCreated(@NonNull View view,
+                              @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mapView = view.findViewById(R.id.map_view);
+        mapView.onCreate(savedInstanceState);
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mapView.onStart();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mapView.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mapView.onPause();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mapView.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mapView.onStop();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mapView.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mapView.onLowMemory();
+    }
 
 }

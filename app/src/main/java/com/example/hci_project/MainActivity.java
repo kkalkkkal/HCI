@@ -1,9 +1,12 @@
 package com.example.hci_project;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.UiThread;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -16,7 +19,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.naver.maps.geometry.LatLng;
+import com.naver.maps.map.CameraPosition;
+import com.naver.maps.map.LocationTrackingMode;
 import com.naver.maps.map.MapFragment;
+import com.naver.maps.map.NaverMap;
+import com.naver.maps.map.NaverMapOptions;
+import com.naver.maps.map.OnMapReadyCallback;
+import com.naver.maps.map.UiSettings;
+import com.naver.maps.map.overlay.LocationOverlay;
+import com.naver.maps.map.NaverMapSdk;
+import com.naver.maps.map.overlay.Marker;
+import com.naver.maps.map.util.FusedLocationSource;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -34,11 +48,15 @@ import jxl.Sheet;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private TextView schoolSearchTv;
     private ViewPager2 viewPager;
     private List<Fragment> viewPagerFragmentList = new ArrayList<>();
+
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
+    private FusedLocationSource locationSource;
+    private NaverMap naverMap; // 네이버 맵 객체
 
     //데이터베이스
     static Sheet sheet0; // 어린이집 기본 현황
@@ -55,8 +73,9 @@ public class MainActivity extends AppCompatActivity {
     static Sheet sheet11; // 유치원 건물 현황
 
     static final int PERMISSIONS_REQUEST = 0x0000001;
-    
-    
+
+
+
     // Getter
     public static Sheet getSheet0() {
         return sheet0;
@@ -114,6 +133,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        locationSource =
+                new FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE);
+
         comeonDB();
 
         schoolSearchTv= findViewById(R.id.search_school_tv);
@@ -122,6 +144,13 @@ public class MainActivity extends AppCompatActivity {
         viewPagerFragmentList.add(new MapFragment());
         viewPagerFragmentList.add(new CompareSchoolFragment());
         viewPagerFragmentList.add(new BookmarkActivity());
+
+        NaverMapOptions options = new NaverMapOptions() // 초기 화면 위치, 경도 생성자 설정
+                .camera(new CameraPosition(new LatLng(37.543344020789625, 127.07557079824849), 8))
+                .mapType(NaverMap.MapType.Basic);
+
+        options.locationButtonEnabled(true).tiltGesturesEnabled(false);;
+
 
         initUI();
         OnCheckPermission();
@@ -445,6 +474,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
+
         switch (requestCode) {
 
             case PERMISSIONS_REQUEST :
@@ -464,6 +494,50 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
         }
+
+        // 네이버 지도 소스 권한
+        if (locationSource.onRequestPermissionsResult(
+                requestCode, permissions, grantResults)) {
+            if (!locationSource.isActivated()) { // 권한 거부됨
+                naverMap.setLocationTrackingMode(LocationTrackingMode.None);
+            }
+            return;
+        }
+
+        super.onRequestPermissionsResult(
+                requestCode, permissions, grantResults);
+
+
     }
 
+    @UiThread
+    @Override
+    public void onMapReady(@NonNull @NotNull NaverMap naverMap) { // 맵 설정
+        this.naverMap = naverMap;
+
+        naverMap.setLocationSource(locationSource);
+        naverMap.setMapType(NaverMap.MapType.Basic); // 기본형 지도
+        naverMap.setLayerGroupEnabled(NaverMap.LAYER_GROUP_BUILDING, true); // 빌딩 그룹 생성
+
+        naverMap.setLocationTrackingMode(LocationTrackingMode.Follow);
+
+
+        NaverMapOptions options = new NaverMapOptions() // 초기 화면 위치, 경도 생성자 설정
+                .camera(new CameraPosition(new LatLng(37.543344020789625, 127.07557079824849), 8))
+                .mapType(NaverMap.MapType.Basic);
+
+        options.locationButtonEnabled(true).tiltGesturesEnabled(false);;
+
+
+        MapFragment mapFragment = MapFragment.newInstance(options);
+
+        //네이버 지도 추가 UI 설정
+        UiSettings uiSettings = naverMap.getUiSettings();
+        uiSettings.setLocationButtonEnabled(true); // 현 위치 버튼 활성화
+
+        // 마커 표시하기
+        Marker marker = new Marker();
+        marker.setPosition(new LatLng(36.763695, 127.281796));
+        marker.setMap(naverMap);
+    }
 }
