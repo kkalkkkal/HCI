@@ -374,6 +374,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     linearLayout2.setVisibility(View.VISIBLE);
                     schoolTitle.setVisibility(View.VISIBLE);
                     linearLayout.setClickable(true);
+                    linearLayout.setFocusable(true);
                     viewPager.setCurrentItem(0);
                     break;
                 case "비교":
@@ -382,7 +383,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     linearLayout.setVisibility(View.INVISIBLE);
                     linearLayout2.setVisibility(View.INVISIBLE);
                     schoolTitle.setVisibility(View.INVISIBLE);
-                    linearLayout.setClickable(false);
+
                     viewPager.setCurrentItem(1);
                     break;
                 case "즐겨찾기":
@@ -391,7 +392,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     linearLayout.setVisibility(View.INVISIBLE);
                     linearLayout2.setVisibility(View.INVISIBLE);
                     schoolTitle.setVisibility(View.INVISIBLE);
-                    linearLayout.setClickable(false);
                     viewPager.setCurrentItem(2);
                     break;
             }

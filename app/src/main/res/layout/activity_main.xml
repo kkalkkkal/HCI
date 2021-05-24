@@ -29,7 +29,7 @@
         <com.sothree.slidinguppanel.SlidingUpPanelLayout
             android:id="@+id/sliding_layout"
             android:layout_width="match_parent"
-            android:layout_height="665dp"
+            android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="10dp"
             android:gravity="bottom"
@@ -57,9 +57,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
-                android:focusable="false"
+                android:focusable="true"
                 android:orientation="vertical"
-                android:visibility="invisible"
                 >
 
                 <LinearLayout
