@@ -141,7 +141,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        OnCheckPermission(); // 권한 확인
 
+
+        System.out.println("hello");
+        String add = getAddress_DAUM("서울특별시 광진구 아차산로44길 26");
+        System.out.println(add);
+
+        // 네이버 지도 설정
         NaverMapOptions options = new NaverMapOptions() // 초기 화면 위치, 경도 생성자 설정
                 .camera(new CameraPosition(new LatLng(37.543344020789625, 127.07557079824849), 14)) // 건국대 기준으로 지도를 연다.
                 .mapType(NaverMap.MapType.Basic);
@@ -153,9 +160,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
         locationSource =
-                new FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE);
+                new FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE); // 현재 위치 갱신
 
-        comeonDB();
+        comeonDB(); // DB 가져오기
 
         schoolSearchTv= findViewById(R.id.search_school_tv);
         viewPager= findViewById(R.id.main_viewPager);
@@ -167,8 +174,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         viewPagerFragmentList.add(new BookmarkActivity());
 
 
-        initUI();
-        OnCheckPermission();
+        initUI(); // UI 초기화
+
     }
 
     // 처음 UI 설정
@@ -209,6 +216,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
             return true;
         });
+
+
     }
 
     private long backButtonClickTime= 0;
@@ -425,9 +434,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     }
                 }
 
-
-
-
             }
 
             if(wb2 != null) {
@@ -577,8 +583,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         address = sheet.getCell(7, 2).getContents(); // 유치원 주소는 7번째 열에 있음. row는 줄.
 
         // 네이버 API 주소 검색 요청
-
-
+        String response = getAddress_DAUM(address);
 
         // 마커는 최대 10개
         Marker marker1 = new Marker();
@@ -629,12 +634,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         final String Client_ID = "o82z0vth6u"; // 인증용 클라이언트 아이디
         final String Client_Secret = "LjN7euyVUTJlH2haz5RmIMmwwTVq77I6ODNipNrE"; // 클라이언트 인증키
 
-        final String API_URL = "https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode";
+        final String API_URL = "https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query=";
 
         try {
-            String addr = URLEncoder.encode(data, "UTF-8");  //주소입력
+            String addr = URLEncoder.encode(data, "UTF-8");  // data : 주소입력
             String apiURL = "https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query=" + addr; //json
             //String apiURL = "https://openapi.naver.com/v1/map/geocode.xml?query=" + addr; // xml
+
+            // http 프로토콜로 api 호출
             URL url = new URL(apiURL);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
@@ -655,11 +662,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
             br.close();
             System.out.println(response.toString());
+            return response.toString(); // 응답 반환
         } catch (Exception e) {
             System.out.println(e);
+            return null; // 오류면 주소값 없이 반환
         }
-
-        return null; // 주소값 반환
     }
 
 }

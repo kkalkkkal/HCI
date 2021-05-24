@@ -7,6 +7,12 @@ android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
 
+    // Gradle automatically adds 'android.test.runner' as a dependency.
+    useLibrary 'android.test.runner'
+
+    useLibrary 'android.test.base'
+    useLibrary 'android.test.mock'
+
     defaultConfig {
         applicationId "com.example.hci_project"
         minSdkVersion 23
