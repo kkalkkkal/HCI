@@ -19,6 +19,7 @@ import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -87,6 +88,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private ViewPager2 viewPager;
     private List<Fragment> viewPagerFragmentList = new ArrayList<>();
     private RecyclerView recyclerView;
+    private LinearLayout linearLayout;
+    private LinearLayout linearLayout2;
+    private TextView schoolTitle;
 
     // 메인 간이 필터
     private Chip kinder_chip; // 유치원 필터
@@ -244,7 +248,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         child_chip = findViewById(R.id.child_chips);
         schoolSearchTv= findViewById(R.id.search_school_tv);
         viewPager= findViewById(R.id.main_viewPager);
-
+        linearLayout = findViewById(R.id.dragView);
+        linearLayout2 = findViewById(R.id.common_result);
+        schoolTitle = findViewById(R.id.commonTitle);
 
 
         viewPagerFragmentList.add(mapFragment); // 커스텀 맵 프래그먼트 : 기존 new MapFragment 대체
@@ -297,7 +303,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         marker19.setMap(null); // 기존 마커 삭제
                         marker20.setMap(null); // 기존 마커 삭제
                         child_chip.setChecked(false);
-                        dataList.clear();
+                        //dataList.clear();
                         NearKinderMarker();
                     } catch (ParseException e) {
                         e.printStackTrace();
@@ -306,7 +312,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     }
                 } else {
                     try { // 전체 출력
-                        dataList.clear();
+                        //dataList.clear();
                         NearKinderMarker();
                         NearChildMarker();
                     } catch (ParseException e) {
@@ -322,7 +328,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onClick(View v) {
                 if (child_chip.isChecked()) {
-                    dataList.clear();
+                    //dataList.clear();
                     try {
                         marker1.setMap(null); // 기존 유치원 마커 삭제
                         marker2.setMap(null); // 기존 마커 삭제
@@ -364,26 +370,35 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     kinder_chip.setVisibility(View.VISIBLE);
                     child_chip.setVisibility(View.VISIBLE);
                     schoolSearchTv.setVisibility(View.VISIBLE);
+                    linearLayout.setVisibility(View.VISIBLE);
+                    linearLayout2.setVisibility(View.VISIBLE);
+                    schoolTitle.setVisibility(View.VISIBLE);
+                    linearLayout.setClickable(true);
                     viewPager.setCurrentItem(0);
                     break;
                 case "비교":
                     kinder_chip.setVisibility(View.INVISIBLE);
                     child_chip.setVisibility(View.INVISIBLE);
+                    linearLayout.setVisibility(View.INVISIBLE);
+                    linearLayout2.setVisibility(View.INVISIBLE);
+                    schoolTitle.setVisibility(View.INVISIBLE);
+                    linearLayout.setClickable(false);
                     viewPager.setCurrentItem(1);
                     break;
                 case "즐겨찾기":
                     kinder_chip.setVisibility(View.INVISIBLE);
                     child_chip.setVisibility(View.INVISIBLE);
+                    linearLayout.setVisibility(View.INVISIBLE);
+                    linearLayout2.setVisibility(View.INVISIBLE);
+                    schoolTitle.setVisibility(View.INVISIBLE);
+                    linearLayout.setClickable(false);
                     viewPager.setCurrentItem(2);
                     break;
             }
             return true;
         });
 
-        // 리사이클러뷰에 LinearLayoutManager 객체 지정.
-        recyclerView = (RecyclerView)findViewById(R.id.commonRecycler);
-        LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false);
-        recyclerView.setLayoutManager(manager); // LayoutManager 등록
+
 
 
     }
@@ -922,6 +937,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         }
 
+        // 리사이클러뷰에 LinearLayoutManager 객체 지정.
+        recyclerView = (RecyclerView)findViewById(R.id.commonRecycler);
+        LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false);
+        recyclerView.setLayoutManager(manager); // LayoutManager 등록
         // 리사이클러뷰에 SimpleTextAdapter 객체 지정.
         recyclerView.setAdapter(new commonAdapter(dataList));  // Adapter 등록
 
@@ -1171,6 +1190,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         }
 
+        // 리사이클러뷰에 LinearLayoutManager 객체 지정.
+        recyclerView = (RecyclerView)findViewById(R.id.commonRecycler);
+        LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false);
+        recyclerView.setLayoutManager(manager); // LayoutManager 등록
         // 리사이클러뷰에 SimpleTextAdapter 객체 지정.
         recyclerView.setAdapter(new commonAdapter(dataList));  // Adapter 등록
 
