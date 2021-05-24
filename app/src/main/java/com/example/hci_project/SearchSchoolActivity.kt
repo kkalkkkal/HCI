@@ -1,18 +1,17 @@
 package com.example.hci_project
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Toast
-import com.example.hci_project.bean.FilterSetting
-import com.example.hci_project.bean.SchoolManager
-import com.example.hci_project.bean.SearchResult
-import com.example.hci_project.bean.SearchResultManager
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import com.example.hci_project.bean.*
 import com.example.hci_project.databinding.ActivitySearchSchoolBinding
-import com.example.hci_project.dummy.DummySchoolContent
 
 class SearchSchoolActivity : AppCompatActivity() {
     lateinit var binding: ActivitySearchSchoolBinding
@@ -32,9 +31,17 @@ class SearchSchoolActivity : AppCompatActivity() {
 
         initListener()
         simpleFilterFragment =
-            supportFragmentManager.findFragmentById(R.id.simple_filter_fragment)!! as FilterSimpleStatusFragment
+                supportFragmentManager.findFragmentById(R.id.simple_filter_fragment)!! as FilterSimpleStatusFragment
         searchResultFragment =
-            supportFragmentManager.findFragmentById(R.id.search_result_fragment)!! as SearchResultFragment
+                supportFragmentManager.findFragmentById(R.id.search_result_fragment)!! as SearchResultFragment
+        if (
+                ContextCompat.checkSelfPermission(
+                        this,
+                        Manifest.permission_group.LOCATION
+                ) == PackageManager.PERMISSION_GRANTED) {
+            // You can use the API that requires the permission.
+            LocationUtil.requestUserLocation(this)
+        }
     }
 
 

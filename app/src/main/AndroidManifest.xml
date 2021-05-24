@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.hci_project">
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!--대략적인 위치 확인 권한 요청 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />  <!--정확한 위치 확인 권한 요청-->
 
     <application
         android:allowBackup="true"
