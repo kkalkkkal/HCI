@@ -40,7 +40,7 @@ class SchoolManager private constructor() {
     fun search(keyword: String, filterSetting: FilterSetting?): ArrayList<School> {
         val resultList: ArrayList<School> = ArrayList()
         list.map {
-            if (keyword != "" || it.name.contains(keyword))
+            if (keyword == "" || it.name.contains(keyword))
                 resultList.add(it)
         }
         return if (filterSetting == null) resultList else applyFilter(resultList, filterSetting)
