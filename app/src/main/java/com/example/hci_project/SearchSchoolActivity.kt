@@ -9,9 +9,10 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
+import androidx.core.app.ActivityCompat
 import com.example.hci_project.bean.*
 import com.example.hci_project.databinding.ActivitySearchSchoolBinding
+
 
 class SearchSchoolActivity : AppCompatActivity() {
     lateinit var binding: ActivitySearchSchoolBinding
@@ -34,16 +35,28 @@ class SearchSchoolActivity : AppCompatActivity() {
                 supportFragmentManager.findFragmentById(R.id.simple_filter_fragment)!! as FilterSimpleStatusFragment
         searchResultFragment =
                 supportFragmentManager.findFragmentById(R.id.search_result_fragment)!! as SearchResultFragment
-        if (
-                ContextCompat.checkSelfPermission(
-                        this,
-                        Manifest.permission_group.LOCATION
-                ) == PackageManager.PERMISSION_GRANTED) {
+
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             // You can use the API that requires the permission.
             LocationUtil.requestUserLocation(this)
+        } else {
+            requirePermission()
         }
     }
 
+    //위치 권한 설정
+    private fun requirePermission() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                Toast.makeText(this, "위치 필터 적용을 사용하려면 위치 권한이 필요합니다", Toast.LENGTH_LONG).show()
+            }
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION),
+                    1)
+        }
+    }
 
     private fun initListener() {
         binding.apply {
@@ -96,6 +109,10 @@ class SearchSchoolActivity : AppCompatActivity() {
             binding.searchKeyword.setText(text)
         }
         renderSearchResult()
+
+        if (filterSetting != null && filterSetting!!.maxDistanceKmFromHere != 5 && LocationUtil.location == null) {
+            Toast.makeText(this, "위치 정보를 받아올 수 없어 거리 필터가 무시됩니다", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun renderSearchResult() {
@@ -143,8 +160,6 @@ class SearchSchoolActivity : AppCompatActivity() {
                     }
                     this.filterSetting?.overwrite(filterSetting)
                 }
-
-                Toast.makeText(applicationContext, "필터가 적용되었습니다", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -152,5 +167,19 @@ class SearchSchoolActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         filterSetting?.setCallback(null)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        var allGranted = true
+        grantResults.map {
+            if (it == PackageManager.PERMISSION_DENIED)
+                allGranted = false
+        }
+
+        if (allGranted) {
+            filterSetting?.callback?.run()
+        }
     }
 }

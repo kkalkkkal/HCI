@@ -78,7 +78,7 @@ class SchoolManager private constructor() {
                 }
             }
         }
-        if (filterSetting.maxDistanceKmFromHere != 0 && LocationUtil.location != null) {
+        if (filterSetting.maxDistanceKmFromHere != 5 && LocationUtil.location != null) {
             val iterator = resultList.iterator()
             while (iterator.hasNext()) {
                 val school = iterator.next()
@@ -137,8 +137,8 @@ class SchoolManager private constructor() {
                                 getSum(currentRow_teacher, 'g', 't'),
                                 getSum(currentRow, 'l', 'u'),
                                 getSum(currentRow, 'q', 'u'),
-                                0.0,
-                                0.0,
+                                currentRow[getColIndex('w')].contents!!.toDouble(),
+                                currentRow[getColIndex('x')].contents!!.toDouble(),
                                 currentRow_bus[getColIndex('f')].contents!! == "Y",
                                 currentRow[getColIndex('j')].contents!!,
                                 currentRow[getColIndex('g')].contents!!,

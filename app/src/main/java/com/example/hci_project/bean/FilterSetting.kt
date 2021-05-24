@@ -70,7 +70,7 @@ class FilterSetting() : Serializable {
 
     var minSchoolSize: Int = 0
     var maxKidsPerTeacher: Int = 0
-    var maxDistanceKmFromHere: Int = 0
+    var maxDistanceKmFromHere: Int = 3
 
     var schoolStartHour: Int = 0
     var schoolEndTime: Int = 0

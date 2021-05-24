@@ -37,6 +37,7 @@ class LocationUtil private constructor() {
             //require Location Permission
             val mLocationManager = context.getSystemService(LOCATION_SERVICE) as LocationManager
 
+            this.location= mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
             mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000 * 60,
                     100f, mLocationListener)
         }

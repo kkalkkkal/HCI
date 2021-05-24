@@ -43,7 +43,7 @@ class FilterSimpleStatusFragment : Fragment() {
                 builder.append("최소 면적: ${minSchoolSize}평", null)
             if (maxKidsPerTeacher != 0)
                 builder.append("최대 교사 당 학생수: ${maxKidsPerTeacher}명", null)
-            if (maxDistanceKmFromHere != 0)
+            if (maxDistanceKmFromHere != 5)
                 builder.append("최대 거리: ${maxDistanceKmFromHere}km", null)
 
             if (schoolStartHour != 0)
