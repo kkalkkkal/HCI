@@ -60,10 +60,10 @@ class SearchSchoolActivity : AppCompatActivity() {
 
             searchKeyword.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    count: Int,
-                    after: Int
+                        s: CharSequence?,
+                        start: Int,
+                        count: Int,
+                        after: Int
                 ) {
                 }
 
@@ -92,7 +92,7 @@ class SearchSchoolActivity : AppCompatActivity() {
                 save(applicationContext)
             }
         }
-        if(binding.searchKeyword.text.toString()!= text){
+        if (binding.searchKeyword.text.toString() != text) {
             binding.searchKeyword.setText(text)
         }
         renderSearchResult()
@@ -107,14 +107,14 @@ class SearchSchoolActivity : AppCompatActivity() {
                 runOnUiThread {
                     if (it == null) {
                         Toast.makeText(applicationContext, "유치원 정보를 로드할 수 없습니다", Toast.LENGTH_SHORT)
-                            .show()
+                                .show()
                         return@runOnUiThread
                     }
-                    val resultList = it.search(keyword)
+                    val resultList = it.search(keyword, filterSetting)
                     if (resultList.isEmpty()) {
                         searchResultFragment.setList(ArrayList())
                         Toast.makeText(applicationContext, "해당하는 유치원이 없습니다", Toast.LENGTH_SHORT)
-                            .show()
+                                .show()
                         return@runOnUiThread
                     }
                     Toast.makeText(this, "검색/필터를 반영하여 ${resultList.size}개의 결과를 표시합니다", Toast.LENGTH_SHORT).show()
