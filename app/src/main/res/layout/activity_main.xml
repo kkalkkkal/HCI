@@ -59,6 +59,7 @@
                 android:clickable="true"
                 android:focusable="false"
                 android:orientation="vertical"
+                android:visibility="invisible"
                 >
 
                 <LinearLayout
