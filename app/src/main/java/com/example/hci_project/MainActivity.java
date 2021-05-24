@@ -20,7 +20,9 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.hci_project.bean.School;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.chip.Chip;
 import com.naver.maps.geometry.LatLng;
 import com.naver.maps.map.CameraPosition;
 import com.naver.maps.map.LocationSource;
@@ -55,6 +57,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 
 
+import java.sql.Struct;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,6 +81,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private ViewPager2 viewPager;
     private List<Fragment> viewPagerFragmentList = new ArrayList<>();
 
+    // 메인 간이 필터
+    private Chip kinder_chip; // 유치원 필터
+    private Chip child_chip; // 어린이집 필터
+
+
+    // 네이버 자기 위치 디폴트 코드
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
     public FusedLocationSource locationSource;
     static public NaverMap naverMap; // 네이버 맵 객체 - 다른 곳에서도 접근 가능하게 하려고 일단 전역변수화함.
@@ -189,7 +198,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         // 네이버 지도 설정
         NaverMapOptions options = new NaverMapOptions() // 초기 화면 위치, 경도 생성자 설정
-                .camera(new CameraPosition(new LatLng(37.543344020789625, 127.07557079824849), 14)) // 건국대 기준으로 지도를 연다.
+                .camera(new CameraPosition(new LatLng(37.543344020789625, 127.07557079824849), 13)) // 건국대 기준으로 지도를 연다.
                 .mapType(NaverMap.MapType.Basic);
 
         options.locationButtonEnabled(true).tiltGesturesEnabled(false);
@@ -201,6 +210,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         comeonDB(); // DB 가져오기
 
+
+        kinder_chip = findViewById(R.id.kinder_chips);
+        child_chip = findViewById(R.id.child_chips);
         schoolSearchTv= findViewById(R.id.search_school_tv);
         viewPager= findViewById(R.id.main_viewPager);
 
@@ -234,6 +246,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         viewPager.setUserInputEnabled(false);
 
         schoolSearchTv.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, SearchSchoolActivity.class)));
+
+        kinder_chip.setChecked(false); // 처음에는 체크 X
+        child_chip.setChecked(false);
+
+       // kinder_chip.setOnClickListener({});
 
         BottomNavigationView bottomNavigationView= findViewById(R.id.bottomNavBar);
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
@@ -662,16 +679,26 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
+
     public void NearKinderMarker() throws ParseException, JSONException { // 화면에 있는 유치원의 마커를 표시함
         int count = 0 ; // 최대 10개만 표시 카운트
          // 유치원 기본 현황 시트
         int colTotal = sheet11.getColumns();    // 전체 컬럼
-        String address = null;
-        //Location mlocationSource = locationSource.getLastLocation();
-        double m_y =  37.541680773674464; //mlocationSource.getLatitude();
-        double m_x = 127.07943250328056; //mlocationSource.getLongitude();
+        String address = "";
+        double m_y;
+        double m_x;
+        try {
+            Location mlocationSource = locationSource.getLastLocation();
+            m_y = mlocationSource.getLatitude(); // 자기 위치 위도
+            m_x = mlocationSource.getLongitude();
+        } catch (Exception e){
+            m_y =  37.541680773674464; // 건국대 기준
+            m_x = 127.07943250328056; //
+        }
+
 
         for (int i = 3; i < colTotal; i++){
+
 
             address = sheet11.getCell(7, i).getContents(); // 유치원 주소는 7번째 열에 있음.(0번째 부터 시작) row는 줄. 유치원 위도는 22, 23번째에 있다.
 
@@ -810,45 +837,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         */
 
-
-
-
-        Marker marker2 = new Marker();
-        marker2.setPosition(new LatLng(37.541680773674464, 127.07943250328056));
-        marker2.setMap(naverMap);
-
-        Marker marker3 = new Marker();
-        marker3.setPosition(new LatLng(37.541680773674464, 127.07943250328056));
-        marker3.setMap(naverMap);
-
-        Marker marker4 = new Marker();
-        marker4.setPosition(new LatLng(37.541680773674464, 127.07943250328056));
-        marker4.setMap(naverMap);
-
-        Marker marker5 = new Marker();
-        marker5.setPosition(new LatLng(37.541680773674464, 127.07943250328056));
-        marker5.setMap(naverMap);
-
-        Marker marker6 = new Marker();
-        marker6.setPosition(new LatLng(37.541680773674464, 127.07943250328056));
-        marker6.setMap(naverMap);
-
-        Marker marker7 = new Marker();
-        marker7.setPosition(new LatLng(37.541680773674464, 127.07943250328056));
-        marker7.setMap(naverMap);
-
-        Marker marker8 = new Marker();
-        marker8.setPosition(new LatLng(37.541680773674464, 127.07943250328056));
-        marker8.setMap(naverMap);
-
-        Marker marker9 = new Marker();
-        marker9.setPosition(new LatLng(37.541680773674464, 127.07943250328056));
-        marker9.setMap(naverMap);
-
-        Marker marker10 = new Marker();
-        marker10.setPosition(new LatLng(37.541680773674464, 127.07943250328056));
-        marker10.setMap(naverMap);
-
     }
 
     public void NearChildMarker() throws JSONException, ParseException { // 화면에 있는 어린이집의 마커를 표시함
@@ -856,9 +844,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         //Sheet sheet = getSheet0(); // 어린이집 기본 현황 시트
 
         String address = "";
+
+
+
         address = sheet0.getCell(6, 2).getContents(); // 어린이집 주소는 6번째 열에 있음.(0번째부터 시작) row는 줄.
 
 
+        /*
         // 네이버 API 주소 검색 요청
         String response = getAddress_DAUM(address);
 
@@ -869,6 +861,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         double x = (double) jsonObj.get("x"); // double 형으로 경도 추출
         double y = (double) jsonObj.get("y"); // double 형으로 위도 추출
+        */
 
         // 마커는 최대 10개
         Marker marker1 = new Marker();

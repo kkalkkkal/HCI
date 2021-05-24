@@ -18,6 +18,6 @@ class School(
     val lng: Double,
     val isAvailableBus: Boolean,
     val homePage: String,
-    val sinceDate: String,
+    val sinceDate: String
 ) : Serializable {
 }

@@ -12,6 +12,7 @@
         android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="0dp">
+
         <TextView
             android:id="@+id/search_school_tv"
             android:elevation="5dp"
@@ -23,13 +24,44 @@
             android:layout_marginTop="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
+
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/main_viewPager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
-
+            android:layout_height="match_parent">
 
         </androidx.viewpager2.widget.ViewPager2>
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/kinder_chips"
+            style="@style/Widget.MaterialComponents.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/search_school_tv"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            android:text="유치원"
+            app:chipBackgroundColor="#FFEB3B"
+            app:rippleColor="#BABABA" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/child_chips"
+            style="@style/Widget.MaterialComponents.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/search_school_tv"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_toEndOf="@+id/kinder_chips"
+            android:text="어린이집"
+            android:textColor="#FFFFFF"
+            app:chipBackgroundColor="#9C27B0"
+            app:rippleColor="#BABABA" />
+
     </RelativeLayout>
 
 
