@@ -9,22 +9,25 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.HCI_Project">
-        <activity android:name=".SearchResultActivity">
-
+        <meta-data
+            android:name="com.naver.maps.map.CLIENT_ID"
+            android:value="o82z0vth6u" /> <!--네이버지도 클라이언트 아이디-->
+        <activity android:name=".MainActivity" />
+        <activity android:name=".IntroActivity"
+            android:theme="@style/SplashTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".BarChartActivity" />
         <activity android:name=".LineChartActivity" />
         <activity android:name=".PieChartActivity" />
-        <activity android:name=".CompareSchool">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+        <activity android:name=".CompareSchoolActivity">
         </activity>
+        <activity android:name=".SchoolInfoActivity"/>
         <activity android:name=".SearchFilterActivity" />
         <activity android:name=".SearchSchoolActivity" />
-        <activity android:name=".MainActivity" />
     </application>
 
 </manifest>
