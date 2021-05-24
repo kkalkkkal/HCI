@@ -22,7 +22,9 @@ class School(
 ) : Serializable {
 
     fun getKidsPerTeacher(): Int {
-        return currentStudentCnt / currentStudentCnt
+        if (teacherCnt == 0)
+            return 0
+        return currentStudentCnt / teacherCnt
     }
 
     fun getDistanceFromUserLocation(): Float {

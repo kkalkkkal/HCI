@@ -2,6 +2,7 @@ package com.example.hci_project.bean
 
 import android.content.Context
 import android.util.Log
+import jxl.Cell
 import jxl.Workbook
 import java.io.InputStream
 
@@ -22,12 +23,18 @@ class SchoolManager private constructor() {
             return
         }
         //load
-        try {
-            list = load(context)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        callback(if (list.isEmpty()) null else this)
+        Thread {
+            try {
+                list = loadChildHome(context)
+                list.addAll(loadKindergarden(context))
+                //success to load
+                callback(this)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                //fail to load
+                callback(null)
+            }
+        }.start()
     }
 
     fun search(keyword: String, filterSetting: FilterSetting?): ArrayList<School> {
@@ -71,7 +78,7 @@ class SchoolManager private constructor() {
                 }
             }
         }
-        if(filterSetting.maxDistanceKmFromHere!= 0 && LocationUtil.location!= null){
+        if (filterSetting.maxDistanceKmFromHere != 0 && LocationUtil.location != null) {
             val iterator = resultList.iterator()
             while (iterator.hasNext()) {
                 val school = iterator.next()
@@ -83,7 +90,72 @@ class SchoolManager private constructor() {
         return resultList
     }
 
-    private fun load(context: Context, filterSetting: FilterSetting? = null): ArrayList<School> {
+    private fun loadKindergarden(context: Context): ArrayList<School> {
+        // DB 불러오기
+        val schoolList = ArrayList<School>()
+
+        val is2: InputStream =
+                context.resources.assets.open("kindergardenDB.xls") // 유치원 현황
+        val wb = Workbook.getWorkbook(is2)
+        if (wb != null) {
+            val sheet = wb.getSheet("유치원+기본현황") // 시트 불러오기
+            val sheet_room = wb.getSheet("유치원+교실면적현황") // 시트 불러오기
+            val sheet_bus = wb.getSheet("유치원+통학차량현황") // 시트 불러오기
+            val sheet_teacher = wb.getSheet("유치원+직위·자격별+교직원현황") // 시트 불러오기
+            if (sheet != null && sheet_room != null && sheet_bus != null) {
+                var getColIndex = fun(char: Char): Int {
+                    return char.toInt() - 'a'.toInt()
+                }
+                var getSum = fun(row: Array<Cell>, start: Char, end: Char): Int {
+                    var sum = 0
+                    for (idx in getColIndex(start) until getColIndex(end)) {
+                        try {
+                            sum += row[idx].contents!!.toInt()
+                        } catch (e: Exception) {
+                            //cast error
+                            e.printStackTrace()
+                        }
+                    }
+                    return sum
+                }
+                //iterate about row
+                for (row in 3 until sheet.rows - 1) {
+                    try {
+                        val currentRow = sheet.getRow(row)
+                        val currentRow_room = sheet_room.getRow(row)
+                        val currentRow_bus = sheet_bus.getRow(row)
+                        val currentRow_teacher = sheet_bus.getRow(row)
+                        val school = School(
+                                currentRow[getColIndex('h')].contents!!,
+                                currentRow[getColIndex('d')].contents!!,
+                                currentRow[getColIndex('e')].contents!!,
+                                "",
+                                currentRow[getColIndex('l')].contents!!,
+                                currentRow_room[getColIndex('f')].contents!!.replace("개", "").toInt(),
+                                (currentRow_room[getColIndex('g')].contents!!.replace("㎡", "").toInt() / 3.3).toInt(),
+                                if (currentRow_room[getColIndex('h')].contents!!.replace("㎡", "") == "") 0 else 1,
+                                getSum(currentRow_teacher, 'g', 't'),
+                                getSum(currentRow, 'l', 'u'),
+                                getSum(currentRow, 'q', 'u'),
+                                0.0,
+                                0.0,
+                                currentRow_bus[getColIndex('f')].contents!! == "Y",
+                                currentRow[getColIndex('j')].contents!!,
+                                currentRow[getColIndex('g')].contents!!,
+                        )
+                        schoolList.add(school)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        Log.d("excel translate err", e.toString())
+                    }
+                }
+            }
+        }
+        wb?.close()
+        return schoolList
+    }
+
+    private fun loadChildHome(context: Context): ArrayList<School> {
         // DB 불러오기
         val schoolList = ArrayList<School>()
 
@@ -129,6 +201,7 @@ class SchoolManager private constructor() {
                 }
             }
         }
+        wb2?.close()
         return schoolList
     }
 }
