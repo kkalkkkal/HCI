@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.hci_project.bean.School;
+import com.example.hci_project.bean.School2;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 
 public class commonAdapter extends RecyclerView.Adapter<commonAdapter.ViewHolder> {
 
-    private ArrayList<School> myDataList = null;
+    private ArrayList<School2> myDataList = null;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView textView1;
@@ -41,7 +42,7 @@ public class commonAdapter extends RecyclerView.Adapter<commonAdapter.ViewHolder
         }
     }
 
-    commonAdapter(ArrayList<School> dataList)
+    commonAdapter(ArrayList<School2> dataList)
     {
         myDataList = dataList;
     }

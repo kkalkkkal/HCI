@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.hci_project.bean.School;
+import com.example.hci_project.bean.School2;
 import com.example.hci_project.bean.SchoolManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.chip.Chip;
@@ -112,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     static Sheet sheet11; // 유치원 기본 현황
     static Sheet sheet12; // 유치원 건물 현황
 
-    private ArrayList<School> dataList;
+    private ArrayList<School2> dataList = new ArrayList<>();
 
     static final int PERMISSIONS_REQUEST = 0x0000001;
 
@@ -296,6 +297,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         marker19.setMap(null); // 기존 마커 삭제
                         marker20.setMap(null); // 기존 마커 삭제
                         child_chip.setChecked(false);
+                        dataList.clear();
                         NearKinderMarker();
                     } catch (ParseException e) {
                         e.printStackTrace();
@@ -304,8 +306,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     }
                 } else {
                     try { // 전체 출력
-                        NearChildMarker();
+                        dataList.clear();
                         NearKinderMarker();
+                        NearChildMarker();
                     } catch (ParseException e) {
                         e.printStackTrace();
                     } catch (JSONException e) {
@@ -319,6 +322,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onClick(View v) {
                 if (child_chip.isChecked()) {
+                    dataList.clear();
                     try {
                         marker1.setMap(null); // 기존 유치원 마커 삭제
                         marker2.setMap(null); // 기존 마커 삭제
@@ -339,6 +343,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     }
                 } else {
                     try {
+
                         NearKinderMarker();
                         NearChildMarker();
                     } catch (ParseException e) {
@@ -751,6 +756,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             e.printStackTrace();
         }
 
+
+
         // 클릭 리스너 :
         naverMap.setOnMapClickListener((point, coord) ->
                 Toast.makeText(this, coord.latitude + ", " + coord.longitude,
@@ -784,8 +791,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
          // 유치원 기본 현황 시트
         int colTotal = sheet11.getColumns();    // 전체 컬럼
         String address = "";
-        double m_y;
-        double m_x;
+        double m_y, y;
+        double m_x, x;
         try {
             Location mlocationSource = locationSource.getLastLocation();
             m_y = mlocationSource.getLatitude(); // 자기 위치 위도
@@ -799,30 +806,31 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         ArrayList<Integer> num = new ArrayList<>();
 
 
-        // 리사이클러뷰에 SimpleTextAdapter 객체 지정.
-        recyclerView.setAdapter(new commonAdapter(dataList));  // Adapter 등록
 
         for (int i = 3; i < colTotal; i++){
 
 
             address = sheet11.getCell(7, i).getContents(); // 유치원 주소는 7번째 열에 있음.(0번째 부터 시작) row는 줄. 유치원 위도는 22, 23번째에 있다.
 
-            double y = Double.parseDouble(sheet11.getCell(22, i).getContents()); // 위도 가져옴.
-            double x = Double.parseDouble(sheet11.getCell(23, i).getContents()); // 경도 가져옴.
+            y = Double.parseDouble(sheet11.getCell(22, i).getContents()); // 위도 가져옴.
+            x = Double.parseDouble(sheet11.getCell(23, i).getContents()); // 경도 가져옴.
 
             String kindername = sheet11.getCell(3,i).getContents(); // 유치원이름은 3번째 (0번째 부터 시작)에 있음.
-
+            String kinderType = sheet11.getCell(4,i).getContents(); // 유치원 유형은 4번째 (0번째 부터 시작)에 있음.
+            String kinderTel = sheet11.getCell(8,i).getContents(); // 유치원 전화번호는 8번째 (0번째 부터 시작)에 있음.
 
 
 
             if (count >= 10) // 검색 결과가 10개 이상이면 아웃
             {
+
                 break;
             }
 
 
             if (distance(y,x,m_y,m_x,"kilometer") < 3.0){ // 자신의 주변 (3km 이내라면) 검색
 
+                dataList.add(new School2(address, kindername, kinderType, kinderTel, x, y));
                 name.add(kindername);
                 num.add(i);
                 switch (count) {
@@ -913,6 +921,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 count++;
             }
         }
+
+        // 리사이클러뷰에 SimpleTextAdapter 객체 지정.
+        recyclerView.setAdapter(new commonAdapter(dataList));  // Adapter 등록
 
         // 각 마커 클릭 리스너
         marker1.setOnClickListener(new Overlay.OnClickListener() {
@@ -1038,8 +1049,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         int colTotal = sheet0.getColumns();    // 전체 컬럼
         String address2 = "";
-        double m_y;
-        double m_x;
+        String kindername2= "";
+        String kinderTel2="";
+        String kinderType2="";
+        double m_y, y;
+        double m_x, x;
         try {
             Location mlocationSource = locationSource.getLastLocation();
             m_y = mlocationSource.getLatitude(); // 자기 위치 위도
@@ -1054,20 +1068,24 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             address2 = sheet0.getCell(6, i).getContents(); // 어린이집 주소는 6번째 열에 있음.(0번째부터 시작) row는 줄.
 
-            double y = Double.parseDouble(sheet0.getCell(15, i).getContents()); // 위도 가져옴.
-            double x = Double.parseDouble(sheet0.getCell(16, i).getContents()); // 경도 가져옴.
+            y = Double.parseDouble(sheet0.getCell(15, i).getContents()); // 위도 가져옴.
+            x = Double.parseDouble(sheet0.getCell(16, i).getContents()); // 경도 가져옴.
 
-            String kindername = sheet0.getCell(2,i).getContents(); // 유치원이름은 2번째 (0번째 부터 시작)에 있음.
+            kindername2 = sheet0.getCell(2,i).getContents(); // 어린이집 이름은 2번째 (0번째 부터 시작)에 있음.
+            kinderType2 = sheet0.getCell(3,i).getContents(); // 어린이집 유형은 3번째 (0번째 부터 시작)에 있음.
+            kinderTel2 = sheet0.getCell(7,i).getContents(); // 어린이집 전화번호는 7번째 (0번째 부터 시작)에 있음.
 
 
             if (count >= 10) // 검색 결과가 10개 이상이면 아웃
             {
+
                 break;
             }
 
 
             if (distance(y,x,m_y,m_x,"kilometer") < 3.0){ // 자신의 주변 (3km 이내라면) 검색
 
+                dataList.add(new School2(address2, kindername2, kinderType2, kinderTel2, x, y));
                 switch (count) {
                     case 0:
                         marker11.setMap(null); // 기존 마커 삭제
@@ -1152,6 +1170,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 count++;
             }
         }
+
+        // 리사이클러뷰에 SimpleTextAdapter 객체 지정.
+        recyclerView.setAdapter(new commonAdapter(dataList));  // Adapter 등록
 
         /*
         // 네이버 API 주소 검색 요청
