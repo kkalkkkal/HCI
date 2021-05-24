@@ -1,13 +1,13 @@
 package com.example.hci_project
 
 import android.app.Activity
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.SeekBar
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.hci_project.bean.FilterSetting
@@ -15,7 +15,7 @@ import com.example.hci_project.databinding.ActivitySearchFilterBinding
 
 class SearchFilterActivity : AppCompatActivity() {
     lateinit var binding: ActivitySearchFilterBinding
-    private val filterSetting: FilterSetting = FilterSetting()
+    private lateinit var filterSetting: FilterSetting
     private lateinit var facilitateImageButtonLayoutParams: ViewGroup.LayoutParams
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,10 +24,22 @@ class SearchFilterActivity : AppCompatActivity() {
         binding = ActivitySearchFilterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        supportActionBar?.title = "검색 필터 설정"
 
+        filterSetting = if (intent.getSerializableExtra("filter") != null) {
+            FilterSetting(intent.getSerializableExtra("filter") as FilterSetting)
+        } else {
+            FilterSetting()
+        }
+
+        supportActionBar?.title = "검색 필터 설정"
         initComponent()
         initListener()
+
+        filterSetting.setCallback {
+            renderFacilitateList()
+            renderFilterValues()
+        }
+
     }
 
     private fun initComponent() {
@@ -35,16 +47,17 @@ class SearchFilterActivity : AppCompatActivity() {
         renderFacilitateList()
 
         binding.apply {
-            //TODO: seekBar 값이 바뀔 때 마다 filterSetting에 저장
             schoolSizeMaxBar.max = 4
-            schoolSizeMaxBar.progress = 0
+            schoolSizeMaxBar.progress = filterSetting.minSchoolSize / 30
             schoolSizeMaxValue.text = "제한없음"
             schoolSizeMaxBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-                override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                    if (progress == 0) {
-                        schoolSizeMaxValue.text = "제한없음"
-                    } else {
-                        schoolSizeMaxValue.text = "${(progress) * 30}평 이상"
+                override fun onProgressChanged(
+                    seekBar: SeekBar?,
+                    progress: Int,
+                    fromUser: Boolean
+                ) {
+                    filterSetting.use {
+                        it.minSchoolSize = progress * 30
                     }
                 }
 
@@ -57,14 +70,17 @@ class SearchFilterActivity : AppCompatActivity() {
 
 
             kidsPerTeacherMaxBar.max = 4
-            kidsPerTeacherMaxBar.progress = 0
-            kidsPerTeacherMaxValue.text = "제한없음"
-            kidsPerTeacherMaxBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-                override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                    if (progress == 0) {
-                        kidsPerTeacherMaxValue.text = "제한없음"
-                    } else {
-                        kidsPerTeacherMaxValue.text = "${(progress + 1) * 10}명 이하"
+            kidsPerTeacherMaxBar.progress =
+                if (filterSetting.maxKidsPerTeacher == 0) 0 else (filterSetting.maxKidsPerTeacher / 10) - 1
+            kidsPerTeacherMaxBar.setOnSeekBarChangeListener(object :
+                SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(
+                    seekBar: SeekBar?,
+                    progress: Int,
+                    fromUser: Boolean
+                ) {
+                    filterSetting.use {
+                        it.maxKidsPerTeacher = if (progress == 0) progress else (progress + 1) * 10
                     }
                 }
 
@@ -76,13 +92,18 @@ class SearchFilterActivity : AppCompatActivity() {
             })
 
 
-
-            schoolDistanceMaxBar.max = 4
-            schoolDistanceMaxBar.progress = 0
-            schoolDistanceMaxValue.text = "반경 ${schoolDistanceMaxBar.progress + 1}km 내"
-            schoolDistanceMaxBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-                override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                    schoolDistanceMaxValue.text = "반경 ${(progress + 1)}km 내"
+            schoolDistanceMaxBar.max = 5
+            schoolDistanceMaxBar.progress = filterSetting.maxDistanceKmFromHere
+            schoolDistanceMaxBar.setOnSeekBarChangeListener(object :
+                SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(
+                    seekBar: SeekBar?,
+                    progress: Int,
+                    fromUser: Boolean
+                ) {
+                    filterSetting.use {
+                        it.maxDistanceKmFromHere = progress
+                    }
                 }
 
                 override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -91,6 +112,68 @@ class SearchFilterActivity : AppCompatActivity() {
                 override fun onStopTrackingTouch(seekBar: SeekBar?) {
                 }
             })
+
+            val hours = ArrayList<String>()
+            hours.add("제한없음")
+            for (hour in 1..24) {
+                hours.add(hour.toString() + "시")
+            }
+
+            openTimeSpinner.adapter =
+                ArrayAdapter(this@SearchFilterActivity, android.R.layout.simple_list_item_1, hours)
+            openTimeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    filterSetting.use {
+                        filterSetting.schoolStartHour =
+                            if (position != 0) hours[position].replace("시", "")
+                                .toInt() else 0
+                    }
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                }
+            }
+            if (filterSetting.schoolStartHour != 0)
+                openTimeSpinner.setSelection(filterSetting.schoolStartHour)
+            closeTimeSpinner.adapter =
+                ArrayAdapter(this@SearchFilterActivity, android.R.layout.simple_list_item_1, hours)
+            closeTimeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    filterSetting.use {
+                        filterSetting.schoolEndTime =
+                            if (position != 0) hours[position].replace("시", "")
+                                .toInt() else 0
+                    }
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                }
+            }
+            if (filterSetting.schoolEndTime != 0)
+                closeTimeSpinner.setSelection(filterSetting.schoolEndTime)
+
+            renderFilterValues()
+        }
+    }
+
+    private fun renderFilterValues() {
+        filterSetting.apply {
+            binding.schoolSizeMaxValue.text =
+                if (minSchoolSize == 0) "제한없음" else "${minSchoolSize}평 이상"
+            binding.kidsPerTeacherMaxValue.text =
+                if (maxKidsPerTeacher == 0) "제한없음" else "${maxKidsPerTeacher}명 이하"
+            binding.schoolDistanceMaxValue.text =
+                if (maxDistanceKmFromHere == 5) "제한없음" else "반경 ${maxDistanceKmFromHere + 1}km 내"
         }
     }
 
@@ -99,19 +182,32 @@ class SearchFilterActivity : AppCompatActivity() {
             facilitiesList.removeAllViews()
 
             FilterSetting.Facilitate.getAll().map { facilitate ->
-                val btn: ImageButton = layoutInflater.inflate(R.layout.facilitate_button, null) as ImageButton
+                val btn: ImageButton =
+                    layoutInflater.inflate(R.layout.facilitate_button, null) as ImageButton
                 val iconDrawable: Drawable = resources.getDrawable(facilitate.icon, null)
                 iconDrawable.setTint(if (filterSetting.facilitates.contains(facilitate)) Color.BLACK else Color.GRAY)
                 btn.setImageDrawable(iconDrawable)
                 btn.setOnClickListener {
                     if (filterSetting.facilitates.contains(facilitate)) {
-                        Toast.makeText(this@SearchFilterActivity, "${facilitate.name} 필터가 해제되었습니다", Toast.LENGTH_SHORT).show()
-                        filterSetting.facilitates.remove(facilitate)
+                        filterSetting.use { filterSetting ->
+                            filterSetting.facilitates.remove(facilitate)
+                            Toast.makeText(
+                                this@SearchFilterActivity,
+                                "${facilitate.name} 필터가 해제되었습니다",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     } else {
-                        Toast.makeText(this@SearchFilterActivity, "${facilitate.name} 필터가 적용되었습니다", Toast.LENGTH_SHORT).show()
-                        filterSetting.facilitates.add(facilitate)
+                        Toast.makeText(
+                            this@SearchFilterActivity,
+                            "${facilitate.name} 필터가 적용되었습니다",
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+                        filterSetting.use { filterSetting ->
+                            filterSetting.facilitates.add(facilitate)
+                        }
                     }
-                    renderFacilitateList()
                 }
                 btn.layoutParams = facilitateImageButtonLayoutParams
                 facilitiesList.addView(btn)
@@ -122,9 +218,11 @@ class SearchFilterActivity : AppCompatActivity() {
 
     private fun initListener() {
         binding.apply {
-
             filterSetFinishBtn.setOnClickListener {
-                setResult(Activity.RESULT_OK)
+                filterSetting.setCallback(null)
+                val intent = Intent()
+                intent.putExtra("filter", filterSetting)
+                setResult(Activity.RESULT_OK, intent)
                 finish()
             }
         }
@@ -133,12 +231,18 @@ class SearchFilterActivity : AppCompatActivity() {
     override fun onBackPressed() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("경고")
-                .setMessage("필터를 적용하지 않고 나가시겠습니까?")
-                .setPositiveButton("네") { dialog, _ ->
-                    dialog.dismiss()
-                    super.onBackPressed()
-                }
-                .setNegativeButton("아니오") { dialog, _ -> dialog.dismiss() }
+            .setMessage("필터를 적용하지 않고 나가시겠습니까?")
+            .setPositiveButton("네") { dialog, _ ->
+                dialog.dismiss()
+                super.onBackPressed()
+            }
+            .setNegativeButton("아니오") { dialog, _ -> dialog.dismiss() }
         builder.create().show()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        filterSetting.setCallback(null)
     }
 }
