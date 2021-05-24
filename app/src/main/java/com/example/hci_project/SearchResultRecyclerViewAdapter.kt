@@ -56,7 +56,7 @@ class SearchResultRecyclerViewAdapter(
             } else {
                 SearchResultManager.getInstance().use(context) { manager ->
                     manager?.apply {
-                        searchResultList.add(item)
+                        searchResultList.add(0, item)
                         save(context)
                     }
                 }

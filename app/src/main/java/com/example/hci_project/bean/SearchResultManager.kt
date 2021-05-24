@@ -51,14 +51,12 @@ class SearchResultManager private constructor() {
     fun save(context: Context) {
         Thread {
             val pureList = ArrayList<SearchResult>()
-            searchResultList.reverse()
             searchResultList.map {
                 if (pureList.contains(it))
                     return@map
 
                 pureList.add(it)
             }
-            pureList.reverse()
             searchResultList = pureList
             try {
                 val file = context.getFileStreamPath(fileName)

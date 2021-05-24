@@ -39,7 +39,7 @@ class SearchResultFragment : Fragment() {
                             SearchResult.TYPE_SCHOOL -> {
                                 SearchResultManager.getInstance().use(context!!) { manager ->
                                     manager?.apply {
-                                        searchResultList.add(it)
+                                        searchResultList.add(0, it)
                                         save(context!!)
                                     }
                                 }

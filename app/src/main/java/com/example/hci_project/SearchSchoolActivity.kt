@@ -81,7 +81,7 @@ class SearchSchoolActivity : AppCompatActivity() {
         }
         SearchResultManager.getInstance().use(this) { manager ->
             manager?.apply {
-                searchResultList.add(SearchResult(SearchResult.TYPE_SEARCH, text.trim()))
+                searchResultList.add(0, SearchResult(SearchResult.TYPE_SEARCH, text.trim()))
                 save(applicationContext)
             }
         }
