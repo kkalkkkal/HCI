@@ -25,6 +25,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.chip.Chip;
 import com.naver.maps.geometry.LatLng;
 import com.naver.maps.map.CameraPosition;
+import com.naver.maps.map.CameraUpdate;
 import com.naver.maps.map.LocationSource;
 import com.naver.maps.map.LocationTrackingMode;
 import com.naver.maps.map.MapFragment;
@@ -191,6 +192,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     static MapFragment mapFragment;
 
+    // 카메라
+    CameraUpdate cameraUpdate;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -200,11 +204,17 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         locationSource =
                 new FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE); // 현재 위치 갱신
 
+        infoWindow.setAdapter(new InfoWindow.DefaultTextAdapter(this) { // 정보창
+            @NonNull
+            @Override
+            public CharSequence getText(@NonNull InfoWindow infoWindow) {
+                return (CharSequence)infoWindow.getMarker().getTag(); // 태그에 적힌 값이 출력됨.
+            }
+        });
 
-
-        System.out.println("hello");
-        String add = getAddress_DAUM("서울특별시 광진구 아차산로44길 26");
-        System.out.println(add);
+        //System.out.println("hello");
+        //String add = getAddress_DAUM("서울특별시 광진구 아차산로44길 26"); Test
+        //System.out.println(add);
 
         // 네이버 지도 설정
         NaverMapOptions options = new NaverMapOptions() // 초기 화면 위치, 경도 생성자 설정
@@ -263,23 +273,34 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         kinder_chip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    marker11.setMap(null); // 기존 어린이집 마커 삭제
-                    marker12.setMap(null); // 기존 마커 삭제
-                    marker13.setMap(null); // 기존 마커 삭제
-                    marker14.setMap(null); // 기존 마커 삭제
-                    marker15.setMap(null); // 기존 마커 삭제
-                    marker16.setMap(null); // 기존 마커 삭제
-                    marker17.setMap(null); // 기존 마커 삭제
-                    marker18.setMap(null); // 기존 마커 삭제
-                    marker19.setMap(null); // 기존 마커 삭제
-                    marker20.setMap(null); // 기존 마커 삭제
-                    child_chip.setChecked(false);
-                    NearKinderMarker();
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                if(kinder_chip.isChecked()) { // 체크되면 True
+                    try {
+                        marker11.setMap(null); // 기존 어린이집 마커 삭제
+                        marker12.setMap(null); // 기존 마커 삭제
+                        marker13.setMap(null); // 기존 마커 삭제
+                        marker14.setMap(null); // 기존 마커 삭제
+                        marker15.setMap(null); // 기존 마커 삭제
+                        marker16.setMap(null); // 기존 마커 삭제
+                        marker17.setMap(null); // 기존 마커 삭제
+                        marker18.setMap(null); // 기존 마커 삭제
+                        marker19.setMap(null); // 기존 마커 삭제
+                        marker20.setMap(null); // 기존 마커 삭제
+                        child_chip.setChecked(false);
+                        NearKinderMarker();
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    try { // 전체 출력
+                        NearChildMarker();
+                        NearKinderMarker();
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
@@ -287,23 +308,34 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         child_chip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    marker1.setMap(null); // 기존 유치원 마커 삭제
-                    marker2.setMap(null); // 기존 마커 삭제
-                    marker3.setMap(null); // 기존 마커 삭제
-                    marker4.setMap(null); // 기존 마커 삭제
-                    marker5.setMap(null); // 기존 마커 삭제
-                    marker6.setMap(null); // 기존 마커 삭제
-                    marker7.setMap(null); // 기존 마커 삭제
-                    marker8.setMap(null); // 기존 마커 삭제
-                    marker9.setMap(null); // 기존 마커 삭제
-                    marker10.setMap(null); // 기존 마커 삭제
-                    kinder_chip.setChecked(false); // 체크 X
-                    NearChildMarker();
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                if (child_chip.isChecked()) {
+                    try {
+                        marker1.setMap(null); // 기존 유치원 마커 삭제
+                        marker2.setMap(null); // 기존 마커 삭제
+                        marker3.setMap(null); // 기존 마커 삭제
+                        marker4.setMap(null); // 기존 마커 삭제
+                        marker5.setMap(null); // 기존 마커 삭제
+                        marker6.setMap(null); // 기존 마커 삭제
+                        marker7.setMap(null); // 기존 마커 삭제
+                        marker8.setMap(null); // 기존 마커 삭제
+                        marker9.setMap(null); // 기존 마커 삭제
+                        marker10.setMap(null); // 기존 마커 삭제
+                        kinder_chip.setChecked(false); // 체크 X
+                        NearChildMarker();
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    try {
+                        NearKinderMarker();
+                        NearChildMarker();
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
@@ -326,6 +358,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
             return true;
         });
+
 
 
     }
@@ -743,6 +776,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
         ArrayList<String> name = new ArrayList<>();
+        ArrayList<Integer> num = new ArrayList<>();
 
 
         for (int i = 3; i < colTotal; i++){
@@ -756,13 +790,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             String kindername = sheet11.getCell(3,i).getContents(); // 유치원이름은 3번째 (0번째 부터 시작)에 있음.
 
 
-            infoWindow.setAdapter(new InfoWindow.DefaultTextAdapter(this) {
-                @NonNull
-                @Override
-                public CharSequence getText(@NonNull InfoWindow infoWindow) {
-                    return kindername;
-                }
-            });
+
 
             if (count >= 10) // 검색 결과가 10개 이상이면 아웃
             {
@@ -773,6 +801,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             if (distance(y,x,m_y,m_x,"kilometer") < 3.0){ // 자신의 주변 (3km 이내라면) 검색
 
                 name.add(kindername);
+                num.add(i);
                 switch (count) {
                     case 0:
                         marker1.setMap(null); // 기존 마커 삭제
@@ -812,7 +841,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         marker5.setIcon(MarkerIcons.YELLOW); // 마커 색깔, 유치원은 노랑
                         marker5.setIconTintColor(Color.TRANSPARENT); //
                         marker5.setMap(naverMap); // 마커 표시
-                        infoWindow.open(marker5);
+
                         break;
                     case 5:
                         marker6.setMap(null); // 기존 마커 삭제
@@ -820,7 +849,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         marker6.setIcon(MarkerIcons.YELLOW); // 마커 색깔, 유치원은 노랑
                         marker6.setIconTintColor(Color.TRANSPARENT); //
                         marker6.setMap(naverMap); // 마커 표시
-                        infoWindow.open(marker6);
+
                         break;
                     case 6:
                         marker7.setMap(null); // 기존 마커 삭제
@@ -828,7 +857,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         marker7.setIcon(MarkerIcons.YELLOW); // 마커 색깔, 유치원은 노랑
                         marker7.setIconTintColor(Color.TRANSPARENT); //
                         marker7.setMap(naverMap); // 마커 표시
-                        infoWindow.open(marker7);
+
                         break;
                     case 7:
                         marker8.setMap(null); // 기존 마커 삭제
@@ -836,14 +865,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         marker8.setIcon(MarkerIcons.YELLOW); // 마커 색깔, 유치원은 노랑
                         marker8.setIconTintColor(Color.TRANSPARENT); //
                         marker8.setMap(naverMap); // 마커 표시
-                        infoWindow.open(marker8);
+
                         break;
                     case 8:
                         marker9.setMap(null); // 기존 마커 삭제
                         marker9.setPosition(new LatLng(y, x)); // 마커 위치 재설정
                         marker9.setIcon(MarkerIcons.YELLOW); // 마커 색깔, 유치원은 노랑
                         marker9.setMap(naverMap); // 마커 표시
-                        infoWindow.open(marker9);
+
                         break;
                     case 9:
                         marker10.setMap(null); // 기존 마커 삭제
@@ -851,7 +880,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         marker10.setIcon(MarkerIcons.YELLOW); // 마커 색깔, 유치원은 노랑
                         marker10.setIconTintColor(Color.TRANSPARENT); //
                         marker10.setMap(naverMap); // 마커 표시
-                        infoWindow.open(marker10);
+
                         break;
                     default:
                         break;
@@ -866,6 +895,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         marker1.setOnClickListener(new Overlay.OnClickListener() {
             @Override
             public boolean onClick(@NonNull @NotNull Overlay overlay) {
+                marker1.setTag("마커 1");
                 infoWindow.open(marker1);
                 return false;
             }
@@ -873,30 +903,75 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         marker2.setOnClickListener(new Overlay.OnClickListener() {
             @Override
             public boolean onClick(@NonNull @NotNull Overlay overlay) {
+                marker2.setTag("마커 2");
                 infoWindow.open(marker2);
-                return false;
+                return true;
             }
         });
         marker3.setOnClickListener(new Overlay.OnClickListener() {
             @Override
             public boolean onClick(@NonNull @NotNull Overlay overlay) {
+                marker3.setTag("마커 3");
                 infoWindow.open(marker3);
-                return false;
+                return true;
             }
         });
         marker4.setOnClickListener(new Overlay.OnClickListener() {
             @Override
             public boolean onClick(@NonNull @NotNull Overlay overlay) {
+                marker4.setTag("마커 4");
                 infoWindow.open(marker4);
                 return false;
             }
         });
-        marker5.setOnClickListener();
-        marker6.setOnClickListener();
-        marker7.setOnClickListener();
-        marker8.setOnClickListener();
-        marker9.setOnClickListener();
-        marker10.setOnClickListener();
+        marker5.setOnClickListener(new Overlay.OnClickListener() {
+            @Override
+            public boolean onClick(@NonNull @NotNull Overlay overlay) {
+                marker5.setTag("마커 5");
+                infoWindow.open(marker5);
+                return false;
+            }
+        });
+        marker6.setOnClickListener(new Overlay.OnClickListener() {
+            @Override
+            public boolean onClick(@NonNull @NotNull Overlay overlay) {
+                marker6.setTag("마커 6");
+                infoWindow.open(marker6);
+                return false;
+            }
+        });
+        marker7.setOnClickListener(new Overlay.OnClickListener() {
+            @Override
+            public boolean onClick(@NonNull @NotNull Overlay overlay) {
+                marker7.setTag("마커 7");
+                infoWindow.open(marker7);
+                return false;
+            }
+        });
+        marker8.setOnClickListener(new Overlay.OnClickListener() {
+            @Override
+            public boolean onClick(@NonNull @NotNull Overlay overlay) {
+                marker8.setTag("마커 8");
+                infoWindow.open(marker8);
+                return false;
+            }
+        });
+        marker9.setOnClickListener(new Overlay.OnClickListener() {
+            @Override
+            public boolean onClick(@NonNull @NotNull Overlay overlay) {
+                marker9.setTag("마커 9");
+                infoWindow.open(marker9);
+                return false;
+            }
+        });
+        marker10.setOnClickListener(new Overlay.OnClickListener() {
+            @Override
+            public boolean onClick(@NonNull @NotNull Overlay overlay) {
+                marker10.setTag("마커 10");
+                infoWindow.open(marker10);
+                return false;
+            }
+        });
 
         /*
         // 네이버 API 주소 검색 요청
@@ -1079,6 +1154,87 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         double x = (double) jsonObj.get("x"); // double 형으로 경도 추출
         double y = (double) jsonObj.get("y"); // double 형으로 위도 추출
         */
+        // 각 마커 클릭 리스너
+        marker11.setOnClickListener(new Overlay.OnClickListener() {
+            @Override
+            public boolean onClick(@NonNull @NotNull Overlay overlay) {
+                marker11.setTag("마커 1");
+                infoWindow.open(marker11);
+                return false;
+            }
+        });
+        marker12.setOnClickListener(new Overlay.OnClickListener() {
+            @Override
+            public boolean onClick(@NonNull @NotNull Overlay overlay) {
+                marker12.setTag("마커 2");
+                infoWindow.open(marker12);
+                return true;
+            }
+        });
+        marker13.setOnClickListener(new Overlay.OnClickListener() {
+            @Override
+            public boolean onClick(@NonNull @NotNull Overlay overlay) {
+                marker13.setTag("마커 3");
+                infoWindow.open(marker13);
+                return true;
+            }
+        });
+        marker14.setOnClickListener(new Overlay.OnClickListener() {
+            @Override
+            public boolean onClick(@NonNull @NotNull Overlay overlay) {
+                marker14.setTag("마커 4");
+                infoWindow.open(marker14);
+                return false;
+            }
+        });
+        marker15.setOnClickListener(new Overlay.OnClickListener() {
+            @Override
+            public boolean onClick(@NonNull @NotNull Overlay overlay) {
+                marker15.setTag("마커 5");
+                infoWindow.open(marker15);
+                return false;
+            }
+        });
+        marker16.setOnClickListener(new Overlay.OnClickListener() {
+            @Override
+            public boolean onClick(@NonNull @NotNull Overlay overlay) {
+                marker16.setTag("마커 6");
+                infoWindow.open(marker16);
+                return false;
+            }
+        });
+        marker17.setOnClickListener(new Overlay.OnClickListener() {
+            @Override
+            public boolean onClick(@NonNull @NotNull Overlay overlay) {
+                marker17.setTag("마커 17");
+                infoWindow.open(marker17);
+                return false;
+            }
+        });
+        marker18.setOnClickListener(new Overlay.OnClickListener() {
+            @Override
+            public boolean onClick(@NonNull @NotNull Overlay overlay) {
+                marker18.setTag("마커 18");
+                infoWindow.open(marker18);
+                return false;
+            }
+        });
+        marker19.setOnClickListener(new Overlay.OnClickListener() {
+            @Override
+            public boolean onClick(@NonNull @NotNull Overlay overlay) {
+                marker19.setTag("마커 19");
+                infoWindow.open(marker19);
+                return false;
+            }
+        });
+        marker20.setOnClickListener(new Overlay.OnClickListener() {
+            @Override
+            public boolean onClick(@NonNull @NotNull Overlay overlay) {
+                marker20.setTag("마커 10");
+                infoWindow.open(marker20);
+                return false;
+            }
+        });
 
         
     }
