@@ -26,7 +26,7 @@ public class ExampleUnitTest {
     @Test
     public void getAddress_DAUM() {
 
-        String data = "서울특별시 광진구 아차산로44길 26";
+        String data = "서울특별시 광진구 자양동 504 서울신양초등학교";
         final String Client_ID = "o82z0vth6u"; // 인증용 클라이언트 아이디
         final String Client_Secret = "LjN7euyVUTJlH2haz5RmIMmwwTVq77I6ODNipNrE"; // 클라이언트 인증키
 

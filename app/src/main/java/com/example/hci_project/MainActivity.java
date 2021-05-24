@@ -33,6 +33,14 @@ import com.naver.maps.map.overlay.Marker;
 import com.naver.maps.map.util.FusedLocationSource;
 
 import org.jetbrains.annotations.NotNull;
+
+// Json 파싱
+import org.json.JSONException;
+import org.json.JSONStringer;
+import org.json.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.*;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
@@ -56,6 +64,7 @@ import jxl.Workbook;
 import jxl.read.biff.BiffException;
 import okhttp3.internal.http.HttpHeaders;
 import okhttp3.internal.http.HttpMethod;
+
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -549,10 +558,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         // 마커 표시하기
         Marker marker = new Marker();
-        marker.setPosition(new LatLng(37.541680773674464, 127.07943250328056));
+        marker.setPosition(new LatLng(37.541680773674464, 127.07943250328056)); // 그냥 건국대 임시 마커
         marker.setMap(naverMap);
 
-        // 클릭 리스너
+        // 클릭 리스너 :
         naverMap.setOnMapClickListener((point, coord) ->
                 Toast.makeText(this, coord.latitude + ", " + coord.longitude,
                         Toast.LENGTH_SHORT).show());
@@ -574,13 +583,83 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
     }
 
-    public void NearMarker() { // 화면에 있는 유치원의 마커를 표시함
-        int count = 0 ;
+    public void NearKinderMarker() throws ParseException, JSONException { // 화면에 있는 유치원의 마커를 표시함
+        int count = 0 ; // 최대 10개만 표시 카운트
         Sheet sheet = getSheet8(); // 유치원 기본 현황 시트
 
         String address = null;
 
-        address = sheet.getCell(7, 2).getContents(); // 유치원 주소는 7번째 열에 있음. row는 줄.
+        address = sheet.getCell(7, 2).getContents(); // 유치원 주소는 7번째 열에 있음.(0번째 부터 시작) row는 줄.
+
+
+        JSONParser parser = new JSONParser();
+        Object obj = parser.parse( address );
+        JSONObject jsonObj = (JSONObject) obj;
+
+        double x = (double) jsonObj.get("x"); // double 형으로 경도 추출
+        double y = (double) jsonObj.get("y"); // double 형으로 위도 추출
+
+        // 네이버 API 주소 검색 요청
+        String response = getAddress_DAUM(address);
+
+        // 마커는 최대 10개
+        Marker marker1 = new Marker();
+        marker1.setPosition(new LatLng(y, x));
+        marker1.setMap(naverMap);
+
+        Marker marker2 = new Marker();
+        marker2.setPosition(new LatLng(37.541680773674464, 127.07943250328056));
+        marker2.setMap(naverMap);
+
+        Marker marker3 = new Marker();
+        marker3.setPosition(new LatLng(37.541680773674464, 127.07943250328056));
+        marker3.setMap(naverMap);
+
+        Marker marker4 = new Marker();
+        marker4.setPosition(new LatLng(37.541680773674464, 127.07943250328056));
+        marker4.setMap(naverMap);
+
+        Marker marker5 = new Marker();
+        marker5.setPosition(new LatLng(37.541680773674464, 127.07943250328056));
+        marker5.setMap(naverMap);
+
+        Marker marker6 = new Marker();
+        marker6.setPosition(new LatLng(37.541680773674464, 127.07943250328056));
+        marker6.setMap(naverMap);
+
+        Marker marker7 = new Marker();
+        marker7.setPosition(new LatLng(37.541680773674464, 127.07943250328056));
+        marker7.setMap(naverMap);
+
+        Marker marker8 = new Marker();
+        marker8.setPosition(new LatLng(37.541680773674464, 127.07943250328056));
+        marker8.setMap(naverMap);
+
+        Marker marker9 = new Marker();
+        marker9.setPosition(new LatLng(37.541680773674464, 127.07943250328056));
+        marker9.setMap(naverMap);
+
+        Marker marker10 = new Marker();
+        marker10.setPosition(new LatLng(37.541680773674464, 127.07943250328056));
+        marker10.setMap(naverMap);
+
+    }
+
+    public void NearChildMarker() throws JSONException, ParseException { // 화면에 있는 어린이집의 마커를 표시함
+        int count = 0 ;
+        Sheet sheet = getSheet0(); // 어린이집 기본 현황 시트
+
+        String address = null;
+
+        address = sheet.getCell(6, 2).getContents(); // 어린이집 주소는 6번째 열에 있음.(0번째부터 시작) row는 줄.
+
+
+        JSONParser parser = new JSONParser();
+        Object obj = parser.parse( address );
+        JSONObject jsonObj = (JSONObject) obj;
+
+        double x = (double) jsonObj.get("x"); // double 형으로 경도 추출
+        double y = (double) jsonObj.get("y"); // double 형으로 위도 추출
 
         // 네이버 API 주소 검색 요청
         String response = getAddress_DAUM(address);
@@ -629,7 +708,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     // 주소 검색
-    public String getAddress_DAUM(String data) {
+    public String getAddress_DAUM(String data) { // data에 구주소나 신주소를 입력함.
 
         final String Client_ID = "o82z0vth6u"; // 인증용 클라이언트 아이디
         final String Client_Secret = "LjN7euyVUTJlH2haz5RmIMmwwTVq77I6ODNipNrE"; // 클라이언트 인증키

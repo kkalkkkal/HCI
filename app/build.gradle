@@ -59,6 +59,12 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:16.0.0' // 위치 서비스
     implementation 'com.sothree.slidinguppanel:library:3.4.0' // 슬라이딩 레이아웃 ( 네이버 지도 첫 화면 위 아래로 왔다갔다하는 레이아웃 그거)
 
+    //JSON PARSER
+    //implementation 'com.org.json:json:20210307'
+    implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1'
+
+
+    // Unit Test
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
