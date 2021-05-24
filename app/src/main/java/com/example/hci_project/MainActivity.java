@@ -36,6 +36,7 @@ import com.naver.maps.map.overlay.InfoWindow;
 import com.naver.maps.map.overlay.LocationOverlay;
 import com.naver.maps.map.NaverMapSdk;
 import com.naver.maps.map.overlay.Marker;
+import com.naver.maps.map.overlay.Overlay;
 import com.naver.maps.map.util.FusedLocationSource;
 import com.naver.maps.map.util.MarkerIcons;
 
@@ -122,7 +123,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     Marker marker9 = new Marker();
     Marker marker10 = new Marker();
 
-
+    Marker marker11 = new Marker();
+    Marker marker12 = new Marker();
+    Marker marker13 = new Marker();
+    Marker marker14 = new Marker();
+    Marker marker15 = new Marker();
+    Marker marker16 = new Marker();
+    Marker marker17 = new Marker();
+    Marker marker18 = new Marker();
+    Marker marker19 = new Marker();
+    Marker marker20 = new Marker();
 
     // Getter
     public static Sheet getSheet0() {
@@ -250,7 +260,53 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         kinder_chip.setChecked(false); // 처음에는 체크 X
         child_chip.setChecked(false);
 
-       // kinder_chip.setOnClickListener({});
+        kinder_chip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    marker11.setMap(null); // 기존 어린이집 마커 삭제
+                    marker12.setMap(null); // 기존 마커 삭제
+                    marker13.setMap(null); // 기존 마커 삭제
+                    marker14.setMap(null); // 기존 마커 삭제
+                    marker15.setMap(null); // 기존 마커 삭제
+                    marker16.setMap(null); // 기존 마커 삭제
+                    marker17.setMap(null); // 기존 마커 삭제
+                    marker18.setMap(null); // 기존 마커 삭제
+                    marker19.setMap(null); // 기존 마커 삭제
+                    marker20.setMap(null); // 기존 마커 삭제
+                    child_chip.setChecked(false);
+                    NearKinderMarker();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        child_chip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    marker1.setMap(null); // 기존 유치원 마커 삭제
+                    marker2.setMap(null); // 기존 마커 삭제
+                    marker3.setMap(null); // 기존 마커 삭제
+                    marker4.setMap(null); // 기존 마커 삭제
+                    marker5.setMap(null); // 기존 마커 삭제
+                    marker6.setMap(null); // 기존 마커 삭제
+                    marker7.setMap(null); // 기존 마커 삭제
+                    marker8.setMap(null); // 기존 마커 삭제
+                    marker9.setMap(null); // 기존 마커 삭제
+                    marker10.setMap(null); // 기존 마커 삭제
+                    kinder_chip.setChecked(false); // 체크 X
+                    NearChildMarker();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
         BottomNavigationView bottomNavigationView= findViewById(R.id.bottomNavBar);
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
@@ -507,7 +563,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
 
             if(wb2 != null) {
-                Sheet sheet0 = wb2.getSheet(0);   // 어린이집 시트 불러오기
+                sheet0 = wb2.getSheet(0);   // 어린이집 시트 불러오기
                 if(sheet0 != null) {
                     int colTotal = sheet0.getColumns();    // 전체 컬럼
                     int rowIndexStart = 1;                  // row 인덱스 시작
@@ -617,14 +673,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         UiSettings uiSettings = naverMap.getUiSettings();
         uiSettings.setLocationButtonEnabled(true); // 현 위치 버튼 활성화
 
-
+/*
         // 마커 표시하기 (자기 위치 기준 검색)
-        Marker marker1 = new Marker();
+        marker1 = new Marker();
         marker1.setMap(null); // 기존 마커 삭제
         marker1.setPosition(new LatLng(37.541680773674464, 127.07943250328056)); // 그냥 건국대 임시 마커
         marker1.setIcon(MarkerIcons.YELLOW); // 마커 색깔, 유치원은 노랑
         marker1.setMap(naverMap); // 마커 표시
-
+*/
         // 첫 실행 시 자기 주변의 어린이집/유치원을 검색해서 마커 표시
         try { // 유치원
             NearKinderMarker();
@@ -633,7 +689,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         } catch (JSONException e) {
             e.printStackTrace();
         }
-/*
+
         try { // 어린이집
             NearChildMarker();
         } catch (JSONException e) {
@@ -641,7 +697,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         } catch (ParseException e) {
             e.printStackTrace();
         }
-*/
+
         // 클릭 리스너 :
         naverMap.setOnMapClickListener((point, coord) ->
                 Toast.makeText(this, coord.latitude + ", " + coord.longitude,
@@ -664,17 +720,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             return false;
         });
 
-        // 각 마커 클릭 리스너
-        marker1.getOnClickListener();
-        marker2.getOnClickListener();
-        marker3.getOnClickListener();
-        marker4.getOnClickListener();
-        marker5.getOnClickListener();
-        marker6.getOnClickListener();
-        marker7.getOnClickListener();
-        marker8.getOnClickListener();
-        marker9.getOnClickListener();
-        marker10.getOnClickListener();
+
 
 
     }
@@ -695,6 +741,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             m_y =  37.541680773674464; // 건국대 기준
             m_x = 127.07943250328056; //
         }
+
+        ArrayList<String> name = new ArrayList<>();
 
 
         for (int i = 3; i < colTotal; i++){
@@ -724,32 +772,37 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             if (distance(y,x,m_y,m_x,"kilometer") < 3.0){ // 자신의 주변 (3km 이내라면) 검색
 
+                name.add(kindername);
                 switch (count) {
                     case 0:
                         marker1.setMap(null); // 기존 마커 삭제
                         marker1.setPosition(new LatLng(y, x)); // 마커 위치 재설정
                         marker1.setIcon(MarkerIcons.YELLOW); // 마커 색깔, 유치원은 노랑
+                        marker1.setIconTintColor(Color.TRANSPARENT); //
                         marker1.setMap(naverMap); // 마커 표시
-                        infoWindow.open(marker1);
+
                         break;
                     case 1:
                         marker2.setMap(null); // 기존 마커 삭제
                         marker2.setPosition(new LatLng(y, x)); // 마커 위치 재설정
                         marker2.setIcon(MarkerIcons.YELLOW); // 마커 색깔, 유치원은 노랑
+                        marker2.setIconTintColor(Color.TRANSPARENT); //
                         marker2.setMap(naverMap); // 마커 표시
-                        infoWindow.open(marker2);
+
                         break;
                     case 2:
                         marker3.setMap(null); // 기존 마커 삭제
                         marker3.setPosition(new LatLng(y, x)); // 마커 위치 재설정
                         marker3.setIcon(MarkerIcons.YELLOW); // 마커 색깔, 유치원은 노랑
                         marker3.setMap(naverMap); // 마커 표시
-                        infoWindow.open(marker3);
+                        marker3.setIconTintColor(Color.TRANSPARENT); //
+
                         break;
                     case 3:
                         marker4.setMap(null); // 기존 마커 삭제
                         marker4.setPosition(new LatLng(y, x)); // 마커 위치 재설정
                         marker4.setIcon(MarkerIcons.YELLOW); // 마커 색깔, 유치원은 노랑
+                        marker4.setIconTintColor(Color.TRANSPARENT); //
                         marker4.setMap(naverMap); // 마커 표시
                         infoWindow.open(marker4);
                         break;
@@ -757,6 +810,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         marker5.setMap(null); // 기존 마커 삭제
                         marker5.setPosition(new LatLng(y, x)); // 마커 위치 재설정
                         marker5.setIcon(MarkerIcons.YELLOW); // 마커 색깔, 유치원은 노랑
+                        marker5.setIconTintColor(Color.TRANSPARENT); //
                         marker5.setMap(naverMap); // 마커 표시
                         infoWindow.open(marker5);
                         break;
@@ -764,6 +818,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         marker6.setMap(null); // 기존 마커 삭제
                         marker6.setPosition(new LatLng(y, x)); // 마커 위치 재설정
                         marker6.setIcon(MarkerIcons.YELLOW); // 마커 색깔, 유치원은 노랑
+                        marker6.setIconTintColor(Color.TRANSPARENT); //
                         marker6.setMap(naverMap); // 마커 표시
                         infoWindow.open(marker6);
                         break;
@@ -771,6 +826,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         marker7.setMap(null); // 기존 마커 삭제
                         marker7.setPosition(new LatLng(y, x)); // 마커 위치 재설정
                         marker7.setIcon(MarkerIcons.YELLOW); // 마커 색깔, 유치원은 노랑
+                        marker7.setIconTintColor(Color.TRANSPARENT); //
                         marker7.setMap(naverMap); // 마커 표시
                         infoWindow.open(marker7);
                         break;
@@ -778,6 +834,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         marker8.setMap(null); // 기존 마커 삭제
                         marker8.setPosition(new LatLng(y, x)); // 마커 위치 재설정
                         marker8.setIcon(MarkerIcons.YELLOW); // 마커 색깔, 유치원은 노랑
+                        marker8.setIconTintColor(Color.TRANSPARENT); //
                         marker8.setMap(naverMap); // 마커 표시
                         infoWindow.open(marker8);
                         break;
@@ -792,6 +849,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         marker10.setMap(null); // 기존 마커 삭제
                         marker10.setPosition(new LatLng(y, x)); // 마커 위치 재설정
                         marker10.setIcon(MarkerIcons.YELLOW); // 마커 색깔, 유치원은 노랑
+                        marker10.setIconTintColor(Color.TRANSPARENT); //
                         marker10.setMap(naverMap); // 마커 표시
                         infoWindow.open(marker10);
                         break;
@@ -803,6 +861,42 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 count++;
             }
         }
+
+        // 각 마커 클릭 리스너
+        marker1.setOnClickListener(new Overlay.OnClickListener() {
+            @Override
+            public boolean onClick(@NonNull @NotNull Overlay overlay) {
+                infoWindow.open(marker1);
+                return false;
+            }
+        });
+        marker2.setOnClickListener(new Overlay.OnClickListener() {
+            @Override
+            public boolean onClick(@NonNull @NotNull Overlay overlay) {
+                infoWindow.open(marker2);
+                return false;
+            }
+        });
+        marker3.setOnClickListener(new Overlay.OnClickListener() {
+            @Override
+            public boolean onClick(@NonNull @NotNull Overlay overlay) {
+                infoWindow.open(marker3);
+                return false;
+            }
+        });
+        marker4.setOnClickListener(new Overlay.OnClickListener() {
+            @Override
+            public boolean onClick(@NonNull @NotNull Overlay overlay) {
+                infoWindow.open(marker4);
+                return false;
+            }
+        });
+        marker5.setOnClickListener();
+        marker6.setOnClickListener();
+        marker7.setOnClickListener();
+        marker8.setOnClickListener();
+        marker9.setOnClickListener();
+        marker10.setOnClickListener();
 
         /*
         // 네이버 API 주소 검색 요청
@@ -843,12 +937,135 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         int count = 0 ;
         //Sheet sheet = getSheet0(); // 어린이집 기본 현황 시트
 
-        String address = "";
+        int colTotal = sheet0.getColumns();    // 전체 컬럼
+        String address2 = "";
+        double m_y;
+        double m_x;
+        try {
+            Location mlocationSource = locationSource.getLastLocation();
+            m_y = mlocationSource.getLatitude(); // 자기 위치 위도
+            m_x = mlocationSource.getLongitude();
+        } catch (Exception e){
+            m_y =  37.541680773674464; // 건국대 기준
+            m_x = 127.07943250328056; //
+        }
+
+        for (int i = 1; i < colTotal; i++){
 
 
+            address2 = sheet0.getCell(6, i).getContents(); // 어린이집 주소는 6번째 열에 있음.(0번째부터 시작) row는 줄.
 
-        address = sheet0.getCell(6, 2).getContents(); // 어린이집 주소는 6번째 열에 있음.(0번째부터 시작) row는 줄.
+            double y = Double.parseDouble(sheet0.getCell(15, i).getContents()); // 위도 가져옴.
+            double x = Double.parseDouble(sheet0.getCell(16, i).getContents()); // 경도 가져옴.
 
+            String kindername = sheet0.getCell(2,i).getContents(); // 유치원이름은 2번째 (0번째 부터 시작)에 있음.
+
+
+            infoWindow.setAdapter(new InfoWindow.DefaultTextAdapter(this) {
+                @NonNull
+                @Override
+                public CharSequence getText(@NonNull InfoWindow infoWindow) {
+                    return kindername;
+                }
+            });
+
+            if (count >= 10) // 검색 결과가 10개 이상이면 아웃
+            {
+                break;
+            }
+
+
+            if (distance(y,x,m_y,m_x,"kilometer") < 3.0){ // 자신의 주변 (3km 이내라면) 검색
+
+                switch (count) {
+                    case 0:
+                        marker11.setMap(null); // 기존 마커 삭제
+                        marker11.setPosition(new LatLng(y, x)); // 마커 위치 재설정
+                        marker11.setIcon(MarkerIcons.RED); // 마커 색깔, 어린이집은 보라
+                        marker11.setIconTintColor(Color.BLUE); // 빨간 색 + 파란색 = 보라색
+                        marker11.setMap(naverMap); // 마커 표시
+                        infoWindow.open(marker11);
+                        break;
+                    case 1:
+                        marker12.setMap(null); // 기존 마커 삭제
+                        marker12.setPosition(new LatLng(y, x)); // 마커 위치 재설정
+                        marker12.setIcon(MarkerIcons.RED); // 마커 색깔, 어린이집은 보라
+                        marker12.setIconTintColor(Color.BLUE); // 빨간 색 + 파란색 = 보라색
+                        marker12.setMap(naverMap); // 마커 표시
+                        infoWindow.open(marker2);
+                        break;
+                    case 2:
+                        marker13.setMap(null); // 기존 마커 삭제
+                        marker13.setPosition(new LatLng(y, x)); // 마커 위치 재설정
+                        marker13.setIcon(MarkerIcons.RED); // 마커 색깔, 어린이집은 보라
+                        marker13.setIconTintColor(Color.BLUE); // 빨간 색 + 파란색 = 보라색
+                        marker13.setMap(naverMap); // 마커 표시
+                        infoWindow.open(marker3);
+                        break;
+                    case 3:
+                        marker14.setMap(null); // 기존 마커 삭제
+                        marker14.setPosition(new LatLng(y, x)); // 마커 위치 재설정
+                        marker14.setIcon(MarkerIcons.RED); // 마커 색깔, 어린이집은 보라
+                        marker14.setIconTintColor(Color.BLUE); // 빨간 색 + 파란색 = 보라색
+                        marker14.setMap(naverMap); // 마커 표시
+                        infoWindow.open(marker4);
+                        break;
+                    case 4:
+                        marker15.setMap(null); // 기존 마커 삭제
+                        marker15.setPosition(new LatLng(y, x)); // 마커 위치 재설정
+                        marker15.setIcon(MarkerIcons.RED); // 마커 색깔, 어린이집은 보라
+                        marker15.setIconTintColor(Color.BLUE); // 빨간 색 + 파란색 = 보라색
+                        marker15.setMap(naverMap); // 마커 표시
+                        infoWindow.open(marker5);
+                        break;
+                    case 5:
+                        marker16.setMap(null); // 기존 마커 삭제
+                        marker16.setPosition(new LatLng(y, x)); // 마커 위치 재설정
+                        marker16.setIcon(MarkerIcons.RED); // 마커 색깔, 어린이집은 보라
+                        marker16.setIconTintColor(Color.BLUE); // 빨간 색 + 파란색 = 보라색
+                        marker16.setMap(naverMap); // 마커 표시
+                        infoWindow.open(marker16);
+                        break;
+                    case 6:
+                        marker17.setMap(null); // 기존 마커 삭제
+                        marker17.setPosition(new LatLng(y, x)); // 마커 위치 재설정
+                        marker17.setIcon(MarkerIcons.RED); // 마커 색깔, 어린이집은 보라
+                        marker17.setIconTintColor(Color.BLUE); // 빨간 색 + 파란색 = 보라색
+                        marker17.setMap(naverMap); // 마커 표시
+                        infoWindow.open(marker7);
+                        break;
+                    case 7:
+                        marker18.setMap(null); // 기존 마커 삭제
+                        marker18.setPosition(new LatLng(y, x)); // 마커 위치 재설정
+                        marker18.setIcon(MarkerIcons.RED); // 마커 색깔, 어린이집은 보라
+                        marker18.setIconTintColor(Color.BLUE); // 빨간 색 + 파란색 = 보라색
+                        marker18.setMap(naverMap); // 마커 표시
+                        infoWindow.open(marker18);
+                        break;
+                    case 8:
+                        marker19.setMap(null); // 기존 마커 삭제
+                        marker19.setPosition(new LatLng(y, x)); // 마커 위치 재설정
+                        marker19.setIcon(MarkerIcons.RED); // 마커 색깔, 어린이집은 보라
+                        marker19.setIconTintColor(Color.BLUE); // 빨간 색 + 파란색 = 보라색
+                        marker19.setMap(naverMap); // 마커 표시
+                        infoWindow.open(marker19);
+                        break;
+                    case 9:
+                        marker20.setMap(null); // 기존 마커 삭제
+                        marker20.setPosition(new LatLng(y, x)); // 마커 위치 재설정
+                        marker20.setIcon(MarkerIcons.RED); // 마커 색깔, 어린이집은 보라
+                        marker20.setIconTintColor(Color.BLUE); // 빨간 색 + 파란색 = 보라색
+                        marker20.setMap(naverMap); // 마커 표시
+                        infoWindow.open(marker10);
+                        break;
+                    default:
+                        break;
+
+                }
+
+                count++;
+            }
+        }
 
         /*
         // 네이버 API 주소 검색 요청
@@ -863,48 +1080,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         double y = (double) jsonObj.get("y"); // double 형으로 위도 추출
         */
 
-        // 마커는 최대 10개
-        Marker marker1 = new Marker();
-        marker1.setPosition(new LatLng(37.541680773674464, 127.07943250328056));
-        marker1.setIcon(MarkerIcons.RED); // 마커 색깔, 어린이집은 보라
-        marker1.setIconTintColor(Color.BLUE); // 빨간 색 + 파란색 = 보라색
-        marker1.setMap(naverMap);
-
-        Marker marker2 = new Marker();
-        marker2.setPosition(new LatLng(37.541680773674464, 127.07943250328056));
-        marker2.setMap(naverMap);
-
-        Marker marker3 = new Marker();
-        marker3.setPosition(new LatLng(37.541680773674464, 127.07943250328056));
-        marker3.setMap(naverMap);
-
-        Marker marker4 = new Marker();
-        marker4.setPosition(new LatLng(37.541680773674464, 127.07943250328056));
-        marker4.setMap(naverMap);
-
-        Marker marker5 = new Marker();
-        marker5.setPosition(new LatLng(37.541680773674464, 127.07943250328056));
-        marker5.setMap(naverMap);
-
-        Marker marker6 = new Marker();
-        marker6.setPosition(new LatLng(37.541680773674464, 127.07943250328056));
-        marker6.setMap(naverMap);
-
-        Marker marker7 = new Marker();
-        marker7.setPosition(new LatLng(37.541680773674464, 127.07943250328056));
-        marker7.setMap(naverMap);
-
-        Marker marker8 = new Marker();
-        marker8.setPosition(new LatLng(37.541680773674464, 127.07943250328056));
-        marker8.setMap(naverMap);
-
-        Marker marker9 = new Marker();
-        marker9.setPosition(new LatLng(37.541680773674464, 127.07943250328056));
-        marker9.setMap(naverMap);
-
-        Marker marker10 = new Marker();
-        marker10.setPosition(new LatLng(37.541680773674464, 127.07943250328056));
-        marker10.setMap(naverMap);
         
     }
 
