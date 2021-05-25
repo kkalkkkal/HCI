@@ -53,7 +53,7 @@ public class SchoolOnMapFragment extends Fragment implements OnMapReadyCallback 
   private LinearLayout linearLayout2;
   private TextView schoolTitle;
   private TextView resultCntText;
-  static public NaverMap naverMap; // 네이버 맵 객체 - 다른 곳에서도 접근 가능하게 하려고 일단 전역변수화함.
+  private NaverMap naverMap;
   
   // 메인 간이 필터
   private Chip kinder_chip; // 유치원 필터
@@ -269,11 +269,19 @@ public class SchoolOnMapFragment extends Fragment implements OnMapReadyCallback 
   
   @Override
   public void onMapReady(@NonNull NaverMap naverMap) {
-    SchoolOnMapFragment.naverMap = naverMap;
+    this.naverMap = naverMap;
     
     naverMap.setMapType(NaverMap.MapType.Basic); // 기본형 지도
     naverMap.setLayerGroupEnabled(NaverMap.LAYER_GROUP_BUILDING, true); // 빌딩 그룹 생성
-    naverMap.setLocationTrackingMode(LocationTrackingMode.Follow); // 위치 추적 모드 실행
+    
+    
+    // 네이버 지도 소스 권한
+    if (!checkRequiredPermissions()) { // 권한 거부됨
+      naverMap.setLocationTrackingMode(LocationTrackingMode.None);
+    } else {
+      naverMap.setLocationSource(locationSource);
+      naverMap.setLocationTrackingMode(LocationTrackingMode.Follow); // 위치 추적 모드 실행
+    }
     
     
     //네이버 지도 추가 UI 설정
@@ -300,9 +308,9 @@ public class SchoolOnMapFragment extends Fragment implements OnMapReadyCallback 
     }
     
     // 네이버 지도 소스 권한
-    if (locationSource.onRequestPermissionsResult(
+    if (locationSource != null && locationSource.onRequestPermissionsResult(
         requestCode, permissions, grantResults)) {
-      if (!locationSource.isActivated()) { // 권한 거부됨
+      if (!locationSource.isActivated() && naverMap != null) { // 권한 거부됨
         naverMap.setLocationTrackingMode(LocationTrackingMode.None);
       }
     }
