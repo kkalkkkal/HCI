@@ -20,6 +20,17 @@ class School(
         val homePage: String,
         val sinceDate: String,
 ) : Serializable {
+    companion object {
+        val TYPE_CHILD = "어린이집"
+        val TYPE_KINDER = "유치원"
+    }
+
+    fun getOnlySchoolType(): String {
+        return if (type.contains(TYPE_CHILD))
+            TYPE_CHILD
+        else
+            TYPE_KINDER
+    }
 
     fun getKidsPerTeacher(): Int {
         if (teacherCnt == 0)

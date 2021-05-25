@@ -106,14 +106,15 @@
             android:layout_below="@+id/search_school_tv"
             android:layout_marginStart="30dp"
             android:layout_marginTop="3dp"
-            android:layout_marginEnd="20dp"
             android:layout_marginBottom="20dp"
+            android:checkable="true"
             android:text="유치원"
             app:chipBackgroundColor="#FFEB3B"
             app:rippleColor="#BABABA" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/child_chips"
+            android:checkable="true"
             style="@style/Widget.MaterialComponents.Chip.Filter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

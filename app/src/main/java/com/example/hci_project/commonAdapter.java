@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 public class commonAdapter extends RecyclerView.Adapter<commonAdapter.ViewHolder> {
 
-    private ArrayList<School2> myDataList = null;
+    private ArrayList<School> myDataList = null;
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView textView1;
@@ -42,7 +42,7 @@ public class commonAdapter extends RecyclerView.Adapter<commonAdapter.ViewHolder
         }
     }
 
-    commonAdapter(ArrayList<School2> dataList)
+    commonAdapter(ArrayList<School> dataList)
     {
         myDataList = dataList;
     }

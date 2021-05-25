@@ -2,6 +2,7 @@ package com.example.hci_project.bean
 
 import android.content.Context
 import android.util.Log
+import com.naver.maps.geometry.LatLng
 import jxl.Cell
 import jxl.Workbook
 import java.io.InputStream
@@ -17,6 +18,8 @@ class SchoolManager private constructor() {
     }
 
     var list: ArrayList<School> = ArrayList()
+
+    @Synchronized
     fun use(context: Context, callback: (SchoolManager?) -> Unit) {
         if (list.isNotEmpty()) {
             callback(this)
@@ -25,8 +28,10 @@ class SchoolManager private constructor() {
         //load
         Thread {
             try {
-                list = loadChildHome(context)
-                list.addAll(loadKindergarden(context))
+                val list = loadKindergarden(context)
+                list.addAll(loadChildHome(context))
+
+                this.list = list
                 //success to load
                 callback(this)
             } catch (e: Exception) {
@@ -35,6 +40,13 @@ class SchoolManager private constructor() {
                 callback(null)
             }
         }.start()
+    }
+
+    fun sortByLocation(userLocation: LatLng): ArrayList<School> {
+        val sorted = ArrayList<School>(list)
+        return ArrayList(sorted.sortedBy {
+            LocationUtil.distance(userLocation.latitude, userLocation.longitude, it.lat, it.lng)
+        })
     }
 
     fun search(keyword: String, filterSetting: FilterSetting?): ArrayList<School> {
@@ -128,7 +140,7 @@ class SchoolManager private constructor() {
                         val school = School(
                                 currentRow[getColIndex('h')].contents!!,
                                 currentRow[getColIndex('d')].contents!!,
-                                currentRow[getColIndex('e')].contents!!,
+                                "${School.TYPE_KINDER} " + currentRow[getColIndex('e')].contents!!,
                                 "",
                                 currentRow[getColIndex('l')].contents!!,
                                 currentRow_room[getColIndex('f')].contents!!.replace("개", "").toInt(),
@@ -178,7 +190,7 @@ class SchoolManager private constructor() {
                         val school = School(
                                 currentRow[getColIndex('g')].contents!!,
                                 currentRow[getColIndex('c')].contents!!,
-                                currentRow[getColIndex('d')].contents!!,
+                                "${School.TYPE_CHILD} " + currentRow[getColIndex('d')].contents!!,
                                 currentRow[getColIndex('f')].contents!!,
                                 currentRow[getColIndex('h')].contents!!,
                                 currentRow[getColIndex('j')].contents!!.toInt(),
