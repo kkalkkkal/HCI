@@ -576,7 +576,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             super.onBackPressed();
         }
         else {
-            changeView(1);
+            changeView(0);
             backButtonClickTime = curTime;
             Toast.makeText(this, "한번 더 누르면 종료됩니다.",Toast.LENGTH_SHORT).show();
         }
@@ -1333,7 +1333,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         marker11.setIconTintColor(Color.BLUE); // 빨간 색 + 파란색 = 보라색
                         marker11.setCaptionText(kindername2); // 캡션 설정
                         marker11.setMap(naverMap2); // 마커 표시
-                        changeView(0);
+
                         break;
                     case 1:
                         marker12.setMap(null); // 기존 마커 삭제
@@ -1500,6 +1500,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     marker13.setCaptionText(dataList.get(13).getName()); // 캡션 설정
                 }
                 infoWindow.open(marker13);
+                changeView(0);
                 return true;
             }
         });
@@ -1514,6 +1515,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     marker14.setTag(dataList.get(13).getName());
                 }
                 infoWindow.open(marker14);
+                changeView(0);
                 return true;
             }
         });
@@ -1690,6 +1692,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         return (rad * 180 / Math.PI);
     }
 
+
+    TextView the_name = findViewById(R.id.the_name);
+    TextView the_type = findViewById(R.id.the_Type);
+    TextView the_tel = findViewById(R.id.the_phone);
+    TextView the_add = findViewById(R.id.the_add);
+    ImageButton imageButton = findViewById(R.id.bookmarkbtn); // 즐겨찾기
+    ImageButton imageButton2 = findViewById(R.id.imageButton2); // 비교
+
+
     public void changeView(int index) {
         // LayoutInflater 초기화.
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -1704,10 +1715,18 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         View view = null ;
         switch (index) {
             case 0 :
-                view = inflater.inflate(R.layout.fragment_common_recycler, frame, false) ;
-                break ;
-            case 1:
                 //frame.removeViewAt(0); // 삭제 (뒤로가기 버튼)
+                break ;
+            default:
+                view = inflater.inflate(R.layout.fragment_common_recycler, frame, false) ;
+                // id 매핑
+
+                the_name.setText(dataList.get(index - 1).getName());
+                the_type.setText(dataList.get(index - 1).getType());
+                the_tel.setText(dataList.get(index - 1).getTel());
+                the_add.setText(dataList.get(index - 1).getAddr());
+
+
                 break;
 
         }

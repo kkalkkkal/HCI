@@ -64,7 +64,7 @@ public class commonAdapter extends RecyclerView.Adapter<commonAdapter.ViewHolder
             textView4 = itemView.findViewById(R.id.the_phone) ;
             imgView1 = itemView.findViewById(R.id.the_img_type);
 
-            button1  = (ImageButton)itemView.findViewById(R.id.imageButton);
+            button1  = (ImageButton)itemView.findViewById(R.id.bookmarkbtn);
 
             button2  = (ImageButton)itemView.findViewById(R.id.imageButton2);
 
