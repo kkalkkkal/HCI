@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/common_cardview"
+        android:layout_width="409dp"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="139dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="136dp">
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:background="?android:attr/listDivider" />
+
+            <ImageButton
+                android:id="@+id/imageButton2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="9dp"
+                android:layout_toStartOf="@+id/imageButton"
+                app:srcCompat="@android:drawable/ic_menu_add" />
+
+            <ImageButton
+                android:id="@+id/imageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="16dp"
+                app:srcCompat="@android:drawable/btn_star_big_off" />
+
+            <ImageView
+                android:id="@+id/the_img_type"
+                android:layout_width="82dp"
+                android:layout_height="73dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="22dp"
+                android:layout_marginTop="31dp"
+                app:srcCompat="@drawable/seekbar_thumb" />
+
+            <TextView
+                android:id="@+id/the_Type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/divider"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="42dp"
+                android:layout_marginTop="52dp"
+                android:text="공립"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/the_name"
+                android:layout_width="123dp"
+                android:layout_height="33dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="14dp"
+                android:layout_marginEnd="12dp"
+                android:layout_toStartOf="@+id/imageButton2"
+                android:text="이름" />
+
+            <TextView
+                android:id="@+id/the_add"
+                android:layout_width="232dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/the_name"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="13dp"
+                android:layout_marginEnd="41dp"
+                android:text="주소" />
+
+            <TextView
+                android:id="@+id/the_phone"
+                android:layout_width="229dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/the_add"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="11dp"
+                android:layout_marginEnd="43dp"
+                android:text="전화번호" />
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -12,6 +12,12 @@ android {
         viewBinding = true // for view binding
     }
 
+    // Gradle automatically adds 'android.test.runner' as a dependency.
+    useLibrary 'android.test.runner'
+
+    useLibrary 'android.test.base'
+    useLibrary 'android.test.mock'
+
     defaultConfig {
         applicationId "com.example.hci_project"
         minSdkVersion 23
@@ -49,13 +55,23 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:17.0.1'
     implementation group: 'net.sourceforge.jexcelapi', name: 'jxl', version: '2.6.12'
     testImplementation 'junit:junit:4.+'
+
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.0'
     implementation 'com.google.android:flexbox:2.0.1'
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+    implementation 'com.google.android.gms:play-services-location:16.0.0' // 위치 서비스
+    implementation 'com.sothree.slidinguppanel:library:3.4.0' // 슬라이딩 레이아웃 ( 네이버 지도 첫 화면 위 아래로 왔다갔다하는 레이아웃 그거)
 
+
+    //JSON PARSER
+    //implementation 'com.org.json:json:20210307'
+    implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1'
+
+
+    // Unit Test
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
