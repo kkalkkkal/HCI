@@ -27,6 +27,14 @@ import jxl.Sheet;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
 
+
+import java.io.IOException;
+import java.io.InputStream;
+
+import jxl.Sheet;
+import jxl.Workbook;
+import jxl.read.biff.BiffException;
+
 public class MainActivity extends AppCompatActivity {
     private TextView schoolSearchTv;
     private ViewPager2 viewPager;
@@ -87,15 +95,54 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private long backButtonClickTime= 0;
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        if(System.currentTimeMillis()- backButtonClickTime>= 1000){
-            Toast.makeText(this, "앱을 종료하시려면 뒤로가기 버튼을 한번 더 누르세요", Toast.LENGTH_SHORT).show();
-            backButtonClickTime= System.currentTimeMillis();
-        }else{
-            finish();
+    public void comeonDB() { // DB 불러오기
+        try {
+            InputStream is = getBaseContext().getResources().getAssets().open("kindergardenDB.xls"); // 유치원 현황
+            InputStream is2 = getBaseContext().getResources().getAssets().open("childhomeDB.xls"); // 어린이집 현황
+            Workbook wb = Workbook.getWorkbook(is);
+            Workbook wb2 = Workbook.getWorkbook(is2);
+
+            if(wb != null) {
+                Sheet sheet = wb.getSheet(0);   // 시트 불러오기
+                if(sheet != null) {
+                    int colTotal = sheet.getColumns();    // 전체 컬럼
+                    int rowIndexStart = 1;                  // row 인덱스 시작
+                    int rowTotal = sheet.getColumn(colTotal-1).length;
+
+                    StringBuilder sb;
+                    for(int row=rowIndexStart;row<rowTotal;row++) {
+                        sb = new StringBuilder();
+                        for(int col=0;col<colTotal;col++) {
+                            String contents = sheet.getCell(col, row).getContents();
+                            sb.append("col"+col+" : "+contents+" , ");
+                        }
+                        Log.i("test", sb.toString()); // 가져오는지 로그 확인
+                    }
+                }
+            }
+
+            if(wb2 != null) {
+                Sheet sheet = wb2.getSheet(0);   // 시트 불러오기
+                if(sheet != null) {
+                    int colTotal = sheet.getColumns();    // 전체 컬럼
+                    int rowIndexStart = 1;                  // row 인덱스 시작
+                    int rowTotal = sheet.getColumn(colTotal-1).length;
+
+                    StringBuilder sb2;
+                    for(int row=rowIndexStart;row<rowTotal;row++) {
+                        sb2 = new StringBuilder();
+                        for(int col=0;col<colTotal;col++) {
+                            String contents = sheet.getCell(col, row).getContents();
+                            sb2.append("col"+col+" : "+contents+" , ");
+                        }
+                        Log.i("test", sb2.toString()); // 가져오는지 로그 확인
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (BiffException e) {
+            e.printStackTrace();
         }
     }
 

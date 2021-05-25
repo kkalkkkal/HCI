@@ -30,9 +30,9 @@ public class PieChartActivity extends AppCompatActivity {
         NoOfEmp.add(new PieEntry(1645f, 7));
         NoOfEmp.add(new PieEntry(1578f, 8));
         NoOfEmp.add(new PieEntry(1695f, 9));
-        PieDataSet dataSet = new PieDataSet(NoOfEmp, "Number Of Employees");
+        PieDataSet dataSet = new PieDataSet(NoOfEmp, "총 교사수");
         ArrayList year = new ArrayList();
-        year.add("2008");
+        year.add("2007");
         year.add("2009");
         year.add("2010");
         year.add("2011");
@@ -46,7 +46,7 @@ public class PieChartActivity extends AppCompatActivity {
         // MPAndroidChart v3.X 오류 발생
         pieChart.setData(data);
         dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
-        pieChart.animateXY(5000, 5000);
+        pieChart.animateXY(1000, 1000);
 
 
 

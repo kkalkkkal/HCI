@@ -29,7 +29,7 @@ public class BarChartActivity extends AppCompatActivity {
         NoOfEmp.add(new BarEntry(1578f, 8));
         NoOfEmp.add(new BarEntry(1695f, 9));
         ArrayList year = new ArrayList();
-        year.add("2008");
+        year.add("2007");
         year.add("2009");
         year.add("2010");
         year.add("2011");
@@ -39,8 +39,8 @@ public class BarChartActivity extends AppCompatActivity {
         year.add("2015");
         year.add("2016");
         year.add("2017");
-        BarDataSet bardataset = new BarDataSet(NoOfEmp, "No Of Employee");
-        chart.animateY(5000);
+        BarDataSet bardataset = new BarDataSet(NoOfEmp, "총 유아수");
+        chart.animateY(1000);
         BarData data = new BarData(bardataset);
         // MPAndroidChart v3.X 오류 발생
         bardataset.setColors(ColorTemplate.COLORFUL_COLORS);
