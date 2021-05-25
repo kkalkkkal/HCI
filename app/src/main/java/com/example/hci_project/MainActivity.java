@@ -13,12 +13,17 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.PointF;
 import android.location.Location;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -90,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private TextView schoolSearchTv;
     private ViewPager2 viewPager;
     private List<Fragment> viewPagerFragmentList = new ArrayList<>();
-    public RecyclerView recyclerView;
+    static RecyclerView recyclerView;
     private LinearLayout linearLayout;
     private LinearLayout linearLayout2;
     private TextView schoolTitle;
@@ -122,6 +127,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     static Sheet sheet12; // 유치원 건물 현황
 
     private ArrayList<School2> dataList = new ArrayList<>();
+    private ArrayList<School2> bookmarkList = new ArrayList<>();
+
 
     static final int PERMISSIONS_REQUEST = 0x0000001;
 
@@ -379,6 +386,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         OnCheckPermission(); // 권한 확인
 
 
+
         locationSource =
                 new FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE); // 현재 위치 갱신
 
@@ -555,21 +563,34 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             return true;
         });
 
-
-
-
     }
 
     private long backButtonClickTime= 0;
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        if(System.currentTimeMillis()- backButtonClickTime>= 1000){
+
+        long curTime = System.currentTimeMillis();
+        long gapTime = curTime - backButtonClickTime;
+
+        if(0 <= gapTime && 2000 >= gapTime) {
+            super.onBackPressed();
+        }
+        else {
+            changeView(1);
+            backButtonClickTime = curTime;
+            Toast.makeText(this, "한번 더 누르면 종료됩니다.",Toast.LENGTH_SHORT).show();
+        }
+
+
+        //super.onBackPressed();
+        /*if(System.currentTimeMillis()- backButtonClickTime>= 1000){
+            changeView(1);
+
             Toast.makeText(this, "앱을 종료하시려면 뒤로가기 버튼을 한번 더 누르세요", Toast.LENGTH_SHORT).show();
             backButtonClickTime= System.currentTimeMillis();
         }else{
             finish();
-        }
+        }*/
     }
 
     public void comeonDB() { // DB 불러오기
@@ -892,11 +913,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(@NonNull @NotNull NaverMap naverMap) { // 맵 설정
         this.naverMap = naverMap;
 
-        naverMap.setLocationSource(locationSource); // 자기 위치 설정 
+        naverMap.setLocationSource(locationSource); // 자기 위치 설정
         naverMap.setMapType(NaverMap.MapType.Basic); // 기본형 지도
         naverMap.setLayerGroupEnabled(NaverMap.LAYER_GROUP_BUILDING, true); // 빌딩 그룹 생성
 
         naverMap.setLocationTrackingMode(LocationTrackingMode.Follow); // 위치 추적 모드 실행
+
+        naverMap.moveCamera(cameraUpdate);
+        naverMap.setMapType(NaverMap.MapType.Basic);
 
 
         //네이버 지도 추가 UI 설정
@@ -931,15 +955,38 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
         // 클릭 리스너 :
-        naverMap.setOnMapClickListener((point, coord) ->
-                Toast.makeText(this, coord.latitude + ", " + coord.longitude,
-                        Toast.LENGTH_SHORT).show());
+ //       naverMap.setOnMapClickListener((point, coord) ->)
+               //Toast.makeText(this, coord.latitude + ", " + coord.longitude, Toast.LENGTH_SHORT).show());
 
 
         // 롱 클릭 리스너
-        naverMap.setOnMapLongClickListener((point, coord) ->
-                Toast.makeText(this, coord.latitude + ", " + coord.longitude,
-                        Toast.LENGTH_SHORT).show());
+        naverMap.setOnMapLongClickListener(new NaverMap.OnMapLongClickListener() {
+            @Override
+            public void onMapLongClick(@NonNull @NotNull PointF pointF, @NonNull @NotNull LatLng latLng) {
+
+           // 길게 클릭하면 카메라 위치 기준으로 검색
+                //   Toast.makeText(this, coord.latitude + ", " + coord.longitude, Toast.LENGTH_SHORT).show();
+
+
+                try {
+                    MainActivity.this.NearKinderMarker();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    MainActivity.this.NearChildMarker();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+
 
         // 심벌 클릭 리스너
         naverMap.setOnSymbolClickListener(symbol -> {
@@ -958,7 +1005,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
-    public void NearKinderMarker() throws ParseException, JSONException { // 화면에 있는 유치원의 마커를 표시함
+    public void NearKinderMarker() throws ParseException, JSONException { // 화면에 있는 유치원의 마커를 표시함 // 여기가 호출됨.
         int count = 0 ; // 최대 10개만 표시 카운트
          // 유치원 기본 현황 시트
         int colTotal = sheet11.getColumns();    // 전체 컬럼
@@ -967,8 +1014,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         double m_x, x;
         try {
             Location mlocationSource = locationSource.getLastLocation();
-            m_y = mlocationSource.getLatitude(); // 자기 위치 위도
-            m_x = mlocationSource.getLongitude();
+            m_y = naverMap2.getCameraPosition().target.latitude;//mlocationSource.getLatitude(); // 자기 위치 위도
+            m_x = naverMap2.getCameraPosition().target.longitude;//mlocationSource.getLongitude(); 카메라 위치 경도
         } catch (Exception e){
             m_y =  37.541680773674464; // 건국대 기준
             m_x = 127.07943250328056; //
@@ -1095,17 +1142,19 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
         // 리사이클러뷰에 LinearLayoutManager 객체 지정.
-        recyclerView = (RecyclerView)findViewById(R.id.commonRecycler);
+        MainActivity.this.recyclerView = (RecyclerView)findViewById(R.id.commonRecycler);
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false);
-        recyclerView.setLayoutManager(manager); // LayoutManager 등록
+        MainActivity.this.recyclerView.setLayoutManager(manager); // LayoutManager 등록
         // 리사이클러뷰에 SimpleTextAdapter 객체 지정.
-        recyclerView.setAdapter(new commonAdapter(dataList));  // Adapter 등록
+        MainActivity.this.recyclerView.setAdapter(new commonAdapter(dataList));  // Adapter 등록
 
         // 각 마커 클릭 리스너
         marker1.setOnClickListener(new Overlay.OnClickListener() {
             @Override
             public boolean onClick(@NonNull @NotNull Overlay overlay) {
-                marker1.setTag("마커 1");
+                marker1.setTag(dataList.get(0).getName()); // 정보창
+                marker1.setCaptionText(dataList.get(0).getName()); // 캡션 설정
+                marker1.setCaptionRequestedWidth(200);
                 infoWindow.open(marker1);
                 return false;
             }
@@ -1113,7 +1162,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         marker2.setOnClickListener(new Overlay.OnClickListener() {
             @Override
             public boolean onClick(@NonNull @NotNull Overlay overlay) {
-                marker2.setTag("마커 2");
+
+                marker2.setTag(dataList.get(1).getName()); // 정보창
+                marker2.setCaptionText(dataList.get(1).getName()); // 캡션 설정
+                marker2.setCaptionRequestedWidth(200);
                 infoWindow.open(marker2);
                 return true;
             }
@@ -1121,7 +1173,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         marker3.setOnClickListener(new Overlay.OnClickListener() {
             @Override
             public boolean onClick(@NonNull @NotNull Overlay overlay) {
-                marker3.setTag("마커 3");
+                marker3.setTag(dataList.get(2).getName()); // 정보창
+                marker3.setCaptionText(dataList.get(2).getName()); // 캡션 설정
+
+                marker3.setCaptionRequestedWidth(200);
                 infoWindow.open(marker3);
                 return true;
             }
@@ -1129,7 +1184,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         marker4.setOnClickListener(new Overlay.OnClickListener() {
             @Override
             public boolean onClick(@NonNull @NotNull Overlay overlay) {
-                marker4.setTag("마커 4");
+                marker4.setTag(dataList.get(3).getName()); // 정보창
+                marker4.setCaptionText(dataList.get(3).getName()); // 캡션 설정
+                marker11.setCaptionRequestedWidth(200);
                 infoWindow.open(marker4);
                 return false;
             }
@@ -1137,7 +1194,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         marker5.setOnClickListener(new Overlay.OnClickListener() {
             @Override
             public boolean onClick(@NonNull @NotNull Overlay overlay) {
-                marker5.setTag("마커 5");
+                marker5.setTag(dataList.get(4).getName()); // 정보창
+                marker5.setCaptionText(dataList.get(4).getName()); // 캡션 설정
                 infoWindow.open(marker5);
                 return false;
             }
@@ -1145,7 +1203,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         marker6.setOnClickListener(new Overlay.OnClickListener() {
             @Override
             public boolean onClick(@NonNull @NotNull Overlay overlay) {
-                marker6.setTag("마커 6");
+                marker6.setTag(dataList.get(6).getName()); // 정보창
+                marker6.setCaptionText(dataList.get(6).getName()); // 캡션 설정
                 infoWindow.open(marker6);
                 return false;
             }
@@ -1153,7 +1212,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         marker7.setOnClickListener(new Overlay.OnClickListener() {
             @Override
             public boolean onClick(@NonNull @NotNull Overlay overlay) {
-                marker7.setTag("마커 7");
+                marker7.setTag(dataList.get(6).getName()); // 정보창
+                marker7.setCaptionText(dataList.get(6).getName()); // 캡션 설정
                 infoWindow.open(marker7);
                 return false;
             }
@@ -1161,7 +1221,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         marker8.setOnClickListener(new Overlay.OnClickListener() {
             @Override
             public boolean onClick(@NonNull @NotNull Overlay overlay) {
-                marker8.setTag("마커 8");
+                marker8.setTag(dataList.get(7).getName()); // 정보창
+                marker8.setCaptionText(dataList.get(7).getName()); // 캡션 설정
                 infoWindow.open(marker8);
                 return false;
             }
@@ -1169,7 +1230,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         marker9.setOnClickListener(new Overlay.OnClickListener() {
             @Override
             public boolean onClick(@NonNull @NotNull Overlay overlay) {
-                marker9.setTag("마커 9");
+                marker9.setTag(dataList.get(8).getName()); // 정보창
+                marker9.setCaptionText(dataList.get(8).getName()); // 캡션 설정
                 infoWindow.open(marker9);
                 return false;
             }
@@ -1177,7 +1239,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         marker10.setOnClickListener(new Overlay.OnClickListener() {
             @Override
             public boolean onClick(@NonNull @NotNull Overlay overlay) {
-                marker10.setTag("마커 10");
+                marker10.setTag(dataList.get(9).getName()); // 정보창
+                marker19.setCaptionText(dataList.get(9).getName()); // 캡션 설정
                 infoWindow.open(marker10);
                 return true;
             }
@@ -1219,7 +1282,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
-    public void NearChildMarker() throws JSONException, ParseException { // 화면에 있는 어린이집의 마커를 표시함
+    public void NearChildMarker() throws JSONException, ParseException { // 화면에 있는 어린이집의 마커를 표시함 (cihp 누르면 여기가 호출됨**)
         int count = 0 ;
         //Sheet sheet = getSheet0(); // 어린이집 기본 현황 시트
 
@@ -1232,8 +1295,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         double m_x, x;
         try {
             Location mlocationSource = locationSource.getLastLocation();
-            m_y = mlocationSource.getLatitude(); // 자기 위치 위도
-            m_x = mlocationSource.getLongitude();
+            m_y = naverMap2.getCameraPosition().target.latitude;//mlocationSource.getLatitude(); // 자기 위치 위도
+            m_x = naverMap2.getCameraPosition().target.longitude;//mlocationSource.getLongitude(); 카메라 위치 경도
         } catch (Exception e){
             m_y =  37.541680773674464; // 건국대 기준
             m_x = 127.07943250328056; //
@@ -1268,13 +1331,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         marker11.setPosition(new LatLng(y, x)); // 마커 위치 재설정
                         marker11.setIcon(MarkerIcons.RED); // 마커 색깔, 어린이집은 보라
                         marker11.setIconTintColor(Color.BLUE); // 빨간 색 + 파란색 = 보라색
+                        marker11.setCaptionText(kindername2); // 캡션 설정
                         marker11.setMap(naverMap2); // 마커 표시
+                        changeView(0);
                         break;
                     case 1:
                         marker12.setMap(null); // 기존 마커 삭제
                         marker12.setPosition(new LatLng(y, x)); // 마커 위치 재설정
                         marker12.setIcon(MarkerIcons.RED); // 마커 색깔, 어린이집은 보라
                         marker12.setIconTintColor(Color.BLUE); // 빨간 색 + 파란색 = 보라색
+                        marker12.setCaptionText(kindername2); // 캡션 설정
                         marker12.setMap(naverMap2); // 마커 표시
 
                         break;
@@ -1283,14 +1349,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         marker13.setPosition(new LatLng(y, x)); // 마커 위치 재설정
                         marker13.setIcon(MarkerIcons.RED); // 마커 색깔, 어린이집은 보라
                         marker13.setIconTintColor(Color.BLUE); // 빨간 색 + 파란색 = 보라색
+                        marker13.setCaptionText(kindername2); // 캡션 설정
                         marker13.setMap(naverMap2); // 마커 표시
-
                         break;
                     case 3:
                         marker14.setMap(null); // 기존 마커 삭제
                         marker14.setPosition(new LatLng(y, x)); // 마커 위치 재설정
                         marker14.setIcon(MarkerIcons.RED); // 마커 색깔, 어린이집은 보라
                         marker14.setIconTintColor(Color.BLUE); // 빨간 색 + 파란색 = 보라색
+                        marker14.setCaptionText(kindername2); // 캡션 설정
+
                         marker14.setMap(naverMap2); // 마커 표시
 
                         break;
@@ -1299,6 +1367,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         marker15.setPosition(new LatLng(y, x)); // 마커 위치 재설정
                         marker15.setIcon(MarkerIcons.RED); // 마커 색깔, 어린이집은 보라
                         marker15.setIconTintColor(Color.BLUE); // 빨간 색 + 파란색 = 보라색
+                        marker15.setCaptionText(kindername2); // 캡션 설정
+
                         marker15.setMap(naverMap2); // 마커 표시
 
                         break;
@@ -1307,6 +1377,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         marker16.setPosition(new LatLng(y, x)); // 마커 위치 재설정
                         marker16.setIcon(MarkerIcons.RED); // 마커 색깔, 어린이집은 보라
                         marker16.setIconTintColor(Color.BLUE); // 빨간 색 + 파란색 = 보라색
+                        marker16.setCaptionText(kindername2); // 캡션 설정
+
                         marker16.setMap(naverMap2); // 마커 표시
 
                         break;
@@ -1315,6 +1387,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         marker17.setPosition(new LatLng(y, x)); // 마커 위치 재설정
                         marker17.setIcon(MarkerIcons.RED); // 마커 색깔, 어린이집은 보라
                         marker17.setIconTintColor(Color.BLUE); // 빨간 색 + 파란색 = 보라색
+                        marker17.setCaptionText(kindername2); // 캡션 설정
+
                         marker17.setMap(naverMap2); // 마커 표시
                         break;
                     case 7:
@@ -1322,6 +1396,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         marker18.setPosition(new LatLng(y, x)); // 마커 위치 재설정
                         marker18.setIcon(MarkerIcons.RED); // 마커 색깔, 어린이집은 보라
                         marker18.setIconTintColor(Color.BLUE); // 빨간 색 + 파란색 = 보라색
+                        marker18.setCaptionText(kindername2); // 캡션 설정
+
                         marker18.setMap(naverMap2); // 마커 표시
                         break;
                     case 8:
@@ -1329,6 +1405,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         marker19.setPosition(new LatLng(y, x)); // 마커 위치 재설정
                         marker19.setIcon(MarkerIcons.RED); // 마커 색깔, 어린이집은 보라
                         marker19.setIconTintColor(Color.BLUE); // 빨간 색 + 파란색 = 보라색
+                        marker19.setCaptionText(kindername2); // 캡션 설정
+
                         marker19.setMap(naverMap2); // 마커 표시
                         break;
                     case 9:
@@ -1336,6 +1414,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         marker20.setPosition(new LatLng(y, x)); // 마커 위치 재설정
                         marker20.setIcon(MarkerIcons.RED); // 마커 색깔, 어린이집은 보라
                         marker20.setIconTintColor(Color.BLUE); // 빨간 색 + 파란색 = 보라색
+                        marker20.setCaptionText(kindername2); // 캡션 설정
+
                         marker20.setMap(naverMap2); // 마커 표시
                         break;
                     default:
@@ -1370,25 +1450,55 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         marker11.setOnClickListener(new Overlay.OnClickListener() {
             @Override
             public boolean onClick(@NonNull @NotNull Overlay overlay) {
-                marker11.setTag("마커 1"); // 정보창
-                marker11.setCaptionText("123"); // 캡션 설정
+
+                if (dataList.size() <= 10)
+                {
+                    marker11.setTag(dataList.get(0).getName()); // 정보창
+                    marker11.setCaptionText(dataList.get(0).getName()); // 캡션 설정
+                }
+                else {
+                    marker11.setTag(dataList.get(10).getName()); // 정보창
+                    marker11.setCaptionText(dataList.get(10).getName()); // 캡션 설정
+
+                }
                 marker11.setCaptionRequestedWidth(200);
                 infoWindow.open(marker11);
+                changeView(0);
                 return true;
             }
         });
         marker12.setOnClickListener(new Overlay.OnClickListener() {
             @Override
             public boolean onClick(@NonNull @NotNull Overlay overlay) {
-                marker12.setTag("마커 2");
+                if (dataList.size() <= 10)
+                {
+                    marker12.setTag(dataList.get(1).getName());
+                    marker12.setCaptionText(dataList.get(1).getName()); // 캡션 설정
+
+                }
+                else {
+                    marker12.setTag(dataList.get(11).getName());
+                    marker12.setCaptionText(dataList.get(11).getName()); // 캡션 설정
+
+                }
                 infoWindow.open(marker12);
+                changeView(0);
                 return true;
             }
         });
         marker13.setOnClickListener(new Overlay.OnClickListener() {
             @Override
             public boolean onClick(@NonNull @NotNull Overlay overlay) {
-                marker13.setTag("마커 3");
+                if (dataList.size() <= 10)
+                {
+                    marker13.setTag(dataList.get(3).getName());
+                    marker13.setCaptionText(dataList.get(3).getName()); // 캡션 설정
+
+                }
+                else {
+                    marker13.setTag(dataList.get(13).getName());
+                    marker13.setCaptionText(dataList.get(13).getName()); // 캡션 설정
+                }
                 infoWindow.open(marker13);
                 return true;
             }
@@ -1396,7 +1506,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         marker14.setOnClickListener(new Overlay.OnClickListener() {
             @Override
             public boolean onClick(@NonNull @NotNull Overlay overlay) {
-                marker14.setTag("마커 4");
+                if (dataList.size() <= 10)
+                {
+                    marker14.setTag(dataList.get(3).getName());
+                }
+                else {
+                    marker14.setTag(dataList.get(13).getName());
+                }
                 infoWindow.open(marker14);
                 return true;
             }
@@ -1404,7 +1520,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         marker15.setOnClickListener(new Overlay.OnClickListener() {
             @Override
             public boolean onClick(@NonNull @NotNull Overlay overlay) {
-                marker15.setTag("마커 5");
+                if (dataList.size() <= 10)
+                {
+                    marker15.setTag(dataList.get(4).getName());
+                }
+                else {
+                    marker15.setTag(dataList.get(14).getName());
+                }
                 infoWindow.open(marker15);
                 return true;
             }
@@ -1412,7 +1534,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         marker16.setOnClickListener(new Overlay.OnClickListener() {
             @Override
             public boolean onClick(@NonNull @NotNull Overlay overlay) {
-                marker16.setTag("마커 6");
+                if (dataList.size() <= 10)
+                {
+                    marker16.setTag(dataList.get(5).getName());
+                }
+                else {
+                    marker16.setTag(dataList.get(15).getName());
+                }
                 infoWindow.open(marker16);
                 return true;
             }
@@ -1420,15 +1548,28 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         marker17.setOnClickListener(new Overlay.OnClickListener() {
             @Override
             public boolean onClick(@NonNull @NotNull Overlay overlay) {
-                marker17.setTag("마커 17");
+                if (dataList.size() <= 10)
+                {
+                    marker14.setTag(dataList.get(6).getName());
+                }
+                else {
+                    marker14.setTag(dataList.get(16).getName());
+                }
                 infoWindow.open(marker17);
+
                 return true;
             }
         });
         marker18.setOnClickListener(new Overlay.OnClickListener() {
             @Override
             public boolean onClick(@NonNull @NotNull Overlay overlay) {
-                marker18.setTag("마커 18");
+                if (dataList.size() <= 10)
+                {
+                    marker14.setTag(dataList.get(7).getName());
+                }
+                else {
+                    marker14.setTag(dataList.get(17).getName());
+                }
                 infoWindow.open(marker18);
                 return true;
             }
@@ -1436,7 +1577,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         marker19.setOnClickListener(new Overlay.OnClickListener() {
             @Override
             public boolean onClick(@NonNull @NotNull Overlay overlay) {
-                marker19.setTag("마커 19");
+                if (dataList.size() <= 10)
+                {
+                    marker14.setTag(dataList.get(8).getName());
+                }
+                else {
+                    marker14.setTag(dataList.get(18).getName());
+                }
                 infoWindow.open(marker19);
                 return true;
             }
@@ -1444,7 +1591,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         marker20.setOnClickListener(new Overlay.OnClickListener() {
             @Override
             public boolean onClick(@NonNull @NotNull Overlay overlay) {
-                marker20.setTag("마커 10");
+                if (dataList.size() <= 10)
+                {
+                    marker14.setTag(dataList.get(9).getName());
+                }
+                else {
+                    marker14.setTag(dataList.get(19).getName());
+                }
                 infoWindow.open(marker20);
                 return true;
             }
@@ -1537,6 +1690,33 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         return (rad * 180 / Math.PI);
     }
 
+    public void changeView(int index) {
+        // LayoutInflater 초기화.
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        FrameLayout frame = (FrameLayout) findViewById(R.id.frame) ;
+        if (frame.getChildCount() > 0) {
+            // FrameLayout에서 뷰 삭제.
+            frame.removeViewAt(0);
+        }
+
+        // XML에 작성된 레이아웃을 View 객체로 변환.
+        View view = null ;
+        switch (index) {
+            case 0 :
+                view = inflater.inflate(R.layout.fragment_common_recycler, frame, false) ;
+                break ;
+            case 1:
+                //frame.removeViewAt(0); // 삭제 (뒤로가기 버튼)
+                break;
+
+        }
+
+        // FrameLayout에 뷰 추가.
+        if (view != null) {
+            frame.addView(view) ;
+        }
+    }
 
 
 }

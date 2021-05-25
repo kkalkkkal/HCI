@@ -1,6 +1,7 @@
 package com.example.hci_project;
 
 import android.graphics.Color;
+import android.graphics.PointF;
 import android.location.Location;
 import android.os.Bundle;
 
@@ -10,9 +11,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -20,6 +23,7 @@ import com.example.hci_project.bean.School2;
 import com.google.android.material.chip.Chip;
 import com.naver.maps.geometry.LatLng;
 import com.naver.maps.map.CameraPosition;
+import com.naver.maps.map.CameraUpdate;
 import com.naver.maps.map.LocationTrackingMode;
 import com.naver.maps.map.MapView;
 import com.naver.maps.map.NaverMap;
@@ -52,31 +56,34 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     // 마커 선언
     // 마커는 최대 10개
-    Marker marker1 = new Marker();
-    Marker marker2 = new Marker();
-    Marker marker3 = new Marker();
-    Marker marker4 = new Marker();
-    Marker marker5 = new Marker();
-    Marker marker6 = new Marker();
-    Marker marker7 = new Marker();
-    Marker marker8 = new Marker();
-    Marker marker9 = new Marker();
-    Marker marker10 = new Marker();
+    Marker marker1 = mainActivity.getMarker1();
+    Marker marker2 = mainActivity.getMarker2();
+    Marker marker3 = mainActivity.getMarker3();
+    Marker marker4 = mainActivity.getMarker4();
+    Marker marker5 = mainActivity.getMarker5();
+    Marker marker6 = mainActivity.getMarker6();
+    Marker marker7 = mainActivity.getMarker7();
+    Marker marker8 = mainActivity.getMarker8();
+    Marker marker9 = mainActivity.getMarker9();
+    Marker marker10 = mainActivity.getMarker10();
 
-    Marker marker11 = new Marker();
-    Marker marker12 = new Marker();
-    Marker marker13 = new Marker();
-    Marker marker14 = new Marker();
-    Marker marker15 = new Marker();
-    Marker marker16 = new Marker();
-    Marker marker17 = new Marker();
-    Marker marker18 = new Marker();
-    Marker marker19 = new Marker();
-    Marker marker20 = new Marker();
+    Marker marker11 = mainActivity.getMarker11();
+    Marker marker12 = mainActivity.getMarker12();
+    Marker marker13 = mainActivity.getMarker13();
+    Marker marker14 = mainActivity.getMarker14();
+    Marker marker15 = mainActivity.getMarker15();
+    Marker marker16 = mainActivity.getMarker16();
+    Marker marker17 = mainActivity.getMarker17();
+    Marker marker18 = mainActivity.getMarker18();
+    Marker marker19 = mainActivity.getMarker19();
+    Marker marker20 = mainActivity.getMarker20();
 
     ArrayList<School2> dataList = new ArrayList<>();
-    RecyclerView recyclerView =mainActivity.recyclerView;
+    //RecyclerView recyclerView = mainActivity.recyclerView;
     com.naver.maps.map.MapFragment mapFragment2;
+
+    CameraPosition cameraPosition;
+    CameraUpdate cameraUpdate;
 
     // 메인 간이 필터
     private Chip kinder_chip; // 유치원 필터
@@ -95,13 +102,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // 네이버 지도 설정
-        NaverMapOptions options = new NaverMapOptions() // 초기 화면 위치, 경도 생성자 설정
-                .camera(new CameraPosition(new LatLng(37.543344020789625, 127.07557079824849), 13)) // 건국대 기준으로 지도를 연다.
-                .mapType(NaverMap.MapType.Basic);
+        cameraPosition = new CameraPosition(new LatLng(37.543344020789625, 127.07557079824849), 13);// 건국대 기준으로 지도를 연다.
 
-        options.locationButtonEnabled(true).tiltGesturesEnabled(false);
-        //mapFragment2 = com.naver.maps.map.MapFragment.newInstance(options); // 옵션 설정
-        //mapFragment2.getMapAsync(this);
+        cameraUpdate = CameraUpdate.scrollTo(new LatLng(37.543344020789625, 127.07557079824849));
+        cameraUpdate = CameraUpdate.toCameraPosition(cameraPosition);
+
 
 
 
@@ -127,20 +132,24 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     @Override
-    public void onMapReady(@NonNull @NotNull NaverMap naverMap) {
+    public void onMapReady(@NonNull @NotNull NaverMap naverMap) { // 실행되면 여기가 호출됩니다! 2021.05.25
         this.naverMap2 = naverMap;
 
 
-        naverMap.setLocationSource(locationSource); // 자기 위치 설정
-        naverMap.setMapType(NaverMap.MapType.Basic); // 기본형 지도
-        naverMap.setLayerGroupEnabled(NaverMap.LAYER_GROUP_BUILDING, true); // 빌딩 그룹 생성
+        naverMap2.setLocationSource(locationSource); // 자기 위치 설정
+        naverMap2.setMapType(NaverMap.MapType.Basic); // 기본형 지도
+        naverMap2.setLayerGroupEnabled(NaverMap.LAYER_GROUP_BUILDING, true); // 빌딩 그룹 생성
 
-        naverMap.setLocationTrackingMode(LocationTrackingMode.Follow); // 위치 추적 모드 실행
+        naverMap2.setLocationTrackingMode(LocationTrackingMode.Follow); // 위치 추적 모드 실행
+
+        naverMap2.moveCamera(cameraUpdate);
 
 
         //네이버 지도 추가 UI 설정
-        UiSettings uiSettings = naverMap.getUiSettings();
+        UiSettings uiSettings = naverMap2.getUiSettings();
         uiSettings.setLocationButtonEnabled(true); // 현 위치 버튼 활성화
+        uiSettings.setTiltGesturesEnabled(false);
+
 
 /*
         // 마커 표시하기 (자기 위치 기준 검색)
@@ -150,34 +159,34 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         marker1.setIcon(MarkerIcons.YELLOW); // 마커 색깔, 유치원은 노랑
         marker1.setMap(naverMap); // 마커 표시
 */
-        // 첫 실행 시 자기 주변의 어린이집/유치원을 검색해서 마커 표시
-        try { // 유치원
-            NearKinderMarker();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
 
-        try { // 어린이집
-            NearChildMarker();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
 
 
         // 클릭 리스너 :
-        naverMap2.setOnMapClickListener((point, coord) ->
-                Toast.makeText(super.getActivity(), coord.latitude + ", " + coord.longitude,
-                        Toast.LENGTH_SHORT).show());
+        naverMap2.setOnMapClickListener((point, coord) ->{
+                //Toast.makeText(super.getActivity(), coord.latitude + ", " + coord.longitude, Toast.LENGTH_SHORT).show()
+                System.out.println("click");
+
+    });
+
 
 
         // 롱 클릭 리스너
-        naverMap2.setOnMapLongClickListener((point, coord) ->
-                Toast.makeText(super.getActivity(), coord.latitude + ", " + coord.longitude,
-                        Toast.LENGTH_SHORT).show());
+       naverMap2.setOnMapLongClickListener((point, coord) -> {
+          Toast.makeText(super.getActivity(), coord.latitude + ", " + coord.longitude,
+                Toast.LENGTH_SHORT).show();
+       });
+
+        // 롱 클릭 리스너
+        naverMap2.setOnMapLongClickListener(new NaverMap.OnMapLongClickListener() {
+            @Override
+            public void onMapLongClick(@NonNull @NotNull PointF pointF, @NonNull @NotNull LatLng latLng) {
+
+                // 길게 클릭하면 카메라 위치 기준으로 검색
+                //   Toast.makeText(this, coord.latitude + ", " + coord.longitude, Toast.LENGTH_SHORT).show();
+
+            }
+        });
 
         // 심벌 클릭 리스너
         naverMap2.setOnSymbolClickListener(symbol -> {
@@ -189,6 +198,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             // 이벤트 전파, OnMapClick 이벤트가 발생함
             return false;
         });
+
+        // 카메라 이동 리스너
+        naverMap2.addOnCameraChangeListener((reason, animated) -> {
+            Log.i("NaverMap", "카메라 변경 - reson: " + reason + ", animated: " + animated);
+
+        });
+
+
 
 
     }
@@ -235,6 +252,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mapView.onLowMemory();
     }
 
+    //여기 이하 호출 안됨.
     public void NearKinderMarker() throws ParseException, JSONException { // 화면에 있는 유치원의 마커를 표시함
         int count = 0; // 최대 10개만 표시 카운트
         // 유치원 기본 현황 시트
@@ -286,7 +304,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         marker1.setPosition(new LatLng(y, x)); // 마커 위치 재설정
                         marker1.setIcon(MarkerIcons.YELLOW); // 마커 색깔, 유치원은 노랑
                         marker1.setIconTintColor(Color.TRANSPARENT); //
-                        marker1.setMap(naverMap); // 마커 표시
+                        marker1.setMap(naverMap2); // 마커 표시
 
                         break;
                     case 1:
@@ -294,14 +312,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         marker2.setPosition(new LatLng(y, x)); // 마커 위치 재설정
                         marker2.setIcon(MarkerIcons.YELLOW); // 마커 색깔, 유치원은 노랑
                         marker2.setIconTintColor(Color.TRANSPARENT); //
-                        marker2.setMap(naverMap); // 마커 표시
+                        marker2.setMap(naverMap2); // 마커 표시
 
                         break;
                     case 2:
                         marker3.setMap(null); // 기존 마커 삭제
                         marker3.setPosition(new LatLng(y, x)); // 마커 위치 재설정
                         marker3.setIcon(MarkerIcons.YELLOW); // 마커 색깔, 유치원은 노랑
-                        marker3.setMap(naverMap); // 마커 표시
+                        marker3.setMap(naverMap2); // 마커 표시
                         marker3.setIconTintColor(Color.TRANSPARENT); //
 
                         break;
@@ -310,7 +328,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         marker4.setPosition(new LatLng(y, x)); // 마커 위치 재설정
                         marker4.setIcon(MarkerIcons.YELLOW); // 마커 색깔, 유치원은 노랑
                         marker4.setIconTintColor(Color.TRANSPARENT); //
-                        marker4.setMap(naverMap); // 마커 표시
+                        marker4.setMap(naverMap2); // 마커 표시
                         infoWindow.open(marker4);
                         break;
                     case 4:
@@ -318,7 +336,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         marker5.setPosition(new LatLng(y, x)); // 마커 위치 재설정
                         marker5.setIcon(MarkerIcons.YELLOW); // 마커 색깔, 유치원은 노랑
                         marker5.setIconTintColor(Color.TRANSPARENT); //
-                        marker5.setMap(naverMap); // 마커 표시
+                        marker5.setMap(naverMap2); // 마커 표시
 
                         break;
                     case 5:
@@ -326,7 +344,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         marker6.setPosition(new LatLng(y, x)); // 마커 위치 재설정
                         marker6.setIcon(MarkerIcons.YELLOW); // 마커 색깔, 유치원은 노랑
                         marker6.setIconTintColor(Color.TRANSPARENT); //
-                        marker6.setMap(naverMap); // 마커 표시
+                        marker6.setMap(naverMap2); // 마커 표시
 
                         break;
                     case 6:
@@ -334,7 +352,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         marker7.setPosition(new LatLng(y, x)); // 마커 위치 재설정
                         marker7.setIcon(MarkerIcons.YELLOW); // 마커 색깔, 유치원은 노랑
                         marker7.setIconTintColor(Color.TRANSPARENT); //
-                        marker7.setMap(naverMap); // 마커 표시
+                        marker7.setMap(naverMap2); // 마커 표시
 
                         break;
                     case 7:
@@ -342,14 +360,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         marker8.setPosition(new LatLng(y, x)); // 마커 위치 재설정
                         marker8.setIcon(MarkerIcons.YELLOW); // 마커 색깔, 유치원은 노랑
                         marker8.setIconTintColor(Color.TRANSPARENT); //
-                        marker8.setMap(naverMap); // 마커 표시
+                        marker8.setMap(naverMap2); // 마커 표시
 
                         break;
                     case 8:
                         marker9.setMap(null); // 기존 마커 삭제
                         marker9.setPosition(new LatLng(y, x)); // 마커 위치 재설정
                         marker9.setIcon(MarkerIcons.YELLOW); // 마커 색깔, 유치원은 노랑
-                        marker9.setMap(naverMap); // 마커 표시
+                        marker9.setMap(naverMap2); // 마커 표시
 
                         break;
                     case 9:
@@ -357,7 +375,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         marker10.setPosition(new LatLng(y, x)); // 마커 위치 재설정
                         marker10.setIcon(MarkerIcons.YELLOW); // 마커 색깔, 유치원은 노랑
                         marker10.setIconTintColor(Color.TRANSPARENT); //
-                        marker10.setMap(naverMap); // 마커 표시
+                        marker10.setMap(naverMap2); // 마커 표시
 
                         break;
                     default:
@@ -376,7 +394,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         marker1.setOnClickListener(new Overlay.OnClickListener() {
             @Override
             public boolean onClick(@NonNull @NotNull Overlay overlay) {
-                marker1.setTag("마커 1");
+                marker1.setTag(dataList.get(0).getName()); // 정보창
+                marker1.setCaptionText(dataList.get(0).getName()); // 캡션 설정
+                marker1.setCaptionRequestedWidth(200);
                 infoWindow.open(marker1);
                 return false;
             }
@@ -384,7 +404,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         marker2.setOnClickListener(new Overlay.OnClickListener() {
             @Override
             public boolean onClick(@NonNull @NotNull Overlay overlay) {
-                marker2.setTag("마커 2");
+
+                marker2.setTag(dataList.get(1).getName()); // 정보창
+                marker2.setCaptionText(dataList.get(1).getName()); // 캡션 설정
+                marker2.setCaptionRequestedWidth(200);
                 infoWindow.open(marker2);
                 return true;
             }
@@ -392,7 +415,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         marker3.setOnClickListener(new Overlay.OnClickListener() {
             @Override
             public boolean onClick(@NonNull @NotNull Overlay overlay) {
-                marker3.setTag("마커 3");
+                marker3.setTag(dataList.get(2).getName()); // 정보창
+                marker3.setCaptionText(dataList.get(2).getName()); // 캡션 설정
+
+                marker3.setCaptionRequestedWidth(200);
                 infoWindow.open(marker3);
                 return true;
             }
@@ -400,7 +426,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         marker4.setOnClickListener(new Overlay.OnClickListener() {
             @Override
             public boolean onClick(@NonNull @NotNull Overlay overlay) {
-                marker4.setTag("마커 4");
+                marker4.setTag(dataList.get(3).getName()); // 정보창
+                marker4.setCaptionText(dataList.get(3).getName()); // 캡션 설정
+                marker11.setCaptionRequestedWidth(200);
                 infoWindow.open(marker4);
                 return false;
             }
@@ -408,7 +436,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         marker5.setOnClickListener(new Overlay.OnClickListener() {
             @Override
             public boolean onClick(@NonNull @NotNull Overlay overlay) {
-                marker5.setTag("마커 5");
+                marker5.setTag(dataList.get(4).getName()); // 정보창
+                marker5.setCaptionText(dataList.get(4).getName()); // 캡션 설정
                 infoWindow.open(marker5);
                 return false;
             }
@@ -416,7 +445,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         marker6.setOnClickListener(new Overlay.OnClickListener() {
             @Override
             public boolean onClick(@NonNull @NotNull Overlay overlay) {
-                marker6.setTag("마커 6");
+                marker6.setTag(dataList.get(6).getName()); // 정보창
+                marker6.setCaptionText(dataList.get(6).getName()); // 캡션 설정
                 infoWindow.open(marker6);
                 return false;
             }
@@ -424,7 +454,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         marker7.setOnClickListener(new Overlay.OnClickListener() {
             @Override
             public boolean onClick(@NonNull @NotNull Overlay overlay) {
-                marker7.setTag("마커 7");
+                marker7.setTag(dataList.get(6).getName()); // 정보창
+                marker7.setCaptionText(dataList.get(6).getName()); // 캡션 설정
                 infoWindow.open(marker7);
                 return false;
             }
@@ -432,7 +463,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         marker8.setOnClickListener(new Overlay.OnClickListener() {
             @Override
             public boolean onClick(@NonNull @NotNull Overlay overlay) {
-                marker8.setTag("마커 8");
+                marker8.setTag(dataList.get(7).getName()); // 정보창
+                marker8.setCaptionText(dataList.get(7).getName()); // 캡션 설정
                 infoWindow.open(marker8);
                 return false;
             }
@@ -440,7 +472,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         marker9.setOnClickListener(new Overlay.OnClickListener() {
             @Override
             public boolean onClick(@NonNull @NotNull Overlay overlay) {
-                marker9.setTag("마커 9");
+                marker9.setTag(dataList.get(8).getName()); // 정보창
+                marker9.setCaptionText(dataList.get(8).getName()); // 캡션 설정
                 infoWindow.open(marker9);
                 return false;
             }
@@ -448,7 +481,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         marker10.setOnClickListener(new Overlay.OnClickListener() {
             @Override
             public boolean onClick(@NonNull @NotNull Overlay overlay) {
-                marker10.setTag("마커 10");
+                marker10.setTag(dataList.get(9).getName()); // 정보창
+                marker19.setCaptionText(dataList.get(9).getName()); // 캡션 설정
                 infoWindow.open(marker10);
                 return true;
             }
@@ -539,14 +573,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         marker11.setPosition(new LatLng(y, x)); // 마커 위치 재설정
                         marker11.setIcon(MarkerIcons.RED); // 마커 색깔, 어린이집은 보라
                         marker11.setIconTintColor(Color.BLUE); // 빨간 색 + 파란색 = 보라색
-                        marker11.setMap(naverMap); // 마커 표시
+                        marker11.setMap(naverMap2); // 마커 표시
                         break;
                     case 1:
                         marker12.setMap(null); // 기존 마커 삭제
                         marker12.setPosition(new LatLng(y, x)); // 마커 위치 재설정
                         marker12.setIcon(MarkerIcons.RED); // 마커 색깔, 어린이집은 보라
                         marker12.setIconTintColor(Color.BLUE); // 빨간 색 + 파란색 = 보라색
-                        marker12.setMap(naverMap); // 마커 표시
+                        marker12.setMap(naverMap2); // 마커 표시
 
                         break;
                     case 2:
@@ -554,7 +588,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         marker13.setPosition(new LatLng(y, x)); // 마커 위치 재설정
                         marker13.setIcon(MarkerIcons.RED); // 마커 색깔, 어린이집은 보라
                         marker13.setIconTintColor(Color.BLUE); // 빨간 색 + 파란색 = 보라색
-                        marker13.setMap(naverMap); // 마커 표시
+                        marker13.setMap(naverMap2); // 마커 표시
 
                         break;
                     case 3:
@@ -562,7 +596,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         marker14.setPosition(new LatLng(y, x)); // 마커 위치 재설정
                         marker14.setIcon(MarkerIcons.RED); // 마커 색깔, 어린이집은 보라
                         marker14.setIconTintColor(Color.BLUE); // 빨간 색 + 파란색 = 보라색
-                        marker14.setMap(naverMap); // 마커 표시
+                        marker14.setMap(naverMap2); // 마커 표시
 
                         break;
                     case 4:
@@ -570,7 +604,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         marker15.setPosition(new LatLng(y, x)); // 마커 위치 재설정
                         marker15.setIcon(MarkerIcons.RED); // 마커 색깔, 어린이집은 보라
                         marker15.setIconTintColor(Color.BLUE); // 빨간 색 + 파란색 = 보라색
-                        marker15.setMap(naverMap); // 마커 표시
+                        marker15.setMap(naverMap2); // 마커 표시
 
                         break;
                     case 5:
@@ -578,7 +612,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         marker16.setPosition(new LatLng(y, x)); // 마커 위치 재설정
                         marker16.setIcon(MarkerIcons.RED); // 마커 색깔, 어린이집은 보라
                         marker16.setIconTintColor(Color.BLUE); // 빨간 색 + 파란색 = 보라색
-                        marker16.setMap(naverMap); // 마커 표시
+                        marker16.setMap(naverMap2); // 마커 표시
 
                         break;
                     case 6:
@@ -586,28 +620,28 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         marker17.setPosition(new LatLng(y, x)); // 마커 위치 재설정
                         marker17.setIcon(MarkerIcons.RED); // 마커 색깔, 어린이집은 보라
                         marker17.setIconTintColor(Color.BLUE); // 빨간 색 + 파란색 = 보라색
-                        marker17.setMap(naverMap); // 마커 표시
+                        marker17.setMap(naverMap2); // 마커 표시
                         break;
                     case 7:
                         marker18.setMap(null); // 기존 마커 삭제
                         marker18.setPosition(new LatLng(y, x)); // 마커 위치 재설정
                         marker18.setIcon(MarkerIcons.RED); // 마커 색깔, 어린이집은 보라
                         marker18.setIconTintColor(Color.BLUE); // 빨간 색 + 파란색 = 보라색
-                        marker18.setMap(naverMap); // 마커 표시
+                        marker18.setMap(naverMap2); // 마커 표시
                         break;
                     case 8:
                         marker19.setMap(null); // 기존 마커 삭제
                         marker19.setPosition(new LatLng(y, x)); // 마커 위치 재설정
                         marker19.setIcon(MarkerIcons.RED); // 마커 색깔, 어린이집은 보라
                         marker19.setIconTintColor(Color.BLUE); // 빨간 색 + 파란색 = 보라색
-                        marker19.setMap(naverMap); // 마커 표시
+                        marker19.setMap(naverMap2); // 마커 표시
                         break;
                     case 9:
                         marker20.setMap(null); // 기존 마커 삭제
                         marker20.setPosition(new LatLng(y, x)); // 마커 위치 재설정
                         marker20.setIcon(MarkerIcons.RED); // 마커 색깔, 어린이집은 보라
                         marker20.setIconTintColor(Color.BLUE); // 빨간 색 + 파란색 = 보라색
-                        marker20.setMap(naverMap); // 마커 표시
+                        marker20.setMap(naverMap2); // 마커 표시
                         break;
                     default:
                         break;
@@ -692,7 +726,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             public boolean onClick(@NonNull @NotNull Overlay overlay) {
                 if (dataList.size() <= 10)
                 {
-                    marker14.setTag(dataList.get(13).getName());
+                    marker14.setTag(dataList.get(3).getName());
                 }
                 else {
                     marker14.setTag(dataList.get(13).getName());
@@ -718,7 +752,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         marker16.setOnClickListener(new Overlay.OnClickListener() {
             @Override
             public boolean onClick(@NonNull @NotNull Overlay overlay) {
-                marker16.setTag(dataList.get(15).getName());
+                if (dataList.size() <= 10)
+                {
+                    marker16.setTag(dataList.get(5).getName());
+                }
+                else {
+                    marker16.setTag(dataList.get(15).getName());
+                }
                 infoWindow.open(marker16);
                 return true;
             }
@@ -726,7 +766,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         marker17.setOnClickListener(new Overlay.OnClickListener() {
             @Override
             public boolean onClick(@NonNull @NotNull Overlay overlay) {
-                marker17.setTag(dataList.get(16).getName());
+                if (dataList.size() <= 10)
+                {
+                    marker14.setTag(dataList.get(6).getName());
+                }
+                else {
+                    marker14.setTag(dataList.get(16).getName());
+                }
                 infoWindow.open(marker17);
 
                 return true;
@@ -735,15 +781,28 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         marker18.setOnClickListener(new Overlay.OnClickListener() {
             @Override
             public boolean onClick(@NonNull @NotNull Overlay overlay) {
-                marker18.setTag("마커 18");
+                if (dataList.size() <= 10)
+                {
+                    marker14.setTag(dataList.get(7).getName());
+                }
+                else {
+                    marker14.setTag(dataList.get(17).getName());
+                }
                 infoWindow.open(marker18);
+
                 return true;
             }
         });
         marker19.setOnClickListener(new Overlay.OnClickListener() {
             @Override
             public boolean onClick(@NonNull @NotNull Overlay overlay) {
-                marker19.setTag("마커 19");
+                if (dataList.size() <= 10)
+                {
+                    marker14.setTag(dataList.get(8).getName());
+                }
+                else {
+                    marker14.setTag(dataList.get(18).getName());
+                }
                 infoWindow.open(marker19);
                 return true;
             }
@@ -751,12 +810,22 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         marker20.setOnClickListener(new Overlay.OnClickListener() {
             @Override
             public boolean onClick(@NonNull @NotNull Overlay overlay) {
-                marker20.setTag("마커 10");
+                if (dataList.size() <= 10)
+                {
+                    marker14.setTag(dataList.get(9).getName());
+                }
+                else {
+                    marker14.setTag(dataList.get(19).getName());
+                }
                 infoWindow.open(marker20);
                 return true;
             }
         });
 
     }
+
+
+
+
 }
 

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,10 +17,34 @@ import com.example.hci_project.bean.School2;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class commonAdapter extends RecyclerView.Adapter<commonAdapter.ViewHolder> {
 
     private ArrayList<School2> myDataList = null;
+
+    private ImageButton button2; // 비교하기 버튼
+
+    private ImageButton button1; // 즐겨찾기 버튼
+
+    public interface OnItemClickListener {
+        public void onItemClick(View view, int position, boolean isUser);
+    }
+
+    private OnItemClickListener onItemClickListener;
+
+
+    public commonAdapter(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
+    public ImageButton getButton2() {
+        return button2;
+    }
+
+    public ImageButton getButton1() {
+        return button1;
+    }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView textView1;
@@ -38,6 +63,11 @@ public class commonAdapter extends RecyclerView.Adapter<commonAdapter.ViewHolder
             textView3 = itemView.findViewById(R.id.the_add) ;
             textView4 = itemView.findViewById(R.id.the_phone) ;
             imgView1 = itemView.findViewById(R.id.the_img_type);
+
+            button1  = (ImageButton)itemView.findViewById(R.id.imageButton);
+
+            button2  = (ImageButton)itemView.findViewById(R.id.imageButton2);
+
 
         }
     }
@@ -63,6 +93,7 @@ public class commonAdapter extends RecyclerView.Adapter<commonAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
+
         //ViewHolder가 관리하는 View에 position에 해당하는 데이터 바인딩
         holder.textView1.setText(myDataList.get(position).getType());
         holder.textView2.setText(myDataList.get(position).getName());
@@ -70,7 +101,10 @@ public class commonAdapter extends RecyclerView.Adapter<commonAdapter.ViewHolder
         holder.textView4.setText(myDataList.get(position).getTel());
         holder.imgView1.setImageResource(R.drawable.seekbar_thumb);
 
+
     }
+
+
 
     @Override
     public int getItemCount() {
