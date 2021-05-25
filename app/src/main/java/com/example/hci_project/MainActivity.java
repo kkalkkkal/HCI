@@ -377,7 +377,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     // 카메라
     CameraUpdate cameraUpdate;
 
-
+    TextView the_name;
+    TextView the_type;
+    TextView the_tel;
+    TextView the_add;
+    ImageButton imageButton; // 즐겨찾기
+    ImageButton imageButton2; // 비교
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -424,6 +429,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         linearLayout = findViewById(R.id.dragView);
         linearLayout2 = findViewById(R.id.common_result);
         schoolTitle = findViewById(R.id.commonTitle);
+
+        the_name = (TextView) findViewById(R.id.the_name);
+        the_type = (TextView) findViewById(R.id.the_Type);
+        the_tel = (TextView) findViewById(R.id.the_phone);
+        the_add = (TextView) findViewById(R.id.the_add);
+        imageButton = (ImageButton) findViewById(R.id.bookmarkbtn); // 즐겨찾기
+        imageButton2 = (ImageButton) findViewById(R.id.imageButton2); // 비교
 
 
         viewPagerFragmentList.add(new com.example.hci_project.MapFragment()); // 커스텀 맵 프래그먼트 : 기존 new MapFragment 대체
@@ -1156,6 +1168,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 marker1.setCaptionText(dataList.get(0).getName()); // 캡션 설정
                 marker1.setCaptionRequestedWidth(200);
                 infoWindow.open(marker1);
+                changeView(1);
+
                 return false;
             }
         });
@@ -1167,6 +1181,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 marker2.setCaptionText(dataList.get(1).getName()); // 캡션 설정
                 marker2.setCaptionRequestedWidth(200);
                 infoWindow.open(marker2);
+                changeView(2);
+
                 return true;
             }
         });
@@ -1178,6 +1194,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 marker3.setCaptionRequestedWidth(200);
                 infoWindow.open(marker3);
+                changeView(3);
+
                 return true;
             }
         });
@@ -1188,6 +1206,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 marker4.setCaptionText(dataList.get(3).getName()); // 캡션 설정
                 marker11.setCaptionRequestedWidth(200);
                 infoWindow.open(marker4);
+                changeView(4);
                 return false;
             }
         });
@@ -1197,6 +1216,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 marker5.setTag(dataList.get(4).getName()); // 정보창
                 marker5.setCaptionText(dataList.get(4).getName()); // 캡션 설정
                 infoWindow.open(marker5);
+                changeView(5);
                 return false;
             }
         });
@@ -1206,6 +1226,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 marker6.setTag(dataList.get(6).getName()); // 정보창
                 marker6.setCaptionText(dataList.get(6).getName()); // 캡션 설정
                 infoWindow.open(marker6);
+                changeView(6);
                 return false;
             }
         });
@@ -1215,6 +1236,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 marker7.setTag(dataList.get(6).getName()); // 정보창
                 marker7.setCaptionText(dataList.get(6).getName()); // 캡션 설정
                 infoWindow.open(marker7);
+                changeView(7);
                 return false;
             }
         });
@@ -1224,6 +1246,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 marker8.setTag(dataList.get(7).getName()); // 정보창
                 marker8.setCaptionText(dataList.get(7).getName()); // 캡션 설정
                 infoWindow.open(marker8);
+                changeView(8);
                 return false;
             }
         });
@@ -1233,6 +1256,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 marker9.setTag(dataList.get(8).getName()); // 정보창
                 marker9.setCaptionText(dataList.get(8).getName()); // 캡션 설정
                 infoWindow.open(marker9);
+                changeView(9);
                 return false;
             }
         });
@@ -1242,6 +1266,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 marker10.setTag(dataList.get(9).getName()); // 정보창
                 marker19.setCaptionText(dataList.get(9).getName()); // 캡션 설정
                 infoWindow.open(marker10);
+                changeView(10);
                 return true;
             }
         });
@@ -1454,16 +1479,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 if (dataList.size() <= 10)
                 {
                     marker11.setTag(dataList.get(0).getName()); // 정보창
-                    marker11.setCaptionText(dataList.get(0).getName()); // 캡션 설정
+                    marker11.setCaptionText(null); // 캡션 설정
                 }
                 else {
                     marker11.setTag(dataList.get(10).getName()); // 정보창
-                    marker11.setCaptionText(dataList.get(10).getName()); // 캡션 설정
+                    marker11.setCaptionText(null); // 캡션 설정
 
                 }
                 marker11.setCaptionRequestedWidth(200);
                 infoWindow.open(marker11);
-                changeView(0);
                 return true;
             }
         });
@@ -1473,16 +1497,18 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 if (dataList.size() <= 10)
                 {
                     marker12.setTag(dataList.get(1).getName());
-                    marker12.setCaptionText(dataList.get(1).getName()); // 캡션 설정
+                    marker12.setCaptionText(null); // 캡션 설정
+                    changeView(2);
 
                 }
                 else {
                     marker12.setTag(dataList.get(11).getName());
-                    marker12.setCaptionText(dataList.get(11).getName()); // 캡션 설정
+                    marker12.setCaptionText(null); // 캡션 지우기
+                    changeView(12);
 
                 }
                 infoWindow.open(marker12);
-                changeView(0);
+
                 return true;
             }
         });
@@ -1491,16 +1517,18 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             public boolean onClick(@NonNull @NotNull Overlay overlay) {
                 if (dataList.size() <= 10)
                 {
-                    marker13.setTag(dataList.get(3).getName());
-                    marker13.setCaptionText(dataList.get(3).getName()); // 캡션 설정
+                    marker13.setTag(dataList.get(2).getName());
+                    marker13.setCaptionText(null); // 캡션 설정
+                    changeView(3);
 
                 }
                 else {
-                    marker13.setTag(dataList.get(13).getName());
-                    marker13.setCaptionText(dataList.get(13).getName()); // 캡션 설정
+                    marker13.setTag(dataList.get(12).getName());
+                    marker13.setCaptionText(null); // 캡션 설정
+                    changeView(13);
                 }
                 infoWindow.open(marker13);
-                changeView(0);
+
                 return true;
             }
         });
@@ -1510,12 +1538,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 if (dataList.size() <= 10)
                 {
                     marker14.setTag(dataList.get(3).getName());
+                    marker13.setCaptionText(null); // 캡션 설정
+                    changeView(4);
                 }
                 else {
                     marker14.setTag(dataList.get(13).getName());
+                    marker13.setCaptionText(null); // 캡션 설정
+                    changeView(14);
                 }
                 infoWindow.open(marker14);
-                changeView(0);
+
                 return true;
             }
         });
@@ -1525,10 +1557,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 if (dataList.size() <= 10)
                 {
                     marker15.setTag(dataList.get(4).getName());
+                    changeView(5);
                 }
                 else {
                     marker15.setTag(dataList.get(14).getName());
+                    changeView(15);
                 }
+                marker15.setCaptionText(null); // 캡션 지우기
                 infoWindow.open(marker15);
                 return true;
             }
@@ -1539,10 +1574,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 if (dataList.size() <= 10)
                 {
                     marker16.setTag(dataList.get(5).getName());
+                    changeView(6);
                 }
                 else {
                     marker16.setTag(dataList.get(15).getName());
+                    changeView(16);
                 }
+                marker16.setCaptionText(null); // 캡션 지우기
                 infoWindow.open(marker16);
                 return true;
             }
@@ -1553,12 +1591,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 if (dataList.size() <= 10)
                 {
                     marker14.setTag(dataList.get(6).getName());
+                    changeView(7);
                 }
                 else {
                     marker14.setTag(dataList.get(16).getName());
+                    changeView(17);
                 }
                 infoWindow.open(marker17);
-
+                marker17.setCaptionText(null); // 캡션 지우기
                 return true;
             }
         });
@@ -1568,11 +1608,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 if (dataList.size() <= 10)
                 {
                     marker14.setTag(dataList.get(7).getName());
+                    changeView(8);
                 }
                 else {
                     marker14.setTag(dataList.get(17).getName());
+                    changeView(18);
                 }
                 infoWindow.open(marker18);
+                marker18.setCaptionText(null); // 캡션 지우기
                 return true;
             }
         });
@@ -1582,11 +1625,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 if (dataList.size() <= 10)
                 {
                     marker14.setTag(dataList.get(8).getName());
+                    changeView(9);
                 }
                 else {
                     marker14.setTag(dataList.get(18).getName());
+                    changeView(19);
                 }
                 infoWindow.open(marker19);
+                marker19.setCaptionText(null); // 캡션 지우기
                 return true;
             }
         });
@@ -1596,11 +1642,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 if (dataList.size() <= 10)
                 {
                     marker14.setTag(dataList.get(9).getName());
+                    changeView(10);
                 }
                 else {
                     marker14.setTag(dataList.get(19).getName());
+                    changeView(20);
                 }
                 infoWindow.open(marker20);
+                marker20.setCaptionText(null); // 캡션 지우기
                 return true;
             }
         });
@@ -1693,12 +1742,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
-    TextView the_name = findViewById(R.id.the_name);
-    TextView the_type = findViewById(R.id.the_Type);
-    TextView the_tel = findViewById(R.id.the_phone);
-    TextView the_add = findViewById(R.id.the_add);
-    ImageButton imageButton = findViewById(R.id.bookmarkbtn); // 즐겨찾기
-    ImageButton imageButton2 = findViewById(R.id.imageButton2); // 비교
+
 
 
     public void changeView(int index) {
@@ -1718,14 +1762,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 //frame.removeViewAt(0); // 삭제 (뒤로가기 버튼)
                 break ;
             default:
+
+
+
                 view = inflater.inflate(R.layout.fragment_common_recycler, frame, false) ;
-                // id 매핑
-
-                the_name.setText(dataList.get(index - 1).getName());
-                the_type.setText(dataList.get(index - 1).getType());
-                the_tel.setText(dataList.get(index - 1).getTel());
-                the_add.setText(dataList.get(index - 1).getAddr());
-
 
                 break;
 
@@ -1733,7 +1773,43 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         // FrameLayout에 뷰 추가.
         if (view != null) {
-            frame.addView(view) ;
+
+            frame.addView(view);
+
+            // id 매핑
+            the_name = (TextView) view.findViewById(R.id.the_name);
+            the_type = (TextView) view.findViewById(R.id.the_Type);
+            the_tel = (TextView) view.findViewById(R.id.the_phone);
+            the_add = (TextView) view.findViewById(R.id.the_add);
+            imageButton = (ImageButton) view.findViewById(R.id.bookmarkbtn); // 즐겨찾기
+            imageButton2 = (ImageButton) view.findViewById(R.id.imageButton2); // 비교
+
+            the_name.setText(dataList.get(index - 1).getName());
+            the_type.setText(dataList.get(index - 1).getType());
+            the_tel.setText(dataList.get(index - 1).getTel());
+            the_add.setText(dataList.get(index - 1).getAddr());
+
+            the_name.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Todo : 제목을 누르면 검색 결과로 이동하기
+                }
+            });
+
+            imageButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Todo : 즐겨찾기 버튼 누르면 추가
+                }
+            });
+
+            imageButton2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Todo: 비교버튼 누르면 추가
+
+                }
+            });
         }
     }
 
