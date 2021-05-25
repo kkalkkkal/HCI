@@ -1,8 +1,14 @@
 package com.example.hci_project;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -20,32 +26,40 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 
-public class SchoolInfoActivity extends AppCompatActivity {
+public class SchoolInfoActivity extends AppCompatActivity implements OnMapReadyCallback {
 
 
-    private TableLayout tableLayout,tableLayout2,tableLayout3;
+    private TableLayout tableLayout, tableLayout2, tableLayout3;
+    private GoogleMap googleMap;
 
-    public class School{
 
-        public String addr="서울특별시 광진구 뚝섬로52다길 17 (자양동)";
-        public String name="착한어린이집";
-        public String type="민간";
-        public String postNum="05100";
-        public String tel="02-453-3072";
-        public int roomCnt=5;
-        public int size=109;
-        public int playgroundCnt=1;
-        public int teacherCnt=9;
-        public int maxStudentCnt=39;
-        public int currentStudentCnt=19;
-        public double lat=37.530254;
-        public double lng=127.079926;
-        public boolean isAvailableBus=false;
-        public String homePage="";
-        public String sinceDate="2005-05-10";
+    public class School {
+
+        public String addr = "서울특별시 광진구 뚝섬로52다길 17 (자양동)";
+        public String name = "착한어린이집";
+        public String type = "민간";
+        public String postNum = "05100";
+        public String tel = "02-453-3072";
+        public int roomCnt = 5;
+        public int size = 109;
+        public int playgroundCnt = 1;
+        public int teacherCnt = 9;
+        public int maxStudentCnt = 39;
+        public int currentStudentCnt = 19;
+        public double lat = 37.530254;
+        public double lng = 127.079926;
+        public boolean isAvailableBus = false;
+        public String homePage = "";
+        public String sinceDate = "2005-05-10";
     }
 
 
@@ -66,18 +80,27 @@ public class SchoolInfoActivity extends AppCompatActivity {
         TextView youngyang = findViewById(R.id.youngyang);
         TextView cctv = findViewById(R.id.cctv);
 
+        TextView hak_count = findViewById(R.id.hak_count);
+        TextView ua_count = findViewById(R.id.ua_count);
+        TextView hak_count2 = findViewById(R.id.hak_count2);
+        TextView gyo_count = findViewById(R.id.gyo_count);
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+
+
         School school = new School();
 
         like_on.setOnClickListener(new View.OnClickListener() {
 
-        public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Like_off" , Toast.LENGTH_LONG).show();
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "Like_off", Toast.LENGTH_LONG).show();
                 like_on.setVisibility(View.GONE);
                 like_off.setVisibility(View.VISIBLE);
-           //     Intent intent = new Intent(SchoolInfoActivity.this, BookmarkActivity.class);
+                //     Intent intent = new Intent(SchoolInfoActivity.this, BookmarkActivity.class);
 
-            //    startActivity(intent);
-            //    finish();
+                //    startActivity(intent);
+                //    finish();
             }
 
         });
@@ -85,13 +108,13 @@ public class SchoolInfoActivity extends AppCompatActivity {
         like_off.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Like_on" , Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Like_on", Toast.LENGTH_LONG).show();
                 like_on.setVisibility(View.VISIBLE);
                 like_off.setVisibility(View.GONE);
-          //      Intent intent = new Intent(SchoolInfoActivity.this, BookmarkActivity.class);
+                //      Intent intent = new Intent(SchoolInfoActivity.this, BookmarkActivity.class);
 
-           //     startActivity(intent);
-           //     finish();
+                //     startActivity(intent);
+                //     finish();
             }
 
         });
@@ -99,11 +122,11 @@ public class SchoolInfoActivity extends AppCompatActivity {
         compare_add.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "compare_added" , Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "compare_added", Toast.LENGTH_LONG).show();
                 compare_add.setVisibility(View.GONE);
                 compare_delete.setVisibility(View.VISIBLE);
                 Intent intent = new Intent(SchoolInfoActivity.this, CompareSchoolActivity.class);
-                intent.putExtra("last",'b');
+                intent.putExtra("last", 'b');
                 startActivity(intent);
                 finish();
             }
@@ -112,11 +135,11 @@ public class SchoolInfoActivity extends AppCompatActivity {
         compare_delete.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "compare_deleted" , Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "compare_deleted", Toast.LENGTH_LONG).show();
                 compare_add.setVisibility(View.VISIBLE);
                 compare_delete.setVisibility(View.GONE);
                 Intent intent = new Intent(SchoolInfoActivity.this, CompareSchoolActivity.class);
-                intent.putExtra("last",'c');
+                intent.putExtra("last", 'c');
                 startActivity(intent);
                 finish();
             }
@@ -124,19 +147,19 @@ public class SchoolInfoActivity extends AppCompatActivity {
         });
 
         ///////////////////////// 받아온 데이터를 여기에서 표시
-        
+
         address.setText(String.valueOf(school.addr));
         opentime.setText(String.valueOf("0900~1800"));
 
-        if(school.homePage=="")
+        if (school.homePage == "")
             homepage.setText(String.valueOf("없음"));
         else
             homepage.setText(String.valueOf(school.homePage));
-        
-        
+
+
         callnumber.setText(String.valueOf(school.tel));
 
-        if(school.isAvailableBus==false)
+        if (school.isAvailableBus == false)
             bus_number.setText(String.valueOf("없음"));
         else
             bus_number.setText(String.valueOf("있음"));
@@ -146,14 +169,12 @@ public class SchoolInfoActivity extends AppCompatActivity {
         cctv.setText(String.valueOf("3"));
 
 
-
         /////////////////////////////// Bar chart /////////////////////////////
 
-        float a = (float)(school.teacherCnt/school.roomCnt);
+        float a = (float) (school.teacherCnt / school.roomCnt);
         BarChart chart = findViewById(R.id.barchart);
         ArrayList NoOfEmp2 = new ArrayList();
-        for(int i=1;i<=school.roomCnt;i++)
-        {
+        for (int i = 1; i <= school.roomCnt; i++) {
             NoOfEmp2.add(new BarEntry(i, a));
         }
 /*
@@ -188,19 +209,14 @@ public class SchoolInfoActivity extends AppCompatActivity {
 
         for (int i = 0; i < 2; i++) {
 
-            TextView textView = new TextView(this);
-            if(i==0) {
-                textView.setText(String.valueOf(school.roomCnt));
-            }else
-            {
-                textView.setText(String.valueOf(school.currentStudentCnt));
-            }
-            textView.setGravity(Gravity.CENTER);
-            textView.setTextSize(36);
-            tableRow.addView(textView);        // tableRow에 view 추가
-        }
-        tableLayout.addView(tableRow);        // tableLayout에 tableRow 추가
 
+            if (i == 0) {
+                hak_count.setText(String.valueOf(school.roomCnt));
+            } else {
+                ua_count.setText(String.valueOf(school.roomCnt));
+            }
+
+        }
 
 
         tableLayout2 = (TableLayout) findViewById(R.id.tablelayout2);
@@ -209,21 +225,15 @@ public class SchoolInfoActivity extends AppCompatActivity {
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT));
 
+
         for (int i = 0; i < 2; i++) {
-            TextView textView = new TextView(this);
-            if(i==0) {
-                textView.setText(String.valueOf(school.roomCnt));
-            }else
-            {
-                textView.setText(String.valueOf(school.teacherCnt));
+
+            if (i == 0) {
+                hak_count2.setText(String.valueOf(school.roomCnt));
+            } else {
+                gyo_count.setText(String.valueOf(school.teacherCnt));
             }
-            textView.setGravity(Gravity.CENTER);
-            textView.setTextSize(36);
-            tableRow2.addView(textView);        // tableRow에 view 추가
         }
-        tableLayout2.addView(tableRow2);        // tableLayout에 tableRow 추가
-
-
 
 
         tableLayout3 = (TableLayout) findViewById(R.id.tablelayout3);
@@ -234,13 +244,11 @@ public class SchoolInfoActivity extends AppCompatActivity {
 
         for (int i = 0; i < 3; i++) {
             TextView textView = new TextView(this);
-            if(i==0) {
+            if (i == 0) {
                 textView.setText(String.valueOf("소방안전점검"));
-            }else if(i==1)
-            {
+            } else if (i == 1) {
                 textView.setText(String.valueOf("Y"));
-            }
-            else {
+            } else {
                 textView.setText(String.valueOf("20210317"));
             }
             textView.setGravity(Gravity.CENTER);
@@ -250,6 +258,66 @@ public class SchoolInfoActivity extends AppCompatActivity {
         tableLayout3.addView(tableRow3);        // tableLayout에 tableRow 추가
 
 
+    }
+
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        this.googleMap = googleMap;
+        LatLng latLng = new LatLng(37.557667, 126.926546);
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        googleMap.moveCamera(CameraUpdateFactory.zoomTo(15));
+        MarkerOptions markerOptions = new MarkerOptions().position(latLng).title("홍대입구역");
+        googleMap.addMarker(markerOptions);
+
+        if(ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED) {
+            googleMap.setMyLocationEnabled(true);
+        }
+        else{
+            checkLocationPermissionWithRationale();
+        }
+
+
+
 
     }
+
+    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+
+    private void checkLocationPermissionWithRationale() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                new AlertDialog.Builder(this)
+                        .setTitle("위치정보")
+                        .setMessage("이 앱을 사용하기 위해서는 위치정보에 접근이 필요합니다. 위치정보 접근을 허용하여 주세요.")
+                        .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                ActivityCompat.requestPermissions(SchoolInfoActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
+                            }
+                        }).create().show();
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_LOCATION: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                        googleMap.setMyLocationEnabled(true);
+                    }
+                } else {
+                    Toast.makeText(this, "permission denied", Toast.LENGTH_LONG).show();
+                }
+                return;
+            }
+        }
+    }
+
+
+
 }
