@@ -142,8 +142,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         naverMap2.setLocationTrackingMode(LocationTrackingMode.Follow); // 위치 추적 모드 실행
 
+
         naverMap2.moveCamera(cameraUpdate);
 
+        locationSource =
+                new FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE); // 현재 위치 갱신
 
         //네이버 지도 추가 UI 설정
         UiSettings uiSettings = naverMap2.getUiSettings();

@@ -414,8 +414,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         options.locationButtonEnabled(true).tiltGesturesEnabled(false);
 
-        mapFragment = MapFragment.newInstance(options); // 옵션 설정
-        mapFragment.getMapAsync(this);
+        //mapFragment = MapFragment.newInstance(options); // 옵션 설정
+        //mapFragment.getMapAsync(this);
 
 
 
@@ -584,15 +584,21 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         long curTime = System.currentTimeMillis();
         long gapTime = curTime - backButtonClickTime;
 
-        if(0 <= gapTime && 2000 >= gapTime) {
-            super.onBackPressed();
+        FrameLayout frame = (FrameLayout) findViewById(R.id.frame) ;
+
+        if (frame.getChildCount() > 0)
+        {
+            changeView(0);
         }
         else {
-            changeView(0);
-            backButtonClickTime = curTime;
-            Toast.makeText(this, "한번 더 누르면 종료됩니다.",Toast.LENGTH_SHORT).show();
-        }
+            if (0 <= gapTime && 2000 >= gapTime) {
+                super.onBackPressed();
+            } else {
 
+                backButtonClickTime = curTime;
+                Toast.makeText(this, "한번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show();
+            }
+        }
 
         //super.onBackPressed();
         /*if(System.currentTimeMillis()- backButtonClickTime>= 1000){
