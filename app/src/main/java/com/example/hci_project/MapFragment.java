@@ -103,6 +103,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         //mapFragment2 = com.naver.maps.map.MapFragment.newInstance(options); // 옵션 설정
         //mapFragment2.getMapAsync(this);
 
+
+
     }
 
     @Override
@@ -111,6 +113,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState);
         mapView = view.findViewById(R.id.map_view);
         mapView.onCreate(savedInstanceState);
+        mapView.getMapAsync(this);
     }
 
     @Nullable
@@ -127,15 +130,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(@NonNull @NotNull NaverMap naverMap) {
         this.naverMap2 = naverMap;
 
-        naverMap2.setLocationSource(locationSource); // 자기 위치 설정
-        naverMap2.setMapType(NaverMap.MapType.Basic); // 기본형 지도
-        naverMap2.setLayerGroupEnabled(NaverMap.LAYER_GROUP_BUILDING, true); // 빌딩 그룹 생성
 
-        naverMap2.setLocationTrackingMode(LocationTrackingMode.Follow); // 위치 추적 모드 실행
+        naverMap.setLocationSource(locationSource); // 자기 위치 설정
+        naverMap.setMapType(NaverMap.MapType.Basic); // 기본형 지도
+        naverMap.setLayerGroupEnabled(NaverMap.LAYER_GROUP_BUILDING, true); // 빌딩 그룹 생성
+
+        naverMap.setLocationTrackingMode(LocationTrackingMode.Follow); // 위치 추적 모드 실행
 
 
         //네이버 지도 추가 UI 설정
-        UiSettings uiSettings = naverMap2.getUiSettings();
+        UiSettings uiSettings = naverMap.getUiSettings();
         uiSettings.setLocationButtonEnabled(true); // 현 위치 버튼 활성화
 
 /*
@@ -165,18 +169,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
 
         // 클릭 리스너 :
-        naverMap.setOnMapClickListener((point, coord) ->
+        naverMap2.setOnMapClickListener((point, coord) ->
                 Toast.makeText(super.getActivity(), coord.latitude + ", " + coord.longitude,
                         Toast.LENGTH_SHORT).show());
 
 
         // 롱 클릭 리스너
-        naverMap.setOnMapLongClickListener((point, coord) ->
+        naverMap2.setOnMapLongClickListener((point, coord) ->
                 Toast.makeText(super.getActivity(), coord.latitude + ", " + coord.longitude,
                         Toast.LENGTH_SHORT).show());
 
         // 심벌 클릭 리스너
-        naverMap.setOnSymbolClickListener(symbol -> {
+        naverMap2.setOnSymbolClickListener(symbol -> {
             if ("서울특별시청".equals(symbol.getCaption())) {
                 Toast.makeText(super.getActivity(), "서울시청 클릭", Toast.LENGTH_SHORT).show();
                 // 이벤트 소비, OnMapClick 이벤트는 발생하지 않음
@@ -366,12 +370,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
 
 
-        // 리사이클러뷰에 LinearLayoutManager 객체 지정.
 
-        LinearLayoutManager manager = new LinearLayoutManager(super.getActivity(), LinearLayoutManager.VERTICAL, false);
-        recyclerView.setLayoutManager(manager); // LayoutManager 등록
-        // 리사이클러뷰에 SimpleTextAdapter 객체 지정.
-        recyclerView.setAdapter(new commonAdapter(dataList));  // Adapter 등록
 
         // 각 마커 클릭 리스너
         marker1.setOnClickListener(new Overlay.OnClickListener() {
@@ -619,11 +618,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             }
         }
 
-        // 리사이클러뷰에 LinearLayoutManager 객체 지정.
-        LinearLayoutManager manager = new LinearLayoutManager(super.getContext(), LinearLayoutManager.VERTICAL, false);
-        recyclerView.setLayoutManager(manager); // LayoutManager 등록
-        // 리사이클러뷰에 SimpleTextAdapter 객체 지정.
-        recyclerView.setAdapter(new commonAdapter(dataList));  // Adapter 등록
+
 
         /*
         // 네이버 API 주소 검색 요청
@@ -641,8 +636,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         marker11.setOnClickListener(new Overlay.OnClickListener() {
             @Override
             public boolean onClick(@NonNull @NotNull Overlay overlay) {
-                marker11.setTag("마커 1"); // 정보창
-                marker11.setCaptionText("123"); // 캡션 설정
+
+                if (dataList.size() <= 10)
+                {
+                    marker11.setTag(dataList.get(0).getName()); // 정보창
+                    marker11.setCaptionText(dataList.get(0).getName()); // 캡션 설정
+                }
+                else {
+                    marker11.setTag(dataList.get(10).getName()); // 정보창
+                    marker11.setCaptionText(dataList.get(10).getName()); // 캡션 설정
+
+                }
                 marker11.setCaptionRequestedWidth(200);
                 infoWindow.open(marker11);
                 return true;
@@ -651,7 +655,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         marker12.setOnClickListener(new Overlay.OnClickListener() {
             @Override
             public boolean onClick(@NonNull @NotNull Overlay overlay) {
-                marker12.setTag("마커 2");
+                if (dataList.size() <= 10)
+                {
+                    marker12.setTag(dataList.get(1).getName());
+                    marker12.setCaptionText(dataList.get(1).getName()); // 캡션 설정
+
+                }
+                else {
+                    marker12.setTag(dataList.get(11).getName());
+                    marker12.setCaptionText(dataList.get(11).getName()); // 캡션 설정
+
+                }
                 infoWindow.open(marker12);
                 return true;
             }
@@ -659,7 +673,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         marker13.setOnClickListener(new Overlay.OnClickListener() {
             @Override
             public boolean onClick(@NonNull @NotNull Overlay overlay) {
-                marker13.setTag("마커 3");
+                if (dataList.size() <= 10)
+                {
+                    marker13.setTag(dataList.get(3).getName());
+                    marker13.setCaptionText(dataList.get(3).getName()); // 캡션 설정
+
+                }
+                else {
+                    marker13.setTag(dataList.get(13).getName());
+                    marker13.setCaptionText(dataList.get(13).getName()); // 캡션 설정
+                }
                 infoWindow.open(marker13);
                 return true;
             }
@@ -667,7 +690,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         marker14.setOnClickListener(new Overlay.OnClickListener() {
             @Override
             public boolean onClick(@NonNull @NotNull Overlay overlay) {
-                marker14.setTag("마커 4");
+                if (dataList.size() <= 10)
+                {
+                    marker14.setTag(dataList.get(13).getName());
+                }
+                else {
+                    marker14.setTag(dataList.get(13).getName());
+                }
                 infoWindow.open(marker14);
                 return true;
             }
@@ -675,7 +704,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         marker15.setOnClickListener(new Overlay.OnClickListener() {
             @Override
             public boolean onClick(@NonNull @NotNull Overlay overlay) {
-                marker15.setTag("마커 5");
+                if (dataList.size() <= 10)
+                {
+                    marker15.setTag(dataList.get(4).getName());
+                }
+                else {
+                    marker15.setTag(dataList.get(14).getName());
+                }
                 infoWindow.open(marker15);
                 return true;
             }
@@ -683,7 +718,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         marker16.setOnClickListener(new Overlay.OnClickListener() {
             @Override
             public boolean onClick(@NonNull @NotNull Overlay overlay) {
-                marker16.setTag("마커 6");
+                marker16.setTag(dataList.get(15).getName());
                 infoWindow.open(marker16);
                 return true;
             }
@@ -691,8 +726,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         marker17.setOnClickListener(new Overlay.OnClickListener() {
             @Override
             public boolean onClick(@NonNull @NotNull Overlay overlay) {
-                marker17.setTag("마커 17");
+                marker17.setTag(dataList.get(16).getName());
                 infoWindow.open(marker17);
+
                 return true;
             }
         });

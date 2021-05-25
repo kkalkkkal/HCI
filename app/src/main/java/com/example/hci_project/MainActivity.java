@@ -1267,14 +1267,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         marker11.setPosition(new LatLng(y, x)); // 마커 위치 재설정
                         marker11.setIcon(MarkerIcons.RED); // 마커 색깔, 어린이집은 보라
                         marker11.setIconTintColor(Color.BLUE); // 빨간 색 + 파란색 = 보라색
-                        marker11.setMap(naverMap); // 마커 표시
+                        marker11.setMap(naverMap2); // 마커 표시
                         break;
                     case 1:
                         marker12.setMap(null); // 기존 마커 삭제
                         marker12.setPosition(new LatLng(y, x)); // 마커 위치 재설정
                         marker12.setIcon(MarkerIcons.RED); // 마커 색깔, 어린이집은 보라
                         marker12.setIconTintColor(Color.BLUE); // 빨간 색 + 파란색 = 보라색
-                        marker12.setMap(naverMap); // 마커 표시
+                        marker12.setMap(naverMap2); // 마커 표시
 
                         break;
                     case 2:
@@ -1282,7 +1282,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         marker13.setPosition(new LatLng(y, x)); // 마커 위치 재설정
                         marker13.setIcon(MarkerIcons.RED); // 마커 색깔, 어린이집은 보라
                         marker13.setIconTintColor(Color.BLUE); // 빨간 색 + 파란색 = 보라색
-                        marker13.setMap(naverMap); // 마커 표시
+                        marker13.setMap(naverMap2); // 마커 표시
 
                         break;
                     case 3:
@@ -1290,7 +1290,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         marker14.setPosition(new LatLng(y, x)); // 마커 위치 재설정
                         marker14.setIcon(MarkerIcons.RED); // 마커 색깔, 어린이집은 보라
                         marker14.setIconTintColor(Color.BLUE); // 빨간 색 + 파란색 = 보라색
-                        marker14.setMap(naverMap); // 마커 표시
+                        marker14.setMap(naverMap2); // 마커 표시
 
                         break;
                     case 4:
@@ -1298,7 +1298,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         marker15.setPosition(new LatLng(y, x)); // 마커 위치 재설정
                         marker15.setIcon(MarkerIcons.RED); // 마커 색깔, 어린이집은 보라
                         marker15.setIconTintColor(Color.BLUE); // 빨간 색 + 파란색 = 보라색
-                        marker15.setMap(naverMap); // 마커 표시
+                        marker15.setMap(naverMap2); // 마커 표시
 
                         break;
                     case 5:
@@ -1306,7 +1306,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         marker16.setPosition(new LatLng(y, x)); // 마커 위치 재설정
                         marker16.setIcon(MarkerIcons.RED); // 마커 색깔, 어린이집은 보라
                         marker16.setIconTintColor(Color.BLUE); // 빨간 색 + 파란색 = 보라색
-                        marker16.setMap(naverMap); // 마커 표시
+                        marker16.setMap(naverMap2); // 마커 표시
 
                         break;
                     case 6:
@@ -1314,28 +1314,28 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         marker17.setPosition(new LatLng(y, x)); // 마커 위치 재설정
                         marker17.setIcon(MarkerIcons.RED); // 마커 색깔, 어린이집은 보라
                         marker17.setIconTintColor(Color.BLUE); // 빨간 색 + 파란색 = 보라색
-                        marker17.setMap(naverMap); // 마커 표시
+                        marker17.setMap(naverMap2); // 마커 표시
                         break;
                     case 7:
                         marker18.setMap(null); // 기존 마커 삭제
                         marker18.setPosition(new LatLng(y, x)); // 마커 위치 재설정
                         marker18.setIcon(MarkerIcons.RED); // 마커 색깔, 어린이집은 보라
                         marker18.setIconTintColor(Color.BLUE); // 빨간 색 + 파란색 = 보라색
-                        marker18.setMap(naverMap); // 마커 표시
+                        marker18.setMap(naverMap2); // 마커 표시
                         break;
                     case 8:
                         marker19.setMap(null); // 기존 마커 삭제
                         marker19.setPosition(new LatLng(y, x)); // 마커 위치 재설정
                         marker19.setIcon(MarkerIcons.RED); // 마커 색깔, 어린이집은 보라
                         marker19.setIconTintColor(Color.BLUE); // 빨간 색 + 파란색 = 보라색
-                        marker19.setMap(naverMap); // 마커 표시
+                        marker19.setMap(naverMap2); // 마커 표시
                         break;
                     case 9:
                         marker20.setMap(null); // 기존 마커 삭제
                         marker20.setPosition(new LatLng(y, x)); // 마커 위치 재설정
                         marker20.setIcon(MarkerIcons.RED); // 마커 색깔, 어린이집은 보라
                         marker20.setIconTintColor(Color.BLUE); // 빨간 색 + 파란색 = 보라색
-                        marker20.setMap(naverMap); // 마커 표시
+                        marker20.setMap(naverMap2); // 마커 표시
                         break;
                     default:
                         break;
