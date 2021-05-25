@@ -1,5 +1,6 @@
 package com.example.hci_project;
 
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.PointF;
 import android.location.Location;
@@ -108,6 +109,49 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         cameraUpdate = CameraUpdate.toCameraPosition(cameraPosition);
 
 
+        locationSource =
+                new FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE); // 현재 위치 갱신
+
+
+
+    }
+
+    @Override
+
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+
+        switch (requestCode) {
+
+            case PERMISSIONS_REQUEST :
+
+                if (grantResults.length > 0
+
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    Toast.makeText(mainActivity.getBaseContext(), "앱 실행을 위한 권한이 설정 되었습니다", Toast.LENGTH_LONG).show();
+
+                } else {
+
+                    Toast.makeText(super.getContext(), "앱 실행을 위한 권한이 취소 되었습니다", Toast.LENGTH_LONG).show();
+
+                }
+
+                break;
+
+        }
+
+        // 네이버 지도 소스 권한
+        if (locationSource.onRequestPermissionsResult(
+                requestCode, permissions, grantResults)) {
+            if (!locationSource.isActivated()) { // 권한 거부됨
+                naverMap2.setLocationTrackingMode(LocationTrackingMode.None);
+            }
+            return;
+        }
+
+        super.onRequestPermissionsResult(
+                requestCode, permissions, grantResults);
 
 
     }
