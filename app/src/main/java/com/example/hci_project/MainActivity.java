@@ -1806,6 +1806,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 @Override
                 public void onClick(View v) {
                     // Todo : 즐겨찾기 버튼 누르면 추가
+
+                    bookmarkList.add(new School2(dataList.get(index - 1).getAddr(), dataList.get(index - 1).getName(), dataList.get(index - 1).getType(),
+                            dataList.get(index - 1).getTel(), dataList.get(index - 1).getX(), dataList.get(index - 1).getY()));
+
+
                 }
             });
 
