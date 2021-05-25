@@ -125,7 +125,7 @@ class SchoolManager private constructor() {
                             sum += row[idx].contents!!.toInt()
                         } catch (e: Exception) {
                             //cast error
-                            e.printStackTrace()
+//                            e.printStackTrace()
                         }
                     }
                     return sum

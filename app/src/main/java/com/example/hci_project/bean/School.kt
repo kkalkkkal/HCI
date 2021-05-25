@@ -46,4 +46,11 @@ class School(
         val userLocation = LocationUtil.location!!
         return LocationUtil.distance(userLocation.latitude, userLocation.longitude, lat, lng).toFloat()
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (other is School) {
+            return other.name == this.name
+        }
+        return super.equals(other)
+    }
 }

@@ -8,91 +8,84 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/common_cardview"
-        android:layout_width="409dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:layout_editor_absoluteX="1dp"
         tools:layout_editor_absoluteY="139dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
-        <RelativeLayout
+        <View
+            android:id="@+id/divider"
             android:layout_width="match_parent"
-            android:layout_height="136dp">
-
-            <View
-                android:id="@+id/divider"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider" />
+        <LinearLayout
+            android:padding="8dp"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+                android:id="@+id/clickable"
+                android:gravity="center"
                 android:layout_width="match_parent"
-                android:layout_height="5dp"
-                android:background="?android:attr/listDivider" />
-
-            <ImageButton
-                android:id="@+id/imageButton2"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="9dp"
-                android:layout_toStartOf="@+id/imageButton"
-                app:srcCompat="@android:drawable/ic_menu_add" />
+                android:orientation="horizontal">
+                <TextView
+                    android:background="@drawable/seekbar_thumb"
+                    style="@style/text_title"
+                    android:gravity="center"
+                    android:padding="16dp"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:text="공립" />
+                <LinearLayout
+                    android:layout_gravity="center"
+                    android:paddingLeft="16dp"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        style="@style/text_title"
+                        android:id="@+id/the_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="이름" />
 
-            <ImageButton
-                android:id="@+id/imageButton"
-                android:layout_width="wrap_content"
+                    <TextView
+                        android:id="@+id/the_add"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="주소" />
+                    <TextView
+                        android:id="@+id/the_phone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="주소" />
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="16dp"
-                app:srcCompat="@android:drawable/btn_star_big_off" />
-
-            <ImageView
-                android:id="@+id/the_img_type"
-                android:layout_width="82dp"
-                android:layout_height="73dp"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginStart="22dp"
-                android:layout_marginTop="31dp"
-                app:srcCompat="@drawable/seekbar_thumb" />
-
-            <TextView
-                android:id="@+id/the_Type"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/divider"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="42dp"
-                android:layout_marginTop="52dp"
-                android:text="공립"
-                android:textSize="24sp" />
-
-            <TextView
-                android:id="@+id/the_name"
-                android:layout_width="123dp"
-                android:layout_height="33dp"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="14dp"
-                android:layout_marginEnd="12dp"
-                android:layout_toStartOf="@+id/imageButton2"
-                android:text="이름" />
-
-            <TextView
-                android:id="@+id/the_add"
-                android:layout_width="232dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/the_name"
-                android:layout_alignParentEnd="true"
-                android:layout_marginTop="13dp"
-                android:layout_marginEnd="41dp"
-                android:text="주소" />
-
-            <TextView
-                android:id="@+id/the_phone"
-                android:layout_width="229dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/the_add"
-                android:layout_alignParentEnd="true"
-                android:layout_marginTop="11dp"
-                android:layout_marginEnd="43dp"
-                android:text="전화번호" />
-        </RelativeLayout>
+                android:orientation="horizontal"
+                android:gravity="right|center_vertical">
+                <ImageButton
+                    android:layout_margin="8dp"
+                    android:id="@+id/addCompareList"
+                    android:background="@color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@android:drawable/ic_menu_add" />
+                <ImageButton
+                    android:layout_margin="8dp"
+                    android:background="@color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/addFavoriteList"
+                    app:srcCompat="@android:drawable/btn_star_big_off" />
+            </LinearLayout>
+        </LinearLayout>
     </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

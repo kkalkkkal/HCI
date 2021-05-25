@@ -236,7 +236,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     
     viewPagerFragmentList.add(mapFragment); // 커스텀 맵 프래그먼트 : 기존 new MapFragment 대체
     viewPagerFragmentList.add(new CompareSchoolFragment());
-    viewPagerFragmentList.add(new BookmarkActivity());
+    viewPagerFragmentList.add(new BookmarkFragment());
     
     
     initUI(); // UI 초기화
