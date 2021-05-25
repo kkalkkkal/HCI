@@ -12,6 +12,7 @@
         android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="0dp">
+
         <TextView
             android:id="@+id/search_school_tv"
             android:elevation="5dp"
@@ -23,11 +24,115 @@
             android:layout_marginTop="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/main_viewPager"
+
+
+        <com.sothree.slidinguppanel.SlidingUpPanelLayout
+            android:id="@+id/sliding_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="10dp"
+            android:gravity="bottom"
+            app:umanoPanelHeight="68dp"
+            app:umanoShadowHeight="4dp"
+            app:umanoParallaxOffset="200dp"
+            app:umanoOverlay="false"
+            app:umanoDragView="@id/dragView"
+            app:umanoScrollableView="@id/commonRecycler"
+            >
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/main_viewPager"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+
+                </androidx.viewpager2.widget.ViewPager2>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <!-- 올라오는 화면을 꽉 채우고 싶다면 match_parent, 내용물 만큼만 보이고 뒷 배경이 반투명처리로 보이고 싶다면 wrap_content-->
+            <LinearLayout
+                android:id="@+id/dragView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:orientation="vertical"
+                >
+
+                <LinearLayout
+                    android:id="@+id/common_result"
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/commonTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="16sp"
+                        android:text="주변"
+                        android:textSize="20sp" />
+
+                </LinearLayout>
+                <!-- 스크롤 해서 보여줄 부분은 listview 또는 custom listview 또는 recyclerview를 사용 -->
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/commonRecycler"
+                    android:layout_width="wrap_content"
+                    android:layout_height="300dp">
+
+
+                </androidx.recyclerview.widget.RecyclerView>
+
+
+
+            </LinearLayout>
+
+
+
+        </com.sothree.slidinguppanel.SlidingUpPanelLayout>
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/kinder_chips"
+            style="@style/Widget.MaterialComponents.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/search_school_tv"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="20dp"
+            android:checkable="true"
+            android:text="유치원"
+            app:chipBackgroundColor="#FFEB3B"
+            app:rippleColor="#BABABA" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/child_chips"
+            android:checkable="true"
+            style="@style/Widget.MaterialComponents.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/search_school_tv"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_toEndOf="@+id/kinder_chips"
+            android:text="어린이집"
+            android:textColor="#FFFFFF"
+            app:chipBackgroundColor="#9C27B0"
+            app:rippleColor="#BABABA" />
+
     </RelativeLayout>
+
+
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavBar"
         android:layout_gravity="bottom"
@@ -36,9 +141,12 @@
         app:menu="@menu/bottom_navigation_items"
         app:itemIconTint="@drawable/nav_item_color_state"
         app:itemTextColor="@drawable/nav_item_color_state"
-        />
+        >
 
-<!--    <com.google.android.material.tabs.TabLayout-->
+
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
+
+    <!--    <com.google.android.material.tabs.TabLayout-->
 <!--        android:id="@+id/tablayout"-->
 <!--        android:layout_width="match_parent"-->
 <!--        android:layout_height="wrap_content"-->

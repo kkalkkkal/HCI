@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class ChipAdapter(
-        private val values: List<Chip>)
+        var values: List<Chip>)
     : RecyclerView.Adapter<ChipAdapter.ViewHolder>() {
 
     private val colors= arrayOf<@androidx.annotation.ColorInt Int>(
