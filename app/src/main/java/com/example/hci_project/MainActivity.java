@@ -468,7 +468,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         marker19.setMap(null); // 기존 마커 삭제
                         marker20.setMap(null); // 기존 마커 삭제
                         child_chip.setChecked(false);
-                        //dataList.clear();
+                        dataList.clear();
                         NearKinderMarker();
                     } catch (ParseException e) {
                         e.printStackTrace();
@@ -477,7 +477,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     }
                 } else {
                     try { // 전체 출력
-                        //dataList.clear();
+                        dataList.clear();
                         NearKinderMarker();
                         NearChildMarker();
                     } catch (ParseException e) {
@@ -506,6 +506,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         marker9.setMap(null); // 기존 마커 삭제
                         marker10.setMap(null); // 기존 마커 삭제
                         kinder_chip.setChecked(false); // 체크 X
+                        dataList.clear();
                         NearChildMarker();
                     } catch (ParseException e) {
                         e.printStackTrace();
@@ -514,7 +515,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     }
                 } else {
                     try {
-
+                        dataList.clear();
                         NearKinderMarker();
                         NearChildMarker();
                     } catch (ParseException e) {
