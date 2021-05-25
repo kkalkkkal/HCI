@@ -37,4 +37,10 @@
             android:layout_height="wrap_content"
             tools:text="SubTitle" />
     </LinearLayout>
+
+    <ImageButton
+        android:visibility="gone"
+        android:id="@+id/removeBtn"
+        style="@style/imageButton"
+        android:src="@drawable/ic_baseline_close_24" />
 </LinearLayout>
