@@ -65,7 +65,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="24dp"/>
                 <SeekBar
-                    android:theme="@style/Widget.AppCompat.SeekBar.Discrete"
+                    android:splitTrack="false"
+                    android:thumb="@drawable/seekbar_thumb"
+                    android:progressDrawable="@drawable/seekbar_progress"
                     android:id="@+id/school_size_max_bar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
@@ -93,7 +95,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="24dp"/>
                 <SeekBar
-                    android:theme="@style/Widget.AppCompat.SeekBar.Discrete"
+                    android:splitTrack="false"
+                    android:thumb="@drawable/seekbar_thumb"
+                    android:progressDrawable="@drawable/seekbar_progress"
                     android:id="@+id/kids_per_teacher_max_bar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
@@ -113,15 +117,47 @@
                 <TextView
                     android:text="운영시간"
                     style="@style/text_title"/>
-                <TextView
-                    android:text="툴팁"
-                    style="@style/text_explain"/>
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="24dp"/>
-                <Spinner
+                <LinearLayout
+                    android:gravity="center"
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:text="개원시간"
+                            style="@style/text_explain"/>
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="12dp"/>
+                        <Spinner
+                            android:id="@+id/openTimeSpinner"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:text="폐원시간"
+                            style="@style/text_explain"/>
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="12dp"/>
+                        <Spinner
+                            android:id="@+id/closeTimeSpinner"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+                </LinearLayout>
             </LinearLayout>
             <LinearLayout
                 android:layout_marginBottom="32dp"
@@ -139,7 +175,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="24dp"/>
                 <SeekBar
-                    android:theme="@style/Widget.AppCompat.SeekBar.Discrete"
+                    android:splitTrack="false"
+                    android:thumb="@drawable/seekbar_thumb"
+                    android:progressDrawable="@drawable/seekbar_progress"
                     android:id="@+id/school_distance_max_bar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
