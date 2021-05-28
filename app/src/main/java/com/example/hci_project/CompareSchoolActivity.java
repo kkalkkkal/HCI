@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.ActionBar.LayoutParams;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -140,17 +141,27 @@ public class CompareSchoolActivity extends AppCompatActivity {
             }
 
             if((j+1)%5==1){
-                btn.setBackgroundColor(Color.rgb(177, 53, 83));
+                btn.setBackgroundResource(R.drawable.round_btn);
+                btn.setTextColor(getApplication().getResources().getColor(R.color.white));
+             //   btn.setBackgroundColor(Color.rgb(177, 53, 83));
 
              //   Toast.makeText(getApplicationContext(), "진입 "+j%5, Toast.LENGTH_LONG).show();
             }else if((j+1)%5==2){
-                btn.setBackgroundColor(Color.rgb(237, 112, 45));
+                btn.setBackgroundResource(R.drawable.round_btn2);
+                btn.setTextColor(getApplication().getResources().getColor(R.color.white));
+               // btn.setBackgroundColor(Color.rgb(237, 112, 45));
             }else if((j+1)%5==3){
-                btn.setBackgroundColor(Color.rgb(238, 201, 67));
+                btn.setBackgroundResource(R.drawable.round_btn3);
+                btn.setTextColor(getApplication().getResources().getColor(R.color.white));
+               // btn.setBackgroundColor(Color.rgb(238, 201, 67));
             }else if((j+1)%5==4){
-                btn.setBackgroundColor(Color.rgb(115, 149, 54));
+                btn.setBackgroundResource(R.drawable.round_btn4);
+                btn.setTextColor(getApplication().getResources().getColor(R.color.white));
+               // btn.setBackgroundColor(Color.rgb(115, 149, 54));
             }else{
-                btn.setBackgroundColor(Color.rgb(168, 104, 63));
+                btn.setBackgroundResource(R.drawable.round_btn5);
+                btn.setTextColor(getApplication().getResources().getColor(R.color.white));
+              //  btn.setBackgroundColor(Color.rgb(168, 104, 63));
             }
 
 
