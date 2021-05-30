@@ -8,32 +8,32 @@ class FilterSetting() : Serializable {
     class Facilitate(val name: String, val id: String, val icon: Int) : Serializable {
         companion object {
             val BUS_AVAILABLE =
-                Facilitate("통학버스 운영", "bus_available", R.drawable.ic_baseline_directions_bus_24)
+                    Facilitate("통학버스 운영", "bus_available", R.drawable.ic_baseline_directions_bus_24)
             val WATER_INSPECTION =
-                Facilitate("수질 안전 검사", "water_inspection", R.drawable.ic_baseline_water_damage_24)
+                    Facilitate("수질 안전 검사", "water_inspection", R.drawable.ic_baseline_water_damage_24)
             val ELECTRIC_INSPECTION = Facilitate(
-                "전기 안전 검사",
-                "electric_inspection",
-                R.drawable.ic_baseline_electrical_services_24
+                    "전기 안전 검사",
+                    "electric_inspection",
+                    R.drawable.ic_baseline_electrical_services_24
             )
             val GAS_INSPECTION =
-                Facilitate("가스 안전 검사", "gas_inspection", R.drawable.ic_baseline_cloud_done_24)
+                    Facilitate("가스 안전 검사", "gas_inspection", R.drawable.ic_baseline_cloud_done_24)
             val FIRE_INSPECTION = Facilitate(
-                "소방 안전 검사",
-                "fire_inspection",
-                R.drawable.ic_baseline_fire_extinguisher_24
+                    "소방 안전 검사",
+                    "fire_inspection",
+                    R.drawable.ic_baseline_fire_extinguisher_24
             )
             val ESCAPE_TRAINING =
-                Facilitate("소방 대피 훈련", "escape_training", R.drawable.ic_baseline_run_circle_24)
+                    Facilitate("소방 대피 훈련", "escape_training", R.drawable.ic_baseline_run_circle_24)
 
             fun getAll(): ArrayList<Facilitate> {
                 return arrayListOf(
-                    BUS_AVAILABLE,
-                    WATER_INSPECTION,
-                    GAS_INSPECTION,
-                    ELECTRIC_INSPECTION,
-                    FIRE_INSPECTION,
-                    ESCAPE_TRAINING
+                        BUS_AVAILABLE,
+                        WATER_INSPECTION,
+                        GAS_INSPECTION,
+                        ELECTRIC_INSPECTION,
+                        FIRE_INSPECTION,
+                        ESCAPE_TRAINING
                 )
             }
         }
@@ -61,11 +61,11 @@ class FilterSetting() : Serializable {
     }
 
     val facilitates: ArrayList<Facilitate> = arrayListOf(
-        Facilitate.WATER_INSPECTION,
-        Facilitate.GAS_INSPECTION,
-        Facilitate.ELECTRIC_INSPECTION,
-        Facilitate.FIRE_INSPECTION,
-        Facilitate.ESCAPE_TRAINING
+            Facilitate.WATER_INSPECTION,
+            Facilitate.GAS_INSPECTION,
+            Facilitate.ELECTRIC_INSPECTION,
+            Facilitate.FIRE_INSPECTION,
+            Facilitate.ESCAPE_TRAINING
     )
 
     var minSchoolSize: Int = 0
@@ -73,7 +73,7 @@ class FilterSetting() : Serializable {
     var maxDistanceKmFromHere: Int = 3
 
     var schoolStartHour: Int = 0
-    var schoolEndTime: Int = 0
+    var schoolEndHour: Int = 0
 
     var callback: Runnable? = null
 
@@ -82,7 +82,7 @@ class FilterSetting() : Serializable {
         maxKidsPerTeacher = filterSetting.maxKidsPerTeacher
         maxDistanceKmFromHere = filterSetting.maxDistanceKmFromHere
         schoolStartHour = filterSetting.schoolStartHour
-        schoolEndTime = filterSetting.schoolEndTime
+        schoolEndHour = filterSetting.schoolEndHour
 
         facilitates.clear()
         facilitates.addAll(filterSetting.facilitates)
@@ -103,7 +103,7 @@ class FilterSetting() : Serializable {
         maxKidsPerTeacher = filterSetting.maxKidsPerTeacher
         maxDistanceKmFromHere = filterSetting.maxDistanceKmFromHere
         schoolStartHour = filterSetting.schoolStartHour
-        schoolEndTime = filterSetting.schoolEndTime
+        schoolEndHour = filterSetting.schoolEndHour
 
         facilitates.clear()
         facilitates.addAll(filterSetting.facilitates)
@@ -114,7 +114,7 @@ class FilterSetting() : Serializable {
     }
 
     override fun toString(): String {
-        return "FilterSetting(facilitates=$facilitates, minSchoolSize=$minSchoolSize, maxKidsPerTeacher=$maxKidsPerTeacher, maxDistanceKmFromHere=$maxDistanceKmFromHere, schoolStartHour=$schoolStartHour, schoolEndTime=$schoolEndTime, callback=$callback)"
+        return "FilterSetting(facilitates=$facilitates, minSchoolSize=$minSchoolSize, maxKidsPerTeacher=$maxKidsPerTeacher, maxDistanceKmFromHere=$maxDistanceKmFromHere, schoolStartHour=$schoolStartHour, schoolEndTime=$schoolEndHour, callback=$callback)"
     }
 
 

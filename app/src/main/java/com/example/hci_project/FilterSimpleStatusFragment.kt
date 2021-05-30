@@ -48,8 +48,8 @@ class FilterSimpleStatusFragment : Fragment() {
 
             if (schoolStartHour != 0)
                 builder.append("개원 시간: ${schoolStartHour}시 이전", null)
-            if (schoolEndTime != 0)
-                builder.append("폐원 시간: ${schoolEndTime}시 이후", null)
+            if (schoolEndHour != 0)
+                builder.append("폐원 시간: ${schoolEndHour}시 이후", null)
 
             facilitates.map {
                 builder.append(it.name, null)
