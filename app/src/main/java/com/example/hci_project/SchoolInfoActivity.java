@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.hci_project.bean.School;
+import com.example.hci_project.dummy.FileAdapter;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
@@ -34,9 +35,13 @@ import com.naver.maps.map.NaverMapOptions;
 import com.naver.maps.map.OnMapReadyCallback;
 import com.example.hci_project.MainActivity;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import jxl.Sheet;
 import jxl.Workbook;
@@ -44,6 +49,8 @@ import jxl.read.biff.BiffException;
 
 public class SchoolInfoActivity extends AppCompatActivity {
 
+
+    ArrayList<String> fileArray;
 
     //데이터베이스
     static Sheet sheet0; // 어린이집 기본 현황
@@ -67,6 +74,10 @@ public class SchoolInfoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_school_info);
+
+        fileArray = new ArrayList<>();
+
+
         ImageButton like_on = findViewById(R.id.like_added);
         ImageButton like_off = findViewById(R.id.like_added_not);
         ImageButton compare_add = findViewById(R.id.compare_add);
@@ -131,6 +142,7 @@ public class SchoolInfoActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Like_on", Toast.LENGTH_LONG).show();
                 like_on.setVisibility(View.VISIBLE);
                 like_off.setVisibility(View.GONE);
+
                 //      Intent intent = new Intent(SchoolInfoActivity.this, BookmarkActivity.class);
 
                 //     startActivity(intent);
@@ -145,6 +157,7 @@ public class SchoolInfoActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "compare_added", Toast.LENGTH_LONG).show();
                 compare_add.setVisibility(View.GONE);
                 compare_delete.setVisibility(View.VISIBLE);
+                compare_add_save(school.getName(),school.getCurrentStudentCnt(),school.getTeacherCnt());
                 Intent intent = new Intent(SchoolInfoActivity.this, CompareSchoolActivity.class);
                 intent.putExtra("last", 'b');
                 startActivity(intent);
@@ -158,6 +171,7 @@ public class SchoolInfoActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "compare_deleted", Toast.LENGTH_LONG).show();
                 compare_add.setVisibility(View.VISIBLE);
                 compare_delete.setVisibility(View.GONE);
+                compare_add_delete(school.getName());
                 Intent intent = new Intent(SchoolInfoActivity.this, CompareSchoolActivity.class);
                 intent.putExtra("last", 'c');
                 startActivity(intent);
@@ -285,7 +299,32 @@ public class SchoolInfoActivity extends AppCompatActivity {
 
     }
 
+    private void compare_add_delete(String name) {
+        File file = new File(getFilesDir(),name);
+        file.delete();
 
+
+
+
+
+    }
+
+    private void compare_add_save(String name, int currentStudentCnt, int teacherCnt) {
+
+        try {
+            FileOutputStream fos = openFileOutput(name,MODE_PRIVATE);
+            fos.write(currentStudentCnt);
+            fos.write(teacherCnt);
+            fos.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+    }
 
 
 

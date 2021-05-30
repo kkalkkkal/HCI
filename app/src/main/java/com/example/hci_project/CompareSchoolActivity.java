@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.example.hci_project.dummy.FileAdapter;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.Entry;
@@ -26,9 +27,11 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.google.android.gms.common.server.converter.StringToIntConverter;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import jxl.Sheet;
@@ -37,6 +40,10 @@ import jxl.read.biff.BiffException;
 
 
 public class CompareSchoolActivity extends AppCompatActivity {
+
+    ArrayList<String> fileArray;
+
+
 
 
     public String[] adress = new String[400];
@@ -73,9 +80,7 @@ public class CompareSchoolActivity extends AppCompatActivity {
 
 
 
-
-
-        // linearLayout params 정의
+// linearLayout params 정의
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
 
@@ -85,10 +90,14 @@ public class CompareSchoolActivity extends AppCompatActivity {
         // LinearLayout 생성
         LinearLayout ll = new LinearLayout(this);
 
+        File currentDir = getFilesDir();
+        fileArray.addAll(Arrays.asList(currentDir.list()));
+        FileAdapter adapter = new FileAdapter(fileArray,this);
+
+
+
+
         ll.setOrientation(LinearLayout.HORIZONTAL);
-
-
-
 
 
         for (int j = 0; j <= last; j++) {
@@ -269,7 +278,30 @@ public class CompareSchoolActivity extends AppCompatActivity {
         chart.setData(data2);
 
 
+
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
