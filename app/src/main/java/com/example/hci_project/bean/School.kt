@@ -25,6 +25,17 @@ class School(
         val TYPE_KINDER = "유치원"
     }
 
+    //null일 경우 안전정보 없음
+    //어린이집은 해당 정보가 없
+    var safety: Safety? = null
+
+    //영양사 직원 수
+    //-1일 경우 정보 없음
+    var mealManagerCnt: Int = -1
+    //위탁 또는 직영
+    var mealServiceType: String? = null
+
+
     fun getOnlySchoolType(): String {
         return if (type.contains(TYPE_CHILD))
             TYPE_CHILD
