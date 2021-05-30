@@ -114,7 +114,9 @@ class SchoolManager private constructor() {
             val sheet_room = wb.getSheet("유치원+교실면적현황") // 시트 불러오기
             val sheet_bus = wb.getSheet("유치원+통학차량현황") // 시트 불러오기
             val sheet_teacher = wb.getSheet("유치원+직위·자격별+교직원현황") // 시트 불러오기
-            if (sheet != null && sheet_room != null && sheet_bus != null) {
+            val sheet_safety = wb.getSheet("안전점검+및+안전교육+실시+현황") // 시트 불러오기
+            val sheet_meal = wb.getSheet("유치원+급식운영현황") // 시트 불러오기
+            if (sheet != null) {
                 var getColIndex = fun(char: Char): Int {
                     return char.toInt() - 'a'.toInt()
                 }
@@ -137,6 +139,8 @@ class SchoolManager private constructor() {
                         val currentRow_room = sheet_room.getRow(row)
                         val currentRow_bus = sheet_bus.getRow(row)
                         val currentRow_teacher = sheet_bus.getRow(row)
+                        val currentRow_safety = sheet_safety.getRow(row)
+                        val currentRow_meal = sheet_meal.getRow(row)
                         val school = School(
                                 currentRow[getColIndex('h')].contents!!,
                                 currentRow[getColIndex('d')].contents!!,
@@ -155,6 +159,21 @@ class SchoolManager private constructor() {
                                 currentRow[getColIndex('j')].contents!!,
                                 currentRow[getColIndex('g')].contents!!,
                         )
+                        school.mealManagerCnt = getSum(currentRow_meal, 'k', 'l')
+                        school.mealServiceType = currentRow_meal[getColIndex('f')].contents!!
+
+                        val mealServiceCompany = currentRow_meal[getColIndex('g')].contents!!
+                        if (mealServiceCompany != "")
+                            school.mealServiceType += "(${mealServiceCompany})"
+
+                        val safety: Safety = Safety(
+                                currentRow_safety[getColIndex('f')].contents!! != "N",
+                                currentRow_safety[getColIndex('h')].contents!! != "N",
+                                currentRow_safety[getColIndex('j')].contents!! != "N",
+                                currentRow_safety[getColIndex('l')].contents!! != "N",
+                                currentRow_safety[getColIndex('n')].contents!! != "N",
+                                currentRow_safety[getColIndex('r')].contents!!.toInt())
+                        school.safety = safety
                         schoolList.add(school)
                     } catch (e: Exception) {
                         e.printStackTrace()
