@@ -129,6 +129,166 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
   Marker marker20 = new Marker();
   
   // Getter
+
+  public Marker getMarker1() {
+    return marker1;
+  }
+
+  public void setMarker1(Marker marker1) {
+    this.marker1 = marker1;
+  }
+
+  public Marker getMarker2() {
+    return marker2;
+  }
+
+  public void setMarker2(Marker marker2) {
+    this.marker2 = marker2;
+  }
+
+  public Marker getMarker3() {
+    return marker3;
+  }
+
+  public void setMarker3(Marker marker3) {
+    this.marker3 = marker3;
+  }
+
+  public Marker getMarker4() {
+    return marker4;
+  }
+
+  public void setMarker4(Marker marker4) {
+    this.marker4 = marker4;
+  }
+
+  public Marker getMarker5() {
+    return marker5;
+  }
+
+  public void setMarker5(Marker marker5) {
+    this.marker5 = marker5;
+  }
+
+  public Marker getMarker6() {
+    return marker6;
+  }
+
+  public void setMarker6(Marker marker6) {
+    this.marker6 = marker6;
+  }
+
+  public Marker getMarker7() {
+    return marker7;
+  }
+
+  public void setMarker7(Marker marker7) {
+    this.marker7 = marker7;
+  }
+
+  public Marker getMarker8() {
+    return marker8;
+  }
+
+  public void setMarker8(Marker marker8) {
+    this.marker8 = marker8;
+  }
+
+  public Marker getMarker9() {
+    return marker9;
+  }
+
+  public void setMarker9(Marker marker9) {
+    this.marker9 = marker9;
+  }
+
+  public Marker getMarker10() {
+    return marker10;
+  }
+
+  public void setMarker10(Marker marker10) {
+    this.marker10 = marker10;
+  }
+
+  public Marker getMarker11() {
+    return marker11;
+  }
+
+  public void setMarker11(Marker marker11) {
+    this.marker11 = marker11;
+  }
+
+  public Marker getMarker12() {
+    return marker12;
+  }
+
+  public void setMarker12(Marker marker12) {
+    this.marker12 = marker12;
+  }
+
+  public Marker getMarker13() {
+    return marker13;
+  }
+
+  public void setMarker13(Marker marker13) {
+    this.marker13 = marker13;
+  }
+
+  public Marker getMarker14() {
+    return marker14;
+  }
+
+  public void setMarker14(Marker marker14) {
+    this.marker14 = marker14;
+  }
+
+  public Marker getMarker15() {
+    return marker15;
+  }
+
+  public void setMarker15(Marker marker15) {
+    this.marker15 = marker15;
+  }
+
+  public Marker getMarker16() {
+    return marker16;
+  }
+
+  public void setMarker16(Marker marker16) {
+    this.marker16 = marker16;
+  }
+
+  public Marker getMarker17() {
+    return marker17;
+  }
+
+  public void setMarker17(Marker marker17) {
+    this.marker17 = marker17;
+  }
+
+  public Marker getMarker18() {
+    return marker18;
+  }
+
+  public void setMarker18(Marker marker18) {
+    this.marker18 = marker18;
+  }
+
+  public Marker getMarker19() {
+    return marker19;
+  }
+
+  public void setMarker19(Marker marker19) {
+    this.marker19 = marker19;
+  }
+
+  public Marker getMarker20() {
+    return marker20;
+  }
+
+  public void setMarker20(Marker marker20) {
+    this.marker20 = marker20;
+  }
   public static Sheet getSheet0() {
     return sheet0;
   }
@@ -234,7 +394,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     schoolTitle = findViewById(R.id.commonTitle);
     
     
-    viewPagerFragmentList.add(mapFragment); // 커스텀 맵 프래그먼트 : 기존 new MapFragment 대체
+    viewPagerFragmentList.add(new com.example.hci_project.MapFragment()); // 커스텀 맵 프래그먼트 : 기존 new MapFragment 대체
     viewPagerFragmentList.add(new CompareSchoolFragment());
     viewPagerFragmentList.add(new BookmarkFragment());
     
@@ -283,7 +443,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             marker19.setMap(null); // 기존 마커 삭제
             marker20.setMap(null); // 기존 마커 삭제
             child_chip.setChecked(false);
-            //dataList.clear();
+            dataList.clear();
             NearKinderMarker();
           } catch (ParseException e) {
             e.printStackTrace();
@@ -292,7 +452,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
           }
         } else {
           try { // 전체 출력
-            //dataList.clear();
+            dataList.clear();
             NearKinderMarker();
             NearChildMarker();
           } catch (ParseException e) {
@@ -321,6 +481,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             marker9.setMap(null); // 기존 마커 삭제
             marker10.setMap(null); // 기존 마커 삭제
             kinder_chip.setChecked(false); // 체크 X
+            dataList.clear();
             NearChildMarker();
           } catch (ParseException e) {
             e.printStackTrace();
@@ -329,7 +490,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
           }
         } else {
           try {
-            
+            dataList.clear();
             NearKinderMarker();
             NearChildMarker();
           } catch (ParseException e) {
@@ -813,7 +974,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
           case 0:
             marker1.setMap(null); // 기존 마커 삭제
             marker1.setPosition(new LatLng(y, x)); // 마커 위치 재설정
-            marker1.setIcon(MarkerIcons.YELLOW); // 마커 색깔, 유치원은 노랑
+            marker1.setIcon(MarkerIcons.GRAY); // 마커 색깔, 유치원은 노랑
             marker1.setIconTintColor(Color.TRANSPARENT); //
             marker1.setMap(naverMap); // 마커 표시
             
@@ -1312,7 +1473,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
    * @return
    */
   
-  private static double distance(double lat1, double lon1, double lat2, double lon2, String unit) {
+  public static double distance(double lat1, double lon1, double lat2, double lon2, String unit) {
     
     double theta = lon1 - lon2;
     double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
