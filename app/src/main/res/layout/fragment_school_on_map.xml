@@ -121,7 +121,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="4dp"
-                        android:text="갯수" />
+                        android:text="개수" />
                 </LinearLayout>
                 <!-- 스크롤 해서 보여줄 부분은 listview 또는 custom listview 또는 recyclerview를 사용 -->
                 <androidx.recyclerview.widget.RecyclerView
