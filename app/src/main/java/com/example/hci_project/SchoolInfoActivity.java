@@ -77,8 +77,6 @@ public class SchoolInfoActivity extends AppCompatActivity implements OnMapReadyC
         naverMap2.setLayerGroupEnabled(NaverMap.LAYER_GROUP_BUILDING, true); // 빌딩 그룹 생성
 
         naverMap2.setLocationTrackingMode(LocationTrackingMode.Follow); // 위치 추적 모드 실행
-
-
         naverMap2.moveCamera(cameraUpdate);
 
         locationSource =
@@ -221,10 +219,16 @@ public class SchoolInfoActivity extends AppCompatActivity implements OnMapReadyC
         if (school.getHomePage() == "")
             homepage.setText("없음");
         else
-            homepage.setText(String.valueOf(school.getHomePage()));
+            homepage.setText(school.getHomePage());
 
         // 전화번호
-        callnumber.setText(String.valueOf(school.getTel()));
+        Cell cell0 = IntroActivity.sheet11.findCell(school.getName()); // 엑셀파일에서 cell 반환
+        if (cell0 != null) {
+            int row0 = cell0.getRow();
+            callnumber.setText(IntroActivity.sheet11.getCell(8, row0).getContents());
+        } else {
+            callnumber.setText(school.getTel());
+        }
 
         // 통학 버스 유무
         if (school.isAvailableBus() == false)
@@ -256,7 +260,7 @@ public class SchoolInfoActivity extends AppCompatActivity implements OnMapReadyC
             // 운영시간
             Cell cell = IntroActivity.sheet11.findCell(school.getName()); // 엑셀파일에서 cell 반환
             int row = cell.getRow();
-            opentime.setText(IntroActivity.sheet0.getCell(10,row).getContents());
+            opentime.setText(IntroActivity.sheet11.getCell(10,row).getContents());
 
             // 급식 운영방식
             Cell cell2 = IntroActivity.sheet7.findCell(school.getName()); // 엑셀파일에서 cell 반환

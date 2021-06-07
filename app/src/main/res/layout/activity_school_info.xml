@@ -54,6 +54,44 @@
                     android:background="@drawable/round_btn4"
                     android:text="유치원" />
 
+                <ImageButton
+                    android:id="@+id/compare_add"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:background="#ffffff"
+
+                    app:srcCompat="@android:drawable/ic_input_add" />
+
+                <ImageButton
+                    android:id="@+id/compare_delete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:background="#ffffff"
+                    android:visibility="gone"
+                    app:srcCompat="@android:drawable/ic_delete" />
+
+                <ImageButton
+                    android:id="@+id/like_added_not"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:background="#ffffff"
+                    android:visibility="visible"
+
+                    app:srcCompat="@android:drawable/btn_star_big_off" />
+
+                <ImageButton
+                    android:id="@+id/like_added"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:background="#ffffff"
+                    android:visibility="gone"
+
+                    app:srcCompat="@android:drawable/star_big_on" />
+
             </LinearLayout>
 
             <androidx.constraintlayout.widget.Barrier
@@ -62,12 +100,11 @@
                 app:barrierDirection="top" />
 
 
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="---------------------------------------------------------------------------------------------------------" />
+            <View
+                android:id="@+id/divider2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:attr/listDivider" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -79,11 +116,10 @@
                     android:id="@+id/school_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="30dp"
-                    android:gravity="center"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="100dp"
-                    android:text="모두의 유치원" />
+                    android:gravity="center"
+                    android:text="모두의 유치원"
+                    android:textSize="30dp" />
 
                 <TextView
 
@@ -91,46 +127,6 @@
                     android:layout_height="wrap_content"
                     android:textSize="30dp"
                     android:text="        " />
-
-                <ImageButton
-                    android:id="@+id/compare_add"
-                    android:background="#ffffff"
-                    android:layout_gravity="right"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-
-                    app:srcCompat="@android:drawable/ic_input_add" />
-
-                <ImageButton
-                    android:visibility="gone"
-                    android:id="@+id/compare_delete"
-                    android:layout_gravity="right"
-                    android:background="#ffffff"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@android:drawable/ic_delete" />
-
-
-
-                <ImageButton
-                    android:visibility="gone"
-                    android:id="@+id/like_added"
-                    android:layout_gravity="right"
-                    android:background="#ffffff"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-
-                    app:srcCompat="@android:drawable/star_big_on" />
-
-                <ImageButton
-                    android:visibility="visible"
-                    android:background="#ffffff"
-                    android:layout_gravity="right"
-                    android:id="@+id/like_added_not"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-
-                    app:srcCompat="@android:drawable/btn_star_big_off" />
 
 
             </LinearLayout>
