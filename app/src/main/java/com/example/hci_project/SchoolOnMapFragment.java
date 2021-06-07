@@ -249,6 +249,7 @@ public class SchoolOnMapFragment extends Fragment implements OnMapReadyCallback 
           int finalI = i;
           marker.setOnClickListener(overlay -> {
             infoWindow.open(marker);
+            getView().findViewById(R.id.dragView).setVisibility(View.INVISIBLE);
             ((MainCopyActivity)getActivity()).changeView(finalI + 1, shownSchoolList.get(finalI));
             infoWindow.setOnClickListener(overlay1 -> {
               Intent intent = new Intent(getContext(), SchoolInfoActivity.class);

@@ -399,9 +399,9 @@ public class SchoolInfoActivity extends AppCompatActivity implements OnMapReadyC
             textView.setTextSize(18);
             tableRow3.addView(textView);        // tableRow에 view 추가
         }
-        if(tableRow3.getParent() != null)
+        if(tableRow3.getParent() != null) // 부모가 있으면
         {
-            ((ViewGroup)tableRow3.getParent()).removeView(tableRow3);
+            ((ViewGroup)tableRow3.getParent()).removeView(tableRow3); // 끊어줌
         }
         if(tableRow3 != null) {
             tableLayout3.addView(tableRow3);        // tableLayout에 tableRow 추가

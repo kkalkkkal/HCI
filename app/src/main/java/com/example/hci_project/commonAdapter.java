@@ -109,11 +109,11 @@ public class commonAdapter extends RecyclerView.Adapter<commonAdapter.ViewHolder
     holder.textView3.setText(school.getAddr());
     // 전화번호
     holder.textView4.setText(school.getTel().contains("-") ? school.getTel() : "없음");
-    
     holder.clickableLayout.setOnClickListener(v -> {
-      Intent intent = new Intent(context, SchoolInfoActivity.class);
+      Intent intent = new Intent(context.getApplicationContext(), SchoolInfoActivity.class);
       intent.putExtra("school", school);
       context.startActivity(intent);
+
     });
     
     holder.addCompareBtn.setOnClickListener((v) -> {

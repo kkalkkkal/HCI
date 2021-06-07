@@ -111,6 +111,7 @@ public class MainCopyActivity extends AppCompatActivity {
     if (frame.getChildCount() > 0) // 마커 클릭 화면 뒤로가기
     {
       frame.removeViewAt(0);
+      findViewById(R.id.dragView).setVisibility(View.VISIBLE);
     }
     else {
       if (viewPager.getCurrentItem() != 0 || !schoolOnMapFragment.closeSlidePanel()) {
