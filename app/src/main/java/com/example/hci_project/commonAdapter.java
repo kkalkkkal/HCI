@@ -30,6 +30,7 @@ public class commonAdapter extends RecyclerView.Adapter<commonAdapter.ViewHolder
   private List<School> myDataList = null;
   
   public class ViewHolder extends RecyclerView.ViewHolder {
+    TextView textView1;
     TextView textView2;
     TextView textView3;
     TextView textView4;
@@ -42,6 +43,7 @@ public class commonAdapter extends RecyclerView.Adapter<commonAdapter.ViewHolder
       super(itemView);
       
       // 뷰 객체에 대한 참조. (hold strong reference)
+      textView1 = itemView.findViewById(R.id.the_Type);
       textView2 = itemView.findViewById(R.id.the_name);
       textView3 = itemView.findViewById(R.id.the_add);
       textView4 = itemView.findViewById(R.id.the_phone);
@@ -84,8 +86,28 @@ public class commonAdapter extends RecyclerView.Adapter<commonAdapter.ViewHolder
     School school = myDataList.get(position);
     
     //ViewHolder가 관리하는 View에 position에 해당하는 데이터 바인딩
+    // Type 유형
+    if(school.getType().contains("법인"))
+    {
+      holder.textView1.setText("법인"); // 두 글자만
+    } else if (school.getType().contains("가정")){
+      holder.textView1.setText("가정");
+    } else if (school.getType().contains("민간")){
+      holder.textView1.setText("민간");
+    } else if (school.getType().contains("협동")){
+      holder.textView1.setText("협동");
+    } else if (school.getType().contains("사립")){
+      holder.textView1.setText("사립");
+    } else if (school.getType().contains("병설")){
+      holder.textView1.setText("병설");
+    } else {
+      holder.textView1.setText("공립");
+    }
+    // Name
     holder.textView2.setText(school.getName());
+    // 주소
     holder.textView3.setText(school.getAddr());
+    // 전화번호
     holder.textView4.setText(school.getTel().contains("-") ? school.getTel() : "없음");
     
     holder.clickableLayout.setOnClickListener(v -> {
