@@ -52,6 +52,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
+import jxl.Cell;
+
 public class SchoolInfoActivity extends AppCompatActivity implements OnMapReadyCallback {
 
 
@@ -112,6 +114,7 @@ public class SchoolInfoActivity extends AppCompatActivity implements OnMapReadyC
         ImageButton like_off = findViewById(R.id.like_added_not);
         ImageButton compare_add = findViewById(R.id.compare_add);
         ImageButton compare_delete = findViewById(R.id.compare_delete);
+        TextView shcool_name = findViewById(R.id.school_name);
         TextView address = findViewById(R.id.address);
         TextView opentime = findViewById(R.id.opentime);
         TextView homepage = findViewById(R.id.homepage);
@@ -208,6 +211,9 @@ public class SchoolInfoActivity extends AppCompatActivity implements OnMapReadyC
 
         ///////////////////////// 받아온 데이터를 여기에서 표시
 
+        // 이름
+        shcool_name.setText(school.getName());
+
         // 주소
         address.setText(school.getAddr());
 
@@ -230,22 +236,51 @@ public class SchoolInfoActivity extends AppCompatActivity implements OnMapReadyC
         // School Data 기준으로 검색
         if(school.getType().contains("어린이집")) // 어린이집의 경우
         {
-            IntroActivity.sheet0.findCell("");
+            Cell cell = IntroActivity.sheet0.findCell(school.getName()); // 엑셀파일에서 cell 반환
+            int row = cell.getRow(); // 몇 번째 행인지 반환
+
+            // 운영시간
+            opentime.setText(String.valueOf("월~금 : 12시간(07:30~19:30), 토요일 : 8시간(07:30~15:30)")); // 법령상 디폴트
+
+            // 운영방식
+            unyoung.setText(IntroActivity.sheet0.getCell(3,row).getContents());
+
+            // 영양
+            youngyang.setText("0");
+
+            // CCTV 개수
+            cctv.setText("0"); // 각 시도별 데이터를 찾아서 따로 구해야함.
 
         } else { // 유치원
 
+            // 운영시간
+            Cell cell = IntroActivity.sheet11.findCell(school.getName()); // 엑셀파일에서 cell 반환
+            int row = cell.getRow();
+            opentime.setText(IntroActivity.sheet0.getCell(10,row).getContents());
+
+            // 급식 운영방식
+            Cell cell2 = IntroActivity.sheet7.findCell(school.getName()); // 엑셀파일에서 cell 반환
+            int row2 = cell2.getRow();
+            if(IntroActivity.sheet7.getCell(5,row2).getContents().contains("위탁")){ // 위탁 업체도 같이 표기
+                unyoung.setText(IntroActivity.sheet7.getCell(5,row2).getContents() + IntroActivity.sheet7.getCell(6,row2).getContents());
+            }
+            else {
+                unyoung.setText(IntroActivity.sheet7.getCell(5, row2).getContents());
+            }
+
+            // 영양
+            Cell cell3 = IntroActivity.sheet7.findCell(school.getName()); // 엑셀파일에서 cell 반환
+            int row3 = cell3.getRow();
+            youngyang.setText(Integer.toString(Integer.parseInt(IntroActivity.sheet7.getCell(10,row3).getContents())
+                    + Integer.parseInt(IntroActivity.sheet7.getCell(11,row3).getContents())));
+
+            // CCTV 개수
+            Cell cell4 = IntroActivity.sheet3.findCell(school.getName()); // 엑셀파일에서 cell 반환
+            int row4 = cell4.getRow();
+            cctv.setText(IntroActivity.sheet3.getCell(18,row4).getContents());
+
         }
-        // 운영시간
-        opentime.setText(String.valueOf("0900~1800"));
 
-        // 운영방식
-        unyoung.setText(String.valueOf("직영"));
-
-        // 영양
-        youngyang.setText(String.valueOf("2"));
-
-        // CCTV 개수
-        cctv.setText("");
 
 
         /////////////////////////////// Bar chart /////////////////////////////
@@ -309,22 +344,68 @@ public class SchoolInfoActivity extends AppCompatActivity implements OnMapReadyC
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT));
 
+        // 시설 점검 여부
         for (int i = 0; i < 3; i++) {
             TextView textView = new TextView(this);
+            Cell cell4 = IntroActivity.sheet3.findCell(school.getName()); // 엑셀파일에서 cell 반환
+            int row4 = 0;
+            if (cell4 != null) {
+                row4 = cell4.getRow();
+            } else{
+                break;
+            }
             if (i == 0) {
                 textView.setText(String.valueOf("소방안전점검"));
             } else if (i == 1) {
-                textView.setText(String.valueOf("Y"));
+                row4 = cell4.getRow();
+                textView.setText(IntroActivity.sheet3.getCell(9, row4).getContents());
+
             } else {
-                textView.setText(String.valueOf("20210317"));
+                    row4 = cell4.getRow();
+                    textView.setText(IntroActivity.sheet3.getCell(10, row4).getContents());
+            }
+            textView.setGravity(Gravity.CENTER);
+            textView.setTextSize(18);
+            tableRow3.addView(textView);        // tableRow에 view 추가
+
+        }
+        if(tableLayout3.getParent() != null)
+        {
+            ((ViewGroup)tableLayout3.getParent()).removeView(tableLayout3);
+        }
+        if(tableRow3 != null) {
+            tableLayout3.addView(tableRow3);        // tableLayout에 tableRow 추가
+        }
+
+        // 전기 점검 여부
+        for (int i = 0; i < 3; i++) {
+            TextView textView = new TextView(this);
+            Cell cell4 = IntroActivity.sheet3.findCell(school.getName()); // 엑셀파일에서 cell 반환
+            int row4 = 0;
+            if (cell4 != null) {
+                row4 = cell4.getRow();
+            } else{
+                break;
+            }
+            if (i == 0) {
+                textView.setText(String.valueOf("전기안전점검"));
+            } else if (i == 1) {
+                    textView.setText(IntroActivity.sheet3.getCell(11, row4).getContents());
+            } else {
+                row4 = cell4.getRow();
+                textView.setText(IntroActivity.sheet3.getCell(12, row4).getContents());
             }
             textView.setGravity(Gravity.CENTER);
             textView.setTextSize(18);
             tableRow3.addView(textView);        // tableRow에 view 추가
         }
-        tableLayout3.addView(tableRow3);        // tableLayout에 tableRow 추가
-
-
+        if(tableRow3.getParent() != null)
+        {
+            ((ViewGroup)tableRow3.getParent()).removeView(tableRow3);
+        }
+        if(tableRow3 != null) {
+            tableLayout3.addView(tableRow3);        // tableLayout에 tableRow 추가
+        }
 
     }
 

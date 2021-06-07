@@ -278,15 +278,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="학급수와 유아수" />
-            <TableLayout
-                android:stretchColumns="*"
-                android:layout_width="400dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/tablelayout"
-                android:layout_marginTop="10dp"
 
+            <TableLayout
+                android:id="@+id/tablelayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:background="#999999"
-                >
+
+                android:stretchColumns="*">
 
                 <TableRow
 
@@ -342,7 +342,6 @@
                 </TableRow>
 
 
-
             </TableLayout>
 
 
@@ -352,12 +351,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="유아수와 교사수" />
+
             <TableLayout
-                android:stretchColumns="*"
-                android:layout_width="400dp"
-                android:layout_height="wrap_content"
                 android:id="@+id/tablelayout2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:stretchColumns="*"
 
 
                 >
@@ -396,10 +396,10 @@
                         android:id="@+id/hak_count2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
                         android:layout_marginHorizontal="1dp"
                         android:layout_marginBottom="1dp"
                         android:background="#ffffff"
+                        android:gravity="center"
                         android:text="0"
                         android:textSize="18sp" />
 
@@ -407,10 +407,10 @@
                         android:id="@+id/gyo_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
                         android:layout_marginHorizontal="1dp"
                         android:layout_marginBottom="1dp"
                         android:background="#ffffff"
+                        android:gravity="center"
                         android:text="0"
                         android:textSize="18sp" />
                 </TableRow>
@@ -544,13 +544,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="시설점검여부" />
+
             <TableLayout
+                android:id="@+id/tablelayout3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:layout_marginBottom="50dp"
                 android:stretchColumns="*"
-                android:layout_width="400dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/tablelayout3"
-                android:layout_marginTop="10dp"
 
                 >
 
@@ -558,8 +559,7 @@
 
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#999999"
-                    >
+                    android:background="#999999">
 
                     <TextView
                         android:id="@+id/checkA_dateTitleText3"
@@ -576,6 +576,7 @@
                         android:gravity="center"
                         android:text="점검여부"
                         android:textSize="18sp" />
+
                     <TextView
                         android:id="@+id/checkA_namedateText3"
                         android:layout_width="wrap_content"
