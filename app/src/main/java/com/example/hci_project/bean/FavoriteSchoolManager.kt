@@ -18,6 +18,15 @@ class FavoriteSchoolManager private constructor() {
     private val fileName = "favorite.txt"
 
     var list: ArrayList<School> = ArrayList()
+    fun getListAsSearchResult(): ArrayList<SearchResult> {
+        val searchResultList = ArrayList<SearchResult>()
+        list.map {
+            val searchResult = SearchResult.convert(it)
+            searchResult.obj = it
+            searchResultList.add(searchResult)
+        }
+        return searchResultList
+    }
 
     @Synchronized
     fun use(context: Context, @WorkerThread callback: (FavoriteSchoolManager?) -> Unit) {

@@ -6,7 +6,7 @@ class SearchResult(
     val type: Int,
     val title: String,
     val subtitle: String? = null,
-    val obj: Serializable? = null,
+    var obj: Serializable? = null,
     val timeStamp: Long = System.currentTimeMillis()
 ) : Serializable {
     companion object {
