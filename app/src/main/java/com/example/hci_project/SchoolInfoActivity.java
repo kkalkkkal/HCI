@@ -319,7 +319,7 @@ public class SchoolInfoActivity extends AppCompatActivity implements OnMapReadyC
             if (i == 0) {
                 hak_count.setText(String.valueOf(school.getRoomCnt()));
             } else {
-                ua_count.setText(String.valueOf(school.getRoomCnt()));
+                ua_count.setText(String.valueOf(school.getCurrentStudentCnt()));
             }
 
         }
@@ -335,7 +335,7 @@ public class SchoolInfoActivity extends AppCompatActivity implements OnMapReadyC
         for (int i = 0; i < 2; i++) {
 
             if (i == 0) {
-                hak_count2.setText(String.valueOf(school.getRoomCnt()));
+                hak_count2.setText(String.valueOf(school.getCurrentStudentCnt()));
             } else {
                 gyo_count.setText(String.valueOf(school.getTeacherCnt()));
             }
