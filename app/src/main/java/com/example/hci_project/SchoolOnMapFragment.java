@@ -1,6 +1,7 @@
 package com.example.hci_project;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -9,6 +10,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,11 +19,15 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.hci_project.MainCopyActivity;
+
 import com.example.hci_project.bean.School;
+import com.example.hci_project.bean.School2;
 import com.example.hci_project.bean.SchoolManager;
 import com.google.android.material.chip.Chip;
 import com.naver.maps.geometry.LatLng;
@@ -40,6 +47,8 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import java.util.ArrayList;
 
 import kotlin.Unit;
+
+import static androidx.core.content.ContextCompat.getSystemService;
 
 public class SchoolOnMapFragment extends Fragment implements OnMapReadyCallback {
   
@@ -68,7 +77,7 @@ public class SchoolOnMapFragment extends Fragment implements OnMapReadyCallback 
   Marker[] markers = new Marker[100];
   
   private Runnable waitingInit = null;
-  
+
   @Nullable
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -202,36 +211,45 @@ public class SchoolOnMapFragment extends Fragment implements OnMapReadyCallback 
             Marker marker = useMarker(markIndex);
             marker.setMap(null); // 기존 마커 삭제
             
-            if (school.getOnlySchoolType().equals(School.Companion.getTYPE_CHILD()) && !child_chip.isChecked())
+            if (school.getOnlySchoolType().equals(School.Companion.getTYPE_CHILD()) && !child_chip.isChecked()) // 어린이집
               continue;
-            else if (school.getOnlySchoolType().equals(School.Companion.getTYPE_KINDER()) && !kinder_chip.isChecked())
+            else if (school.getOnlySchoolType().equals(School.Companion.getTYPE_KINDER()) && !kinder_chip.isChecked()) // 유치원
               continue;
             
             marker.setPosition(new LatLng(school.getLat(), school.getLng())); // 마커 위치 재설정
             marker.setTag(school);
             // 마커 색깔, 유치원은 노랑
-            if (school.getOnlySchoolType().equals(School.Companion.getTYPE_CHILD())) {
+            if (school.getOnlySchoolType().equals(School.Companion.getTYPE_CHILD())) { // 어린이집
+              marker.setIcon(MarkerIcons.BLACK);
+              marker.setIconTintColor(Color.rgb(170,0,170)); // 빨간 색 + 파란색 = 보라색
+              marker.setCaptionText(school.getName()); // 캡션 설정
+            } else { // 유치원
               marker.setIcon(MarkerIcons.YELLOW);
-            } else {
-              marker.setIcon(MarkerIcons.RED);
+              marker.setIconTintColor(Color.TRANSPARENT);
+              marker.setCaptionText(school.getName()); // 캡션 설정
             }
-            marker.setIconTintColor(Color.TRANSPARENT);
+            marker.setCaptionRequestedWidth(200);
             marker.setMap(naverMap); // 마커 표시
           }
           shownSchoolList.add(school);
-          
+
+
+
+
           markIndex++;
         }
         
         // 리사이클러뷰에 SimpleTextAdapter 객체 지정.
         recyclerView.setAdapter(new commonAdapter(shownSchoolList));  // Adapter 등록
         resultCntText.setText(String.format("근처에 %d개의 유치원/어린이집이 있습니다", shownSchoolList.size()));
-        
+
         // 각 마커 클릭 리스너
         for (int i = 0; i <= markIndex; i++) {
           Marker marker = useMarker(i);
+          int finalI = i;
           marker.setOnClickListener(overlay -> {
             infoWindow.open(marker);
+            ((MainCopyActivity)getActivity()).changeView(finalI + 1, shownSchoolList.get(finalI));
             infoWindow.setOnClickListener(overlay1 -> {
               Intent intent = new Intent(getContext(), SchoolInfoActivity.class);
               intent.putExtra("school", (School) marker.getTag());
@@ -246,7 +264,7 @@ public class SchoolOnMapFragment extends Fragment implements OnMapReadyCallback 
       return Unit.INSTANCE;
     });
   }
-  
+
   //위치 권한 설정
   public boolean checkRequiredPermissions() {
     boolean allGranted = ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
@@ -323,4 +341,8 @@ public class SchoolOnMapFragment extends Fragment implements OnMapReadyCallback 
     }
     return false;
   }
+
+
+
+
 }

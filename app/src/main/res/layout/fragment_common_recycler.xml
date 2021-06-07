@@ -32,13 +32,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
+
                 <TextView
-                    android:background="@drawable/seekbar_thumb"
+                    android:id="@+id/the_Type"
                     style="@style/text_title"
-                    android:gravity="center"
-                    android:padding="16dp"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
+                    android:background="@drawable/seekbar_thumb"
+                    android:gravity="center"
+                    android:padding="16dp"
                     android:text="공립" />
                 <LinearLayout
                     android:layout_gravity="center"
@@ -59,11 +61,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="주소" />
+
                     <TextView
                         android:id="@+id/the_phone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="주소" />
+                        android:text="전화번호" />
                 </LinearLayout>
             </LinearLayout>
             <LinearLayout

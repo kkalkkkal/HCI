@@ -12,7 +12,10 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
+
     </androidx.viewpager2.widget.ViewPager2>
+
+
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavBar"
@@ -22,4 +25,6 @@
         app:itemIconTint="@drawable/nav_item_color_state"
         app:itemTextColor="@drawable/nav_item_color_state"
         app:menu="@menu/bottom_navigation_items" />
+
+
 </LinearLayout>
