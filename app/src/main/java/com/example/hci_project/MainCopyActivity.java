@@ -1,6 +1,7 @@
 package com.example.hci_project;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -129,7 +130,9 @@ public class MainCopyActivity extends AppCompatActivity {
     schoolOnMapFragment.onRequestPermissionsResult(requestCode, permissions, grantResults);
   }
 
+
   public void changeView(int index, School school){
+
     // LayoutInflater 초기화.
     LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     FrameLayout frame = (FrameLayout) findViewById(R.id.frame);
@@ -188,6 +191,9 @@ public class MainCopyActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
           //Todo : 제목을 누르면 검색 결과로 이동하기
+          Intent intent = new Intent(getApplicationContext(), SchoolInfoActivity.class);
+          intent.putExtra("school", school);
+          startActivity(intent);
         }
       });
 

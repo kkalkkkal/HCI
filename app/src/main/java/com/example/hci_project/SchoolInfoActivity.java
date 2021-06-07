@@ -1,14 +1,18 @@
 package com.example.hci_project;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentManager;
 
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -26,12 +30,25 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
+import com.naver.maps.geometry.LatLng;
+import com.naver.maps.map.CameraPosition;
+import com.naver.maps.map.CameraUpdate;
+import com.naver.maps.map.LocationTrackingMode;
+import com.naver.maps.map.MapFragment;
+import com.naver.maps.map.MapView;
+import com.naver.maps.map.NaverMap;
+import com.naver.maps.map.NaverMapOptions;
+import com.naver.maps.map.OnMapReadyCallback;
+import com.naver.maps.map.UiSettings;
+import com.naver.maps.map.overlay.InfoWindow;
+import com.naver.maps.map.overlay.Marker;
+import com.naver.maps.map.util.FusedLocationSource;
+import com.naver.maps.map.util.MarkerIcons;
+
+
+import com.example.hci_project.IntroActivity;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -39,27 +56,50 @@ public class SchoolInfoActivity extends AppCompatActivity implements OnMapReadyC
 
 
     private TableLayout tableLayout, tableLayout2, tableLayout3;
-    private GoogleMap googleMap;
+    private NaverMap naverMap2;
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
+    public FusedLocationSource locationSource;
+    CameraPosition cameraPosition;
+    CameraUpdate cameraUpdate;
+    private Marker marker; // 마커
+    private School school;
 
 
-    public class School {
+    @Override
+    public void onMapReady(@NonNull @NotNull NaverMap naverMap) {
+        this.naverMap2 = naverMap;
 
-        public String addr = "서울특별시 광진구 뚝섬로52다길 17 (자양동)";
-        public String name = "착한어린이집";
-        public String type = "민간";
-        public String postNum = "05100";
-        public String tel = "02-453-3072";
-        public int roomCnt = 5;
-        public int size = 109;
-        public int playgroundCnt = 1;
-        public int teacherCnt = 9;
-        public int maxStudentCnt = 39;
-        public int currentStudentCnt = 19;
-        public double lat = 37.530254;
-        public double lng = 127.079926;
-        public boolean isAvailableBus = false;
-        public String homePage = "";
-        public String sinceDate = "2005-05-10";
+
+        naverMap2.setLocationSource(locationSource); // 자기 위치 설정
+        naverMap2.setMapType(NaverMap.MapType.Basic); // 기본형 지도
+        naverMap2.setLayerGroupEnabled(NaverMap.LAYER_GROUP_BUILDING, true); // 빌딩 그룹 생성
+
+        naverMap2.setLocationTrackingMode(LocationTrackingMode.Follow); // 위치 추적 모드 실행
+
+
+        naverMap2.moveCamera(cameraUpdate);
+
+        locationSource =
+                new FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE); // 현재 위치 갱신
+
+        //네이버 지도 추가 UI 설정
+        UiSettings uiSettings = naverMap2.getUiSettings();
+        uiSettings.setLocationButtonEnabled(true); // 현 위치 버튼 활성화
+        uiSettings.setTiltGesturesEnabled(false); // 특수 제스처 기능 봉인
+
+        // 마커 표시하기 (자기 위치 기준 검색)
+        marker = new Marker();
+        marker.setMap(null); // 기존 마커 삭제
+        marker.setPosition(new LatLng(school.getLat(), school.getLng())); // 그냥 건국대 임시 마커
+        if (school.getType().contains("어린이집"))
+        {
+            marker.setIcon(MarkerIcons.BLACK);
+            marker.setIconTintColor(Color.rgb(170,0,170)); // 빨간 색 + 파란색 = 보라색
+        } else {
+            marker.setIcon(MarkerIcons.YELLOW); // 마커 색깔, 유치원은 노랑
+        }
+        marker.setMap(naverMap2); // 마커 표시
+
     }
 
 
@@ -67,6 +107,7 @@ public class SchoolInfoActivity extends AppCompatActivity implements OnMapReadyC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_school_info);
+
         ImageButton like_on = findViewById(R.id.like_added);
         ImageButton like_off = findViewById(R.id.like_added_not);
         ImageButton compare_add = findViewById(R.id.compare_add);
@@ -85,11 +126,30 @@ public class SchoolInfoActivity extends AppCompatActivity implements OnMapReadyC
         TextView hak_count2 = findViewById(R.id.hak_count2);
         TextView gyo_count = findViewById(R.id.gyo_count);
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        Intent intent = getIntent(); /*데이터 수신*/
+
+        school = (School)intent.getSerializableExtra("school"); /*클래스*/
+
+        // 네이버 지도 설정
+        cameraPosition = new CameraPosition(new LatLng(school.getLat(), school.getLng()), 13);// 넘겨받은 위치 기준으로 연다
+
+        cameraUpdate = CameraUpdate.scrollTo(new LatLng(school.getLat(), school.getLng()));
+        cameraUpdate = CameraUpdate.toCameraPosition(cameraPosition); // 맵 카메라 이동
+
+
+        locationSource =
+                new FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE); // 현재 위치 갱신
+
+
+        // 네이버 지도 호출하기
+        FragmentManager fm = getSupportFragmentManager();
+        MapFragment mapFragment = (MapFragment)fm.findFragmentById(R.id.map_fragment);
+        if (mapFragment == null) {
+            mapFragment = MapFragment.newInstance();
+            fm.beginTransaction().add(R.id.map_fragment, mapFragment).commit();
+        }
+
         mapFragment.getMapAsync(this);
-
-
-        School school = new School();
 
         like_on.setOnClickListener(new View.OnClickListener() {
 
@@ -148,48 +208,55 @@ public class SchoolInfoActivity extends AppCompatActivity implements OnMapReadyC
 
         ///////////////////////// 받아온 데이터를 여기에서 표시
 
-        address.setText(String.valueOf(school.addr));
-        opentime.setText(String.valueOf("0900~1800"));
+        // 주소
+        address.setText(school.getAddr());
 
-        if (school.homePage == "")
-            homepage.setText(String.valueOf("없음"));
+        // 홈페이지
+        if (school.getHomePage() == "")
+            homepage.setText("없음");
         else
-            homepage.setText(String.valueOf(school.homePage));
+            homepage.setText(String.valueOf(school.getHomePage()));
 
+        // 전화번호
+        callnumber.setText(String.valueOf(school.getTel()));
 
-        callnumber.setText(String.valueOf(school.tel));
-
-        if (school.isAvailableBus == false)
+        // 통학 버스 유무
+        if (school.isAvailableBus() == false)
             bus_number.setText(String.valueOf("없음"));
         else
             bus_number.setText(String.valueOf("있음"));
 
+
+        // School Data 기준으로 검색
+        if(school.getType().contains("어린이집")) // 어린이집의 경우
+        {
+            IntroActivity.sheet0.findCell("");
+
+        } else { // 유치원
+
+        }
+        // 운영시간
+        opentime.setText(String.valueOf("0900~1800"));
+
+        // 운영방식
         unyoung.setText(String.valueOf("직영"));
+
+        // 영양
         youngyang.setText(String.valueOf("2"));
-        cctv.setText(String.valueOf("3"));
+
+        // CCTV 개수
+        cctv.setText("");
 
 
         /////////////////////////////// Bar chart /////////////////////////////
 
-        float a = (float) (school.teacherCnt / school.roomCnt);
+        float a = (float) (school.getTeacherCnt() / school.getRoomCnt());
         BarChart chart = findViewById(R.id.barchart);
         ArrayList NoOfEmp2 = new ArrayList();
-        for (int i = 1; i <= school.roomCnt; i++) {
+        for (int i = 1; i <= school.getRoomCnt(); i++) {
             NoOfEmp2.add(new BarEntry(i, a));
         }
-/*
-        ArrayList year2 = new ArrayList();
-        year2.add("2008");
-        year2.add("2009");
-        year2.add("2010");
-        year2.add("2011");
-        year2.add("2012");
-        year2.add("2013");
-        year2.add("2014");
-        year2.add("2015");
-        year2.add("2016");
-        year2.add("2017");
- */
+
         BarDataSet bardataset = new BarDataSet(NoOfEmp2, "학급당 담당 교사수");
         chart.animateY(5000);
         BarData data2 = new BarData(bardataset);
@@ -211,9 +278,9 @@ public class SchoolInfoActivity extends AppCompatActivity implements OnMapReadyC
 
 
             if (i == 0) {
-                hak_count.setText(String.valueOf(school.roomCnt));
+                hak_count.setText(String.valueOf(school.getRoomCnt()));
             } else {
-                ua_count.setText(String.valueOf(school.roomCnt));
+                ua_count.setText(String.valueOf(school.getRoomCnt()));
             }
 
         }
@@ -229,9 +296,9 @@ public class SchoolInfoActivity extends AppCompatActivity implements OnMapReadyC
         for (int i = 0; i < 2; i++) {
 
             if (i == 0) {
-                hak_count2.setText(String.valueOf(school.roomCnt));
+                hak_count2.setText(String.valueOf(school.getRoomCnt()));
             } else {
-                gyo_count.setText(String.valueOf(school.teacherCnt));
+                gyo_count.setText(String.valueOf(school.getTeacherCnt()));
             }
         }
 
@@ -258,65 +325,10 @@ public class SchoolInfoActivity extends AppCompatActivity implements OnMapReadyC
         tableLayout3.addView(tableRow3);        // tableLayout에 tableRow 추가
 
 
-    }
-
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        this.googleMap = googleMap;
-        LatLng latLng = new LatLng(37.557667, 126.926546);
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        googleMap.moveCamera(CameraUpdateFactory.zoomTo(15));
-        MarkerOptions markerOptions = new MarkerOptions().position(latLng).title("홍대입구역");
-        googleMap.addMarker(markerOptions);
-
-        if(ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED) {
-            googleMap.setMyLocationEnabled(true);
-        }
-        else{
-            checkLocationPermissionWithRationale();
-        }
-
-
-
 
     }
 
-    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
-    private void checkLocationPermissionWithRationale() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
-                new AlertDialog.Builder(this)
-                        .setTitle("위치정보")
-                        .setMessage("이 앱을 사용하기 위해서는 위치정보에 접근이 필요합니다. 위치정보 접근을 허용하여 주세요.")
-                        .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                ActivityCompat.requestPermissions(SchoolInfoActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
-                            }
-                        }).create().show();
-            } else {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
-            }
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_LOCATION: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                        googleMap.setMyLocationEnabled(true);
-                    }
-                } else {
-                    Toast.makeText(this, "permission denied", Toast.LENGTH_LONG).show();
-                }
-                return;
-            }
-        }
-    }
 
 
 
