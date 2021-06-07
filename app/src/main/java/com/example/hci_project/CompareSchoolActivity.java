@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.example.hci_project.bean.School;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.Entry;
@@ -39,6 +40,7 @@ import jxl.read.biff.BiffException;
 public class CompareSchoolActivity extends AppCompatActivity {
 
 
+    School school_data;
     public String[] adress = new String[400];
     public int last = 5;
     Intent intent;
@@ -58,6 +60,7 @@ public class CompareSchoolActivity extends AppCompatActivity {
         intent = getIntent();
        // String check = intent.getExtras().getString("last");
         check = intent.getCharExtra("last", 'a');
+        school_data = (School)intent.getSerializableExtra("school"); /*클래스*/
 
         if(check=='b')
         {
@@ -88,12 +91,7 @@ public class CompareSchoolActivity extends AppCompatActivity {
         ll.setOrientation(LinearLayout.HORIZONTAL);
 
 
-
-
-
         for (int j = 0; j <= last; j++) {
-
-
 
 /*
             // TextView 생성
@@ -116,9 +114,7 @@ public class CompareSchoolActivity extends AppCompatActivity {
             btn.setId(j + 1);
 
             if (j != last) {
-                btn.setText("유치원" + (j+1));
-
-
+                btn.setText(school_data.getName() + (j+1));
                 if(j==0){
                     adress[j] = "05100";
                 }else if(j==1){
@@ -130,9 +126,6 @@ public class CompareSchoolActivity extends AppCompatActivity {
                 }else if(j==4){
                     adress[j] = "04956";
                 }
-
-
-
 
             }
             else {
@@ -164,16 +157,12 @@ public class CompareSchoolActivity extends AppCompatActivity {
               //  btn.setBackgroundColor(Color.rgb(168, 104, 63));
             }
 
-
-
-
             btn.setLayoutParams(params);
             //버튼 add
 
             ll.addView(btn);
 
             final int position = j;
-
 
             int finalJ = j;
             btn.setOnClickListener(new OnClickListener() {

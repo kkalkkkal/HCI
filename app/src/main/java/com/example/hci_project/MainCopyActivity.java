@@ -112,6 +112,7 @@ public class MainCopyActivity extends AppCompatActivity {
     {
       frame.removeViewAt(0);
       findViewById(R.id.dragView).setVisibility(View.VISIBLE);
+      SchoolOnMapFragment.infoWindow.close();
     }
     else {
       if (viewPager.getCurrentItem() != 0 || !schoolOnMapFragment.closeSlidePanel()) {
@@ -203,11 +204,6 @@ public class MainCopyActivity extends AppCompatActivity {
         public void onClick(View v) {
           // Todo : 즐겨찾기 버튼 누르면 추가
 
-/*
-          bookmarkList.add(new School2(dataList.get(index - 1).getAddr(), dataList.get(index - 1).getName(), dataList.get(index - 1).getType(),
-                  dataList.get(index - 1).getTel(), dataList.get(index - 1).getX(), dataList.get(index - 1).getY()));
-
-*/
 
         }
       });

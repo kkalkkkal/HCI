@@ -24,6 +24,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.hci_project.bean.FavoriteSchoolManager;
 import com.example.hci_project.bean.School;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarData;
@@ -53,6 +54,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 import jxl.Cell;
+import kotlin.Unit;
 
 public class SchoolInfoActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -152,12 +154,15 @@ public class SchoolInfoActivity extends AppCompatActivity implements OnMapReadyC
 
         mapFragment.getMapAsync(this);
 
+        
+        // 즐겨찾기
         like_on.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "Like_off", Toast.LENGTH_LONG).show();
                 like_on.setVisibility(View.GONE);
                 like_off.setVisibility(View.VISIBLE);
+
                 //     Intent intent = new Intent(SchoolInfoActivity.this, BookmarkActivity.class);
 
                 //    startActivity(intent);
@@ -166,6 +171,9 @@ public class SchoolInfoActivity extends AppCompatActivity implements OnMapReadyC
 
         });
 
+
+
+        // 즐겨찾기 해제
         like_off.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
@@ -187,12 +195,14 @@ public class SchoolInfoActivity extends AppCompatActivity implements OnMapReadyC
                 compare_add.setVisibility(View.GONE);
                 compare_delete.setVisibility(View.VISIBLE);
                 Intent intent = new Intent(SchoolInfoActivity.this, CompareSchoolActivity.class);
+                intent.putExtra("school", school);
                 intent.putExtra("last", 'b');
                 startActivity(intent);
                 finish();
             }
 
         });
+
         compare_delete.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
@@ -200,6 +210,7 @@ public class SchoolInfoActivity extends AppCompatActivity implements OnMapReadyC
                 compare_add.setVisibility(View.VISIBLE);
                 compare_delete.setVisibility(View.GONE);
                 Intent intent = new Intent(SchoolInfoActivity.this, CompareSchoolActivity.class);
+                intent.putExtra("school", school);
                 intent.putExtra("last", 'c');
                 startActivity(intent);
                 finish();
