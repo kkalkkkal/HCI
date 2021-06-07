@@ -60,42 +60,49 @@ class SchoolManager private constructor() {
 
     private fun applyFilter(schoolList: ArrayList<School>, filterSetting: FilterSetting): ArrayList<School> {
         val resultList: ArrayList<School> = ArrayList(schoolList)
-        //BUS
-        if (filterSetting.facilitates.contains(FilterSetting.Facilitate.BUS_AVAILABLE)) {
-            val iterator = resultList.iterator()
-            while (iterator.hasNext()) {
-                val school = iterator.next()
+        val iterator = resultList.iterator()
+        while (iterator.hasNext()) {
+            val school = iterator.next()
+            //BUS
+            if (filterSetting.facilitates.contains(FilterSetting.Facilitate.BUS_AVAILABLE)) {
                 if (!school.isAvailableBus) {
                     iterator.remove()
+                    continue
                 }
             }
-        }
-        //school size
-        if (filterSetting.minSchoolSize != 0) {
-            val iterator = resultList.iterator()
-            while (iterator.hasNext()) {
-                val school = iterator.next()
+            //school size
+            if (filterSetting.minSchoolSize != 0) {
                 if (school.size < filterSetting.minSchoolSize) {
                     iterator.remove()
+                    continue
                 }
             }
-        }
-        //kids per teacher
-        if (filterSetting.maxKidsPerTeacher != 0) {
-            val iterator = resultList.iterator()
-            while (iterator.hasNext()) {
-                val school = iterator.next()
+            //kids per teacher
+            if (filterSetting.maxKidsPerTeacher != 0) {
                 if (school.getKidsPerTeacher() < filterSetting.minSchoolSize) {
                     iterator.remove()
+                    continue
                 }
             }
-        }
-        if (filterSetting.maxDistanceKmFromHere != 5 && LocationUtil.location != null) {
-            val iterator = resultList.iterator()
-            while (iterator.hasNext()) {
-                val school = iterator.next()
+            //distance
+            if (filterSetting.maxDistanceKmFromHere != 5 && LocationUtil.location != null) {
                 if (school.getDistanceFromUserLocation() > filterSetting.maxDistanceKmFromHere) {
                     iterator.remove()
+                    continue
+                }
+            }
+            //time: startHour
+            if (filterSetting.schoolStartHour != 0) {
+                if (school.serviceTime == null || school.serviceTime!!.startHour > filterSetting.schoolStartHour) {
+                    iterator.remove()
+                    continue
+                }
+            }
+            //time: endHour
+            if (filterSetting.schoolEndHour != 0) {
+                if (school.serviceTime == null || school.serviceTime!!.endHour < filterSetting.schoolEndHour) {
+                    iterator.remove()
+                    continue
                 }
             }
         }
@@ -165,6 +172,9 @@ class SchoolManager private constructor() {
                         val mealServiceCompany = currentRow_meal[getColIndex('g')].contents!!
                         if (mealServiceCompany != "")
                             school.mealServiceType += "(${mealServiceCompany})"
+
+                        val serviceTime: ServiceTime? = ServiceTime.build(currentRow[getColIndex('k')].contents!!)
+                        school.serviceTime = serviceTime
 
                         val safety: Safety = Safety(
                                 currentRow_safety[getColIndex('f')].contents!! != "N",

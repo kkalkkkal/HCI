@@ -150,7 +150,7 @@ class SearchFilterActivity : AppCompatActivity() {
                     id: Long
                 ) {
                     filterSetting.use {
-                        filterSetting.schoolEndTime =
+                        filterSetting.schoolEndHour =
                             if (position != 0) hours[position].replace("시", "")
                                 .toInt() else 0
                     }
@@ -159,8 +159,8 @@ class SearchFilterActivity : AppCompatActivity() {
                 override fun onNothingSelected(parent: AdapterView<*>?) {
                 }
             }
-            if (filterSetting.schoolEndTime != 0)
-                closeTimeSpinner.setSelection(filterSetting.schoolEndTime)
+            if (filterSetting.schoolEndHour != 0)
+                closeTimeSpinner.setSelection(filterSetting.schoolEndHour)
 
             renderFilterValues()
         }

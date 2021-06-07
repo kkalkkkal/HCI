@@ -18,7 +18,7 @@ class School(
         val lng: Double,
         val isAvailableBus: Boolean,
         val homePage: String,
-        val sinceDate: String,
+        val sinceDate: String
 ) : Serializable {
     companion object {
         val TYPE_CHILD = "어린이집"
@@ -32,8 +32,11 @@ class School(
     //영양사 직원 수
     //-1일 경우 정보 없음
     var mealManagerCnt: Int = -1
+
     //위탁 또는 직영
     var mealServiceType: String? = null
+
+    var serviceTime: ServiceTime? = null
 
 
     fun getOnlySchoolType(): String {
