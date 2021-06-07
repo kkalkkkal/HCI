@@ -1,10 +1,12 @@
 package com.example.hci_project.bean
 
+import java.io.Serializable
+
 class ServiceTime(
         val startHour: Int = 0,
         val startMin: Int = 0,
         val endHour: Int = 0,
-        val endMin: Int = 0) {
+        val endMin: Int = 0):Serializable {
 
     companion object {
         fun build(serviceTime: String): ServiceTime? {
