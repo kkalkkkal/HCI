@@ -20,12 +20,13 @@ import com.example.hci_project.bean.School;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import kotlin.Unit;
 
-public class commonAdapter extends RecyclerView.Adapter<commonAdapter.ViewHolder> {
+public class commonAdapter extends RecyclerView.Adapter<commonAdapter.ViewHolder> implements Serializable {
   
   private List<School> myDataList = null;
   
@@ -54,8 +55,8 @@ public class commonAdapter extends RecyclerView.Adapter<commonAdapter.ViewHolder
     }
   }
   
-  commonAdapter(List<School> dataList) {
-    myDataList = dataList;
+  commonAdapter(List<School> dataList)  {
+    this.myDataList = dataList;
   }
   
   private Context context = null;
@@ -110,15 +111,19 @@ public class commonAdapter extends RecyclerView.Adapter<commonAdapter.ViewHolder
     // 전화번호
     holder.textView4.setText(school.getTel().contains("-") ? school.getTel() : "없음");
     holder.clickableLayout.setOnClickListener(v -> {
-      Intent intent = new Intent(context.getApplicationContext(), SchoolInfoActivity.class);
+      Intent intent = new Intent(context, SchoolInfoActivity.class);
+
       intent.putExtra("school", school);
       context.startActivity(intent);
 
     });
     
+    // 비교군 추가
     holder.addCompareBtn.setOnClickListener((v) -> {
     
     });
+    
+    // 즐겨찾기 추가
     holder.addFavoriteBtn.setOnClickListener((v) -> {
       FavoriteSchoolManager.Companion.getInstance().use(context, (manager) -> {
         handler.post(() -> {

@@ -1,5 +1,7 @@
 package com.example.hci_project.bean
 
+import java.io.Serializable
+
 class Safety(
         //대피훈련여부
         val escapeCheck: Boolean,
@@ -13,4 +15,4 @@ class Safety(
         val playgroundCheck: Boolean,
         //총 cctv 갯수
         val cctvCnt: Int
-)
+) : Serializable
