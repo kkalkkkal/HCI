@@ -95,19 +95,29 @@ public class MainCopyActivity extends AppCompatActivity {
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             switch (item.getTitle().toString()) {
                 case "주변":
+                    updateActionBarTitle("주변 유치원");
                     viewPager.setCurrentItem(0);
                     break;
                 case "비교":
+                    updateActionBarTitle("유치원 비교");
                     viewPager.setCurrentItem(1);
                     break;
                 case "즐겨찾기":
+                    updateActionBarTitle("즐겨찾기");
                     viewPager.setCurrentItem(2);
                     bookmarkFragment.refreshList();
                     break;
             }
             return true;
         });
+        updateActionBarTitle("주변 유치원");
     }
+
+    private void updateActionBarTitle(String title) {
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setTitle(title);
+    }
+
 
     @Override
     protected void onResume() {
