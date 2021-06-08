@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,6 +15,7 @@ import com.example.hci_project.bean.School
 import com.example.hci_project.bean.SchoolManager
 import com.example.hci_project.bean.SearchResult
 import com.example.hci_project.bean.SearchResultManager
+
 
 class SearchResultFragment : Fragment() {
 
@@ -88,13 +90,6 @@ class SearchResultFragment : Fragment() {
         recylcerView?.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = SearchResultRecyclerViewAdapter(resultList, onClick, onRemove)
-
-            addItemDecoration(
-                DividerItemDecoration(
-                    context!!,
-                    DividerItemDecoration.VERTICAL
-                )
-            )
         }
     }
 }

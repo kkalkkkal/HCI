@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
@@ -102,12 +103,6 @@ public class BookmarkFragment extends Fragment {
 
                 RecyclerView recyclerView = getView().findViewById(R.id.list);
                 recyclerView.setAdapter(adapter);
-                recyclerView.addItemDecoration(
-                        new DividerItemDecoration(
-                                getContext(),
-                                DividerItemDecoration.VERTICAL
-                        )
-                );
 
                 TextView msgView = getView().findViewById(R.id.msg);
                 msgView.setText(String.format("%d개의 즐겨찾기 유치원/어린이집이 있습니다", manager.getList().size()));
