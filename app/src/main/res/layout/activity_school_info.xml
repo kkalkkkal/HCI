@@ -39,7 +39,7 @@
                     <ImageButton
                         style="@style/imageButton"
                         android:id="@+id/compare_add"
-                        android:src="@drawable/ic_baseline_add_24"/>
+                        android:src="@drawable/ic_baseline_playlist_add_24"/>
                     <ImageButton
                         style="@style/imageButton"
                         android:id="@+id/addFavoriteBtn"
