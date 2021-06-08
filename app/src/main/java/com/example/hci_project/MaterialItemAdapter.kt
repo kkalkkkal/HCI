@@ -21,8 +21,19 @@ class MaterialItemAdapter(
         val explain: String,
         val onClick: (() -> Unit)? = null
     ) {
+        constructor(
+            headerText: String,
+            icon: Int,
+            explain: String,
+            onClick: (() -> Unit)? = null
+        ) : this(icon, explain, onClick) {
+            this.headerText = headerText
+        }
+
         @ColorRes
         var tint: Int? = null
+
+        var headerText: String? = null
     }
 
     private lateinit var context: Context
@@ -45,10 +56,34 @@ class MaterialItemAdapter(
                 item.icon
             )
         )
-        if(item.tint!= null){
-            holder.iconView.setColorFilter(ContextCompat.getColor(context, item.tint!!))
-        }else{
+        if (item.tint != null) {
+            try {
+                holder.iconView.setColorFilter(ContextCompat.getColor(context, item.tint!!))
+            } catch (e: Exception) {
+                holder.iconView.setColorFilter(item.tint!!)
+            }
+        } else {
             holder.iconView.setColorFilter(ContextCompat.getColor(context, R.color.yellow))
+        }
+
+        if (item.headerText != null) {
+            holder.headerView.apply {
+                visibility = View.VISIBLE
+                setText(item.headerText)
+                if (item.tint != null) {
+                    try {
+                        setTextColor(ContextCompat.getColor(context, item.tint!!))
+                    } catch (e: Exception) {
+                        setTextColor(item.tint!!)
+                    }
+                }
+            }
+        } else {
+            holder.headerView.apply {
+                visibility = View.GONE
+                setTextColor(ContextCompat.getColor(context, R.color.gray_light))
+            }
+
         }
 
         holder.itemView.setOnClickListener {
@@ -65,5 +100,6 @@ class MaterialItemAdapter(
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val explainView: TextView = view.findViewById(R.id.explain)
         val iconView: ImageView = view.findViewById(R.id.icon)
+        val headerView: TextView = view.findViewById(R.id.header_text)
     }
 }

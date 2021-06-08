@@ -32,24 +32,19 @@ class SelectableSchoolAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val school = values[position]
-        if (selectedList.contains(school)) {
-            //remove
-        } else {
-            selectedList.add(school)
-        }
 
         holder.apply {
             itemView.setOnClickListener {
-                checkBoxView.isChecked= !checkBoxView.isChecked
+                checkBoxView.isChecked = !checkBoxView.isChecked
             }
             checkBoxView.setOnCheckedChangeListener { buttonView, isChecked ->
-                if (selectedList.contains(school)) {
+                if (!isChecked) {
                     //remove
                     val iterator = selectedList.iterator()
                     while (iterator.hasNext()) {
-                        if (iterator.next().equals(school)) {
+                        if (iterator.next() == school) {
                             iterator.remove()
-                            break;
+                            break
                         }
                     }
                 } else {

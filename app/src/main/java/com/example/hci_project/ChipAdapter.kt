@@ -8,22 +8,23 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class ChipAdapter(
-        var values: List<Chip>)
-    : RecyclerView.Adapter<ChipAdapter.ViewHolder>() {
-
-    private val colors= arrayOf<@androidx.annotation.ColorInt Int>(
+    var values: List<Chip>
+) : RecyclerView.Adapter<ChipAdapter.ViewHolder>() {
+    companion object {
+        val colors = arrayOf<@androidx.annotation.ColorInt Int>(
             Color.rgb(3, 169, 244),
             Color.rgb(244, 67, 54),
             Color.rgb(233, 30, 99),
             Color.rgb(156, 39, 176),
             Color.rgb(0, 150, 136),
             Color.rgb(255, 152, 0)
-    )
+        )
+    }
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.list_chip, parent, false)
+            .inflate(R.layout.list_chip, parent, false)
         return ViewHolder(view)
     }
 
@@ -34,7 +35,7 @@ class ChipAdapter(
             item.onClick?.run()
         }
 
-        holder.itemView.background.setTint(colors[position%colors.size])
+        holder.itemView.background.setTint(colors[position % colors.size])
         holder.chipTV.setTextColor(Color.WHITE)
     }
 
