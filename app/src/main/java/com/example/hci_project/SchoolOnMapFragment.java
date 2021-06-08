@@ -79,7 +79,7 @@ public class SchoolOnMapFragment extends Fragment implements OnMapReadyCallback 
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
     
-    if (waitingInit != null && checkRequiredPermissions()) {
+    if (waitingInit != null) {
       waitingInit.run();
       waitingInit = null;
     }
