@@ -183,7 +183,7 @@ public class commonAdapter extends RecyclerView.Adapter<commonAdapter.ViewHolder
                         Label label2 = new Label(1, rowTotal, school.getName()); // 유치원 or 어린이집 이름
                         writeSheet.addCell(label2);
 
-                        Label label3 = new Label(2, rowTotal, Integer.toString(school.getKidsPerTeacher())); // 선생 당 학생 수 (int)
+                        Label label3 = new Label(2, rowTotal, Float.toString(school.getKidsPerTeacher())); // 선생 당 학생 수 (int)
                         writeSheet.addCell(label3);
 
                         // 버스 운행 여부 & 자동차 수
