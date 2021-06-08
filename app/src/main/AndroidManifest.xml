@@ -9,7 +9,6 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/Theme.HCI_Project">
-        <activity android:name=".MainActivity" /> <!--네이버지도 클라이언트 아이디-->
         <activity android:name=".MainCopyActivity" />
         <activity android:name=".IntroActivity">
             <intent-filter>
