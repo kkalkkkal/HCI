@@ -30,6 +30,8 @@ import com.naver.maps.map.util.MarkerIcons;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
