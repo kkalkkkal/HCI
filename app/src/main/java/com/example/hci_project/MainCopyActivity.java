@@ -66,7 +66,7 @@ public class MainCopyActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.main_viewPager);
 
         viewPagerFragmentList.add(schoolOnMapFragment.init());
-        viewPagerFragmentList.add(new CompareSchoolFragment());
+        viewPagerFragmentList.add(new CompareSchoolListFragment());
         viewPagerFragmentList.add(bookmarkFragment);
 
         initUI(); // UI 초기화

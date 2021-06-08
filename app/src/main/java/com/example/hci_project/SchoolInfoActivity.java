@@ -14,6 +14,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.hci_project.bean.CompareSchoolManager;
 import com.example.hci_project.bean.FavoriteSchoolManager;
 import com.example.hci_project.bean.LocationUtil;
 import com.example.hci_project.bean.Safety;
@@ -104,14 +105,36 @@ public class SchoolInfoActivity extends AppCompatActivity implements OnMapReadyC
         TextView school_addr = findViewById(R.id.school_addr);
 
         ImageButton compareBtn = findViewById(R.id.compare_add);
-        ImageButton favoriteBtn = findViewById(R.id.addFavoriteBtn);
+        if (CompareSchoolManager.Companion.contains(school)) {
+            compareBtn.setColorFilter(getColor(R.color.yellow));
+        } else {
+            compareBtn.setColorFilter(getColor(R.color.gray_light));
+        }
         compareBtn.setOnClickListener(v -> {
-            Intent __intent = new Intent(SchoolInfoActivity.this, CompareSchoolActivity.class);
-            __intent.putExtra("school", school);
-            __intent.putExtra("last", 'b');
-            startActivity(__intent);
-            finish();
+            //action
+            if (CompareSchoolManager.Companion.contains(school)) {
+                CompareSchoolManager.Companion.remove(school);
+            } else {
+                CompareSchoolManager.Companion.add(school);
+            }
+            //update ui
+            if (CompareSchoolManager.Companion.contains(school)) {
+                Toast.makeText(this, "비교 리스트에 추가되었습니다", Toast.LENGTH_SHORT).show();
+                compareBtn.setColorFilter(getColor(R.color.yellow));
+            } else {
+                Toast.makeText(this, "비교 리스트에서 제거되었습니다", Toast.LENGTH_SHORT).show();
+                compareBtn.setColorFilter(getColor(R.color.gray_light));
+            }
         });
+
+        ImageButton favoriteBtn = findViewById(R.id.addFavoriteBtn);
+//        compareBtn.setOnClickListener(v -> {
+//            Intent __intent = new Intent(SchoolInfoActivity.this, CompareSchoolActivity.class);
+//            __intent.putExtra("school", school);
+//            __intent.putExtra("last", 'b');
+//            startActivity(__intent);
+//            finish();
+//        });
         FavoriteSchoolManager.Companion.getInstance().use(this, manager -> {
             if (manager == null)
                 return Unit.INSTANCE;
