@@ -288,7 +288,10 @@ public class MainCopyActivity extends AppCompatActivity {
 
                 if (writeSheet.findCell(school.getName()) != null){ // 이미 있으면 삭제
                   writeSheet.removeRow(writeSheet.findCell(school.getName()).getRow()); // 해당 행 삭제
+                  Toast.makeText(getApplicationContext(), "compare_delete", Toast.LENGTH_LONG).show();
                 } else { // 없으면 추가
+                  Toast.makeText(getApplicationContext(), "compare_add", Toast.LENGTH_LONG).show();
+
                   Label label = new Label(0, rowTotal, Integer.toString(rowTotal)); // 번호
                   writeSheet.addCell(label);
 

@@ -173,8 +173,10 @@ public class commonAdapter extends RecyclerView.Adapter<commonAdapter.ViewHolder
               
                     if (writeSheet.findCell(school.getName()) != null){ // 이미 있으면 삭제
                         writeSheet.removeRow(writeSheet.findCell(school.getName()).getRow()); // 해당 행 삭제
-                    } else { // 없으면 추가
+                        Toast.makeText(context.getApplicationContext(), "compare_delete", Toast.LENGTH_LONG).show();
 
+                    } else { // 없으면 추가
+                        Toast.makeText(context.getApplicationContext(), "compare_added", Toast.LENGTH_LONG).show();
                         Label label = new Label(0, rowTotal, Integer.toString(rowTotal)); // 번호
                         writeSheet.addCell(label);
 
