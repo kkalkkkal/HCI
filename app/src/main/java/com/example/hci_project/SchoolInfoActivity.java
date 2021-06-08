@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -122,6 +123,8 @@ public class SchoolInfoActivity extends AppCompatActivity implements OnMapReadyC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_school_info);
 
+        Button button1 = findViewById(R.id.btn1);
+        Button button2 = findViewById(R.id.btn2);
         ImageButton like_on = findViewById(R.id.like_added);
         ImageButton like_off = findViewById(R.id.like_added_not);
         ImageButton compare_add = findViewById(R.id.compare_add);
@@ -227,7 +230,7 @@ public class SchoolInfoActivity extends AppCompatActivity implements OnMapReadyC
         compare_add.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "compare_added", Toast.LENGTH_LONG).show();
+
                 //compare_add.setVisibility(View.GONE);
                 //compare_delete.setVisibility(View.VISIBLE);
 
@@ -267,7 +270,9 @@ public class SchoolInfoActivity extends AppCompatActivity implements OnMapReadyC
                             WritableCell cell = null;
                             if (writeSheet.findCell(school.getName()) != null){ // 이미 있으면 삭제
                                 writeSheet.removeRow(writeSheet.findCell(school.getName()).getRow()); // 해당 행 삭제
+                                Toast.makeText(getApplicationContext(), "compare_delete", Toast.LENGTH_LONG).show();
                             } else { // 없으면 추가
+                                Toast.makeText(getApplicationContext(), "compare_added", Toast.LENGTH_LONG).show();
                                 Label label = new Label(0, rowTotal, Integer.toString(rowTotal)); // 번호
                                 writeSheet.addCell(label);
 
@@ -447,6 +452,8 @@ public class SchoolInfoActivity extends AppCompatActivity implements OnMapReadyC
         // School Data 기준으로 검색
         if(school.getType().contains("어린이집")) // 어린이집의 경우
         {
+            button1.setVisibility(View.VISIBLE);
+            button2.setVisibility(View.GONE);
             Cell cell = IntroActivity.sheet0.findCell(school.getName()); // 엑셀파일에서 cell 반환
             int row = cell.getRow(); // 몇 번째 행인지 반환
 
@@ -463,7 +470,8 @@ public class SchoolInfoActivity extends AppCompatActivity implements OnMapReadyC
             cctv.setText("0"); // 각 시도별 데이터를 찾아서 따로 구해야함.
 
         } else { // 유치원
-
+            button1.setVisibility(View.GONE);
+            button2.setVisibility(View.VISIBLE);
             // 운영시간
             Cell cell = IntroActivity.sheet11.findCell(school.getName()); // 엑셀파일에서 cell 반환
             int row = cell.getRow();

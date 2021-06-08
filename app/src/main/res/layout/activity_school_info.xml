@@ -37,22 +37,26 @@
 
                 <Button
                     android:id="@+id/btn1"
-                   android:layout_width="wrap_content"
+                    style="@style/Widget.AppCompat.Button"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:textSize="10dp"
-                    android:background="@drawable/round_btn2"
-                    android:text="어린이집" />
+                    android:background="@drawable/round_btn"
+                    android:backgroundTint="#673AB7"
+                    android:backgroundTintMode="add"
+                    android:text="어린이집"
+                    android:textColor="@color/black"
+                    android:textSize="15dp"
+                    app:iconTint="#673AB7" />
 
                 <Button
-                    android:visibility="gone"
                     android:id="@+id/btn2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/round_btn3"
+                    android:text="유치원"
                     android:textColor="@color/white"
                     android:textSize="10dp"
-                    android:background="@drawable/round_btn4"
-                    android:text="유치원" />
+                    android:visibility="gone" />
 
                 <ImageButton
                     android:id="@+id/compare_add"
