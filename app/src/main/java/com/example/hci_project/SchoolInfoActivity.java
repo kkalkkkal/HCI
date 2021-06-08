@@ -11,7 +11,6 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.ImageButton;
-import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,7 +26,6 @@ import com.naver.maps.map.NaverMap;
 import com.naver.maps.map.OnMapReadyCallback;
 import com.naver.maps.map.UiSettings;
 import com.naver.maps.map.overlay.Marker;
-import com.naver.maps.map.util.FusedLocationSource;
 import com.naver.maps.map.util.MarkerIcons;
 
 import org.jetbrains.annotations.NotNull;
@@ -40,10 +38,7 @@ import kotlin.Unit;
 public class SchoolInfoActivity extends AppCompatActivity implements OnMapReadyCallback {
 
 
-    private TableLayout tableLayout, tableLayout2, tableLayout3;
     private NaverMap naverMap2;
-    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
-    public FusedLocationSource locationSource;
     CameraPosition cameraPosition;
     private Marker marker; // 마커
     private School school;
@@ -63,7 +58,6 @@ public class SchoolInfoActivity extends AppCompatActivity implements OnMapReadyC
 
         CameraUpdate cameraUpdate = CameraUpdate.scrollTo(new LatLng(school.getLat(), school.getLng()));
         naverMap2.moveCamera(cameraUpdate);
-
 
 
         //네이버 지도 추가 UI 설정
@@ -151,28 +145,7 @@ public class SchoolInfoActivity extends AppCompatActivity implements OnMapReadyC
         });
 
         renderSchoolDescribers();
-        if (LocationUtil.Companion.isPermissionGranted(this)) {
-            LocationUtil.Companion.requestUserLocation(this, (location) -> {
-                if (school.getDistanceFromUserLocation() != 0f) {
-                    schoolDescList.add(
-                            new MaterialItemAdapter.MaterialItem(
-                                    R.drawable.ic_baseline_commute_24,
-                                    String.format("거리: %.2fkm\n(걸어서 약 %d분)",
-                                            school.getDistanceFromUserLocation(),
-                                            (int) LocationUtil.Companion.getGoingTime(school.getDistanceFromUserLocation(), 4)),
-                                    () -> {
-                                        return Unit.INSTANCE;
-                                    })
-                    );
-                    RecyclerView recyclerView = findViewById(R.id.school_describe_list);
-                    if (recyclerView.getAdapter() != null) {
-                        recyclerView.getAdapter().notifyDataSetChanged();
-                    }
-                }
-
-                return Unit.INSTANCE;
-            });
-        } else {
+        if (!appendDistanceDesc()) {
             LocationUtil.Companion.requirePermission(this, "현재 위치에서부터 선택한 유치원의 거리를 알기 위해서 위치 권한이 필요합니다");
         }
 
@@ -295,9 +268,7 @@ public class SchoolInfoActivity extends AppCompatActivity implements OnMapReadyC
         });
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull @NotNull String[] permissions, @NonNull @NotNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    private boolean appendDistanceDesc() {
         if (LocationUtil.Companion.isPermissionGranted(this)) {
             LocationUtil.Companion.requestUserLocation(this, (location) -> {
                 if (school.getDistanceFromUserLocation() != 0f) {
@@ -319,6 +290,15 @@ public class SchoolInfoActivity extends AppCompatActivity implements OnMapReadyC
 
                 return Unit.INSTANCE;
             });
+            return true;
+        } else {
+            return false;
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull @NotNull String[] permissions, @NonNull @NotNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        appendDistanceDesc();
     }
 }
