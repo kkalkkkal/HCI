@@ -87,6 +87,9 @@ public class SchoolInfoActivity extends AppCompatActivity implements OnMapReadyC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_school_info);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
 
         Intent intent = getIntent(); /*데이터 수신*/
 

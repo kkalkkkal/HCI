@@ -9,12 +9,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.example.hci_project.bean.School
+import com.example.hci_project.bean.SchoolManager
 import com.example.hci_project.bean.SearchResult
 import com.example.hci_project.bean.SearchResultManager
 
 class SearchResultRecyclerViewAdapter(
-        private val values: List<SearchResult>, private val onClick: ((SearchResult) -> Unit)? = null,
-        private val onLongClick: ((SearchResult) -> Unit)? = null
+    private val values: List<SearchResult>, private val onClick: ((SearchResult) -> Unit)? = null,
+    private val onLongClick: ((SearchResult) -> Unit)? = null
 ) : RecyclerView.Adapter<SearchResultRecyclerViewAdapter.ViewHolder>() {
 
 
@@ -23,7 +25,7 @@ class SearchResultRecyclerViewAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.list_search_result, parent, false)
+            .inflate(R.layout.list_search_result, parent, false)
         this.context = parent.context
 
         return ViewHolder(view)
@@ -38,14 +40,14 @@ class SearchResultRecyclerViewAdapter(
             holder.explainView.visibility = View.VISIBLE
         }
         holder.iconView.setImageDrawable(
-                ContextCompat.getDrawable(
-                        context,
-                        when (item.type) {
-                            SearchResult.TYPE_SEARCH -> R.drawable.ic_baseline_search_24
-                            SearchResult.TYPE_SCHOOL -> R.drawable.ic_baseline_apartment_24
-                            else -> R.drawable.ic_baseline_search_24
-                        }
-                )
+            ContextCompat.getDrawable(
+                context,
+                when (item.type) {
+                    SearchResult.TYPE_SEARCH -> R.drawable.ic_baseline_search_24
+                    SearchResult.TYPE_SCHOOL -> R.drawable.ic_baseline_apartment_24
+                    else -> R.drawable.ic_baseline_search_24
+                }
+            )
         )
 
         holder.itemView.setOnClickListener {
@@ -61,9 +63,22 @@ class SearchResultRecyclerViewAdapter(
                     }
                 }
                 val intent =
-                        Intent(context, SchoolInfoActivity::class.java)
-                intent.putExtra("school", item)
-                context.startActivity(intent)
+                    Intent(context, SchoolInfoActivity::class.java)
+                //is attached?
+                if (item.obj != null) {
+                    //yes, attached!
+                    intent.putExtra("school", item.obj as School)
+                    context.startActivity(intent)
+                } else {
+                    //not attached. let's find.
+                    SchoolManager.getInstance().use(context) { schoolManager ->
+                        val school = schoolManager!!.list.find { target ->
+                            target.name == item.title
+                        }
+                        intent.putExtra("school", school)
+                        context.startActivity(intent)
+                    }
+                }
             }
         }
         if (onLongClick != null) {

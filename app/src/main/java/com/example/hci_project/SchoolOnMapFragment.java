@@ -1,7 +1,6 @@
 package com.example.hci_project;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -10,8 +9,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,15 +16,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.hci_project.MainCopyActivity;
-
 import com.example.hci_project.bean.School;
-import com.example.hci_project.bean.School2;
 import com.example.hci_project.bean.SchoolManager;
 import com.google.android.material.chip.Chip;
 import com.naver.maps.geometry.LatLng;
@@ -47,8 +40,6 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import java.util.ArrayList;
 
 import kotlin.Unit;
-
-import static androidx.core.content.ContextCompat.getSystemService;
 
 public class SchoolOnMapFragment extends Fragment implements OnMapReadyCallback {
   
@@ -240,7 +231,7 @@ public class SchoolOnMapFragment extends Fragment implements OnMapReadyCallback 
         }
         
         // 리사이클러뷰에 SimpleTextAdapter 객체 지정.
-        recyclerView.setAdapter(new commonAdapter(shownSchoolList));  // Adapter 등록
+        recyclerView.setAdapter(new CommonAdapter(shownSchoolList));  // Adapter 등록
         resultCntText.setText(String.format("근처에 %d개의 유치원/어린이집이 있습니다", shownSchoolList.size()));
 
         // 각 마커 클릭 리스너

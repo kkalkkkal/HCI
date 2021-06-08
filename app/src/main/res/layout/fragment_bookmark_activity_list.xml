@@ -10,6 +10,7 @@
         android:id="@+id/msg"
         style="@style/text_explain"/>
     <androidx.recyclerview.widget.RecyclerView
+        android:overScrollMode="never"
         android:id="@+id/list"
         android:name="com.example.hci_project.BookmarkActivity"
         android:layout_width="match_parent"

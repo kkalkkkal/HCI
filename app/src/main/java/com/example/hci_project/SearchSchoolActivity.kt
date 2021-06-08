@@ -32,13 +32,20 @@ class SearchSchoolActivity : AppCompatActivity() {
 
         initListener()
         simpleFilterFragment =
-                supportFragmentManager.findFragmentById(R.id.simple_filter_fragment)!! as FilterSimpleStatusFragment
+            supportFragmentManager.findFragmentById(R.id.simple_filter_fragment)!! as FilterSimpleStatusFragment
         searchResultFragment =
-                supportFragmentManager.findFragmentById(R.id.search_result_fragment)!! as SearchResultFragment
+            supportFragmentManager.findFragmentById(R.id.search_result_fragment)!! as SearchResultFragment
 
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+            && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
             // You can use the API that requires the permission.
             LocationUtil.requestUserLocation(this)
         } else {
@@ -48,13 +55,30 @@ class SearchSchoolActivity : AppCompatActivity() {
 
     //위치 권한 설정
     private fun requirePermission() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+            || ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(
+                    this,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                )
+            ) {
                 Toast.makeText(this, "위치 필터 적용을 사용하려면 위치 권한이 필요합니다", Toast.LENGTH_LONG).show()
             }
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION),
-                    1)
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ),
+                1
+            )
         }
     }
 
@@ -73,10 +97,10 @@ class SearchSchoolActivity : AppCompatActivity() {
 
             searchKeyword.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(
-                        s: CharSequence?,
-                        start: Int,
-                        count: Int,
-                        after: Int
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
                 ) {
                 }
 
@@ -124,17 +148,21 @@ class SearchSchoolActivity : AppCompatActivity() {
                 runOnUiThread {
                     if (it == null) {
                         Toast.makeText(applicationContext, "유치원 정보를 로드할 수 없습니다", Toast.LENGTH_SHORT)
-                                .show()
+                            .show()
                         return@runOnUiThread
                     }
                     val resultList = it.search(keyword, filterSetting)
                     if (resultList.isEmpty()) {
                         searchResultFragment.setList(ArrayList())
                         Toast.makeText(applicationContext, "해당하는 유치원이 없습니다", Toast.LENGTH_SHORT)
-                                .show()
+                            .show()
                         return@runOnUiThread
                     }
-                    Toast.makeText(this, "검색/필터를 반영하여 ${resultList.size}개의 결과를 표시합니다", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this,
+                        "검색/필터를 반영하여 ${resultList.size}개의 결과를 표시합니다",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     searchResultFragment.setList(SearchResult.convert(resultList))
                 }
         }
@@ -145,6 +173,8 @@ class SearchSchoolActivity : AppCompatActivity() {
         //handle filterInfo
         if (requestCode == FILTER_SET_ACTIVITY && resultCode == Activity.RESULT_OK) {
             if (data != null) {
+                binding.filterBtn.setColorFilter(resources.getColor(R.color.yellow))
+
                 val filterSetting = data.getSerializableExtra("filter") as FilterSetting
                 if (this.filterSetting == null) {
                     this.filterSetting = filterSetting
@@ -169,7 +199,11 @@ class SearchSchoolActivity : AppCompatActivity() {
         filterSetting?.setCallback(null)
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
         var allGranted = true
