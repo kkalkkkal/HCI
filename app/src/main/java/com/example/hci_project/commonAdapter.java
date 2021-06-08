@@ -22,16 +22,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import jxl.Cell;
-import jxl.CellType;
-import jxl.Sheet;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
 import jxl.write.Label;
@@ -39,11 +34,10 @@ import jxl.write.WritableCell;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
-import jxl.write.biff.CellValue;
 import jxl.write.biff.RowsExceededException;
 import kotlin.Unit;
 
-public class commonAdapter extends RecyclerView.Adapter<commonAdapter.ViewHolder> implements Serializable {
+public class CommonAdapter extends RecyclerView.Adapter<CommonAdapter.ViewHolder> implements Serializable {
 
     private List<School> myDataList = null;
 
@@ -72,7 +66,7 @@ public class commonAdapter extends RecyclerView.Adapter<commonAdapter.ViewHolder
         }
     }
 
-    commonAdapter(List<School> dataList) {
+    CommonAdapter(List<School> dataList) {
         this.myDataList = dataList;
     }
 
@@ -88,7 +82,7 @@ public class commonAdapter extends RecyclerView.Adapter<commonAdapter.ViewHolder
 
         //전개자(Inflater)를 통해 얻은 참조 객체를 통해 뷰홀더 객체 생성
         View view = inflater.inflate(R.layout.fragment_common_recycler, parent, false);
-        commonAdapter.ViewHolder viewHolder = new commonAdapter.ViewHolder(view);
+        CommonAdapter.ViewHolder viewHolder = new CommonAdapter.ViewHolder(view);
 
         return viewHolder;
     }
@@ -330,5 +324,11 @@ public class commonAdapter extends RecyclerView.Adapter<commonAdapter.ViewHolder
         return myDataList.size();
     }
 
+
+    public class CommonHolder extends RecyclerView.ViewHolder{
+        public CommonHolder(@NonNull @NotNull View itemView) {
+            super(itemView);
+        }
+    }
 
 }
