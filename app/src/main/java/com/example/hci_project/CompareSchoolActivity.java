@@ -7,11 +7,17 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.style.BackgroundColorSpan;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.hci_project.bean.School;
@@ -33,6 +39,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import jxl.Cell;
 import jxl.Sheet;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
@@ -224,6 +231,37 @@ public class CompareSchoolActivity extends AppCompatActivity {
         data2.setDrawValues(true);
         data2.setValueTextSize(20);
         chart.setData(data2);
+
+        ///// table /////
+        TableLayout tableLayout = (TableLayout) findViewById(R.id.tablelayout4);
+        // 시설 점검 여부
+        for (int i = 1; i < last; i++) {
+            TableRow tableRow4 = new TableRow(this);     // tablerow 생성
+            tableRow4.setLayoutParams(new TableRow.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT));
+            for (int j = 3; j < 8; j++){
+                TextView textView = new TextView(this);
+                if (j == 3)
+                    textView.setText(sheet.getCell(1,i).getContents()); // 이름
+                else {
+                    textView.setText(sheet.getCell(j, i).getContents()); // 엑셀파일에서 cell 반환
+                }
+                textView.setGravity(Gravity.CENTER);
+                textView.setTextSize(20);
+                tableRow4.addView(textView);// tableRow에 view 추가
+            }
+
+            if(tableRow4.getParent() != null)
+            {
+                ((ViewGroup)tableRow4.getParent()).removeView(tableRow4);
+            }
+            if(tableRow4 != null) {
+                tableLayout.addView(tableRow4);        // tableLayout에 tableRow 추가
+            }
+
+        }
+
 
 
     }
