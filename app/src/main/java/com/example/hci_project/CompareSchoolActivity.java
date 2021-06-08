@@ -56,11 +56,11 @@ public class CompareSchoolActivity extends AppCompatActivity {
         final LinearLayout lm = (LinearLayout) findViewById(R.id.ll);
         final LinearLayout lm2 = (LinearLayout) findViewById(R.id.ll2);
 
-        comeonDB(); //DB 불러오기
+        //comeonDB(); //DB 불러오기
         intent = getIntent();
        // String check = intent.getExtras().getString("last");
         check = intent.getCharExtra("last", 'a');
-        school_data = (School)intent.getSerializableExtra("school"); /*클래스*/
+      //  school_data = (School)intent.getSerializableExtra("school"); /*클래스*/
 
         if(check=='b')
         {
@@ -114,7 +114,7 @@ public class CompareSchoolActivity extends AppCompatActivity {
             btn.setId(j + 1);
 
             if (j != last) {
-                btn.setText(school_data.getName() + (j+1));
+                btn.setText("유치원" + (j+1));
                 if(j==0){
                     adress[j] = "05100";
                 }else if(j==1){

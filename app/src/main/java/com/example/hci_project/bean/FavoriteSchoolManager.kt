@@ -15,7 +15,7 @@ class FavoriteSchoolManager private constructor() {
         }
     }
 
-    private val fileName = "favorite.txt"
+    private val fileName = "favorite2.txt"
 
     var list: ArrayList<School> = ArrayList()
     fun getListAsSearchResult(): ArrayList<SearchResult> {
