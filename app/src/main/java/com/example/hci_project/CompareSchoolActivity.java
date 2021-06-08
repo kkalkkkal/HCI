@@ -191,7 +191,7 @@ public class CompareSchoolActivity extends AppCompatActivity {
         ArrayList<PieEntry> NoOfEmp = new ArrayList<>();
         for(int i = 1 ; i < last ; i++)
         {
-            NoOfEmp.add(new PieEntry(Integer.parseInt(sheet.getCell(2,i).getContents()), i));
+            NoOfEmp.add(new PieEntry(Float.parseFloat(sheet.getCell(2,i).getContents()), i));
         }
 
         int[] colorArray = new int[] {Color.rgb(235,119,56), Color.rgb(236,202,76),
