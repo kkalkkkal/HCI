@@ -15,7 +15,7 @@ class FavoriteSchoolManager private constructor() {
         }
     }
 
-    private val fileName = "favorite.txt"
+    private val fileName = "favorite1.txt"
 
     var list: ArrayList<School> = ArrayList()
     fun getListAsSearchResult(): ArrayList<SearchResult> {
@@ -26,6 +26,13 @@ class FavoriteSchoolManager private constructor() {
             searchResultList.add(searchResult)
         }
         return searchResultList
+    }
+
+    fun isFavorite(school: School): Boolean {
+        var target = list.find {
+            it.name == school.name
+        }
+        return target != null
     }
 
     @Synchronized

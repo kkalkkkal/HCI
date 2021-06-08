@@ -3,10 +3,11 @@ package com.example.hci_project.bean
 import java.io.Serializable
 
 class ServiceTime(
-        val startHour: Int = 0,
-        val startMin: Int = 0,
-        val endHour: Int = 0,
-        val endMin: Int = 0):Serializable {
+    val startHour: Int = 0,
+    val startMin: Int = 0,
+    val endHour: Int = 0,
+    val endMin: Int = 0
+) : Serializable {
 
     companion object {
         fun build(serviceTime: String): ServiceTime? {
@@ -25,7 +26,7 @@ class ServiceTime(
 
                     if (idx == 0) {
                         startHour = timeStr.substring(hourStartIdx, timeStr.indexOf('시', 0)).toInt()
-                        startMin = timeStr.substring(minStartIdx, timeStr.length -1).toInt()
+                        startMin = timeStr.substring(minStartIdx, timeStr.length - 1).toInt()
                     } else if (idx == 1) {
                         endHour = timeStr.substring(hourStartIdx, timeStr.indexOf('시', 0)).toInt()
                         endMin = timeStr.substring(minStartIdx, timeStr.length - 1).toInt()
@@ -39,4 +40,9 @@ class ServiceTime(
             return null
         }
     }
+
+    override fun toString(): String {
+        return String.format("%2d시%2d분~ %2d시%2d분", startHour, startMin, endHour, endMin);
+    }
+
 }
